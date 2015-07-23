@@ -12,7 +12,7 @@ module WOW
         [:uint32, :area_table_id],
         [:string, :map_description_horde],
         [:string, :map_description_alliance],
-        [:uint32, :loading_screen_id],
+        [:int32,  :loading_screen_id],
         [:float,  :minimap_icon_scale],
         [:int32,  :corpse_map_id],
         [:float,  :corpse_pos_x],
