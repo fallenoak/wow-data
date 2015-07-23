@@ -46,12 +46,13 @@ module WOW
       @string_block_start = @header_size + (@record_size * @record_count)
     end
 
-    private def read_uint32
-      @file.read(4).unpack('V').first
-    end
+    private def read_record
+      record = Record.new(@template, read_fields)
 
-    private def read_char(length)
-      @file.read(length)
+      @records << record
+
+      # Ensure we return the record.
+      record
     end
 
     private def read_fields
@@ -63,6 +64,10 @@ module WOW
       end
 
       fields
+    end
+
+    private def read_char(length)
+      @file.read(length)
     end
 
     private def read_uint32
@@ -95,15 +100,6 @@ module WOW
       @file.pos = saved_pos
 
       string
-    end
-
-    private def read_record
-      record = Record.new(@template, read_fields)
-
-      @records << record
-
-      # Ensure we return the record.
-      record
     end
 
     private def set_template
