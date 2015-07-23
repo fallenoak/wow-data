@@ -7,8 +7,6 @@ module WOW
 
       @filename = path.split('/').last
 
-      set_template
-
       @header_size = 20
       @magic = nil
       @record_count = nil
@@ -47,7 +45,7 @@ module WOW
     end
 
     private def read_record
-      record = Record.new(@template, read_fields)
+      record = Records.const_get(record_class_name).new(read_fields)
 
       @records << record
 
@@ -58,7 +56,7 @@ module WOW
     private def read_fields
       fields = {}
 
-      @template.const_get(:STRUCTURE).each do |field_definition|
+      Records.const_get(record_class_name).const_get(:STRUCTURE).each do |field_definition|
         field_type, field_name = field_definition
         fields[field_name] = send("read_#{field_type}")
       end
@@ -102,9 +100,9 @@ module WOW
       string
     end
 
-    private def set_template
-      template_name = @filename.split('.').first.capitalize
-      @template = Templates.const_get(template_name)
+    private def record_class_name
+      name = @filename.split('.').first
+      name
     end
   end
 end

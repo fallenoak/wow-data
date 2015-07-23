@@ -1,4 +1,4 @@
 require_relative 'lib/dbc'
-require_relative 'lib/dbc/record'
-require_relative 'lib/dbc/templates'
-require_relative 'lib/dbc/templates/map'
+require_relative 'lib/dbc/records'
+require_relative 'lib/dbc/records/base'
+require_relative 'lib/dbc/records/map'

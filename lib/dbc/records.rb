@@ -1,6 +1,6 @@
 module WOW
   class DBC
-    class Templates
+    module Records
     end
   end
 end
