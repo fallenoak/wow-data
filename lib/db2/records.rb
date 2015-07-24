@@ -1,6 +1,4 @@
-module WOW
-  class DB2
-    module Records
-    end
+module WOW::DB2
+  module Records
   end
 end

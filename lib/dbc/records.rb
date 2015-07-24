@@ -1,6 +1,4 @@
-module WOW
-  class DBC
-    module Records
-    end
+module WOW::DBC
+  module Records
   end
 end

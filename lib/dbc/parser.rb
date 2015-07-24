@@ -1,5 +1,5 @@
-module WOW
-  class DBC
+module WOW::DBC
+  class Parser
     attr_reader :record_count, :field_count, :record_size, :string_block_size, :records
 
     def initialize(path, opts = {})

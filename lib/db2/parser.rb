@@ -1,5 +1,5 @@
-module WOW
-  class DB2
+module WOW::DB2
+  class Parser
     attr_reader :record_count, :field_count, :record_size, :string_table_size, :records, :build,
       :min_id, :max_id, :locale
 
