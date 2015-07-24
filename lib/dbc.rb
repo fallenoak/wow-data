@@ -102,6 +102,15 @@ module WOW
 
     private def record_class_name
       name = @filename.split('.').first
+
+      # Ensure first letter is capitalized-- not all files have uppercased first letters.
+      name = name[0, 1].upcase + name[1, name.length] if name[0, 1].downcase == name[0, 1]
+
+      # Any dashes or underscores should be removed, and the following letter upcased.
+      name.gsub!(/([\-|_])([a-zA-Z0-9])/) do |match|
+        match = "#{$2.upcase}"
+      end
+
       name
     end
   end
