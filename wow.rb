@@ -25,6 +25,7 @@ require_relative 'lib/adt/records/mfbo'
 require_relative 'lib/adt/records/mh2o'
 
 require_relative 'lib/capture/parser'
+require_relative 'lib/capture/guid128'
 require_relative 'lib/capture/opcodes'
 require_relative 'lib/capture/packets'
 require_relative 'lib/capture/packets/base'
