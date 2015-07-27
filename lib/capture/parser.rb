@@ -63,9 +63,8 @@ module WOW::Capture
       opcode = read_int32
       data = read_char(length - 4)
 
-      packet_class_name = opcode_to_packet_class_name(opcode)
-
-      packet = Packets.const_get(packet_class_name).new(direction, connection_index, tick, time, data)
+      packet_class = opcode_to_packet_class(direction, opcode)
+      packet = packet_class.new(direction, connection_index, tick, time, data)
 
       packet
     end
@@ -102,9 +101,20 @@ module WOW::Capture
       string
     end
 
-    private def opcode_to_packet_class_name(opcode)
-      directory_entry = Opcodes::DIRECTORY[opcode]
-      directory_entry.nil? ? 'Unparsed' : directory_entry.last
+    private def opcode_to_packet_class(direction, opcode)
+      directory_entry = Opcodes.const_get(direction)::DIRECTORY[opcode]
+
+      if directory_entry.nil?
+        packet_module = Packets
+        packet_class_name = 'Unparsed'
+      else
+        packet_module = Packets.const_get(direction)
+        packet_class_name = directory_entry[1]
+      end
+
+      packet_class = packet_module.const_get(packet_class_name)
+
+      packet_class
     end
   end
 end
