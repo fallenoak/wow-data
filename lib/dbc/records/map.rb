@@ -45,11 +45,11 @@ module WOW::DBC::Records
     end
 
     def nonraid_dungeon?
-      fields[:instance_type] == MapTypes::INSTANCE
+      fields[:instance_type] == MapTypes::INSTANCE && !garrison?
     end
 
-    def raid?
-      fields[:instance_type] == MapTypes::RAID
+    def raid_dungeon?
+      fields[:instance_type] == MapTypes::RAID && !garrison?
     end
 
     def battleground?
@@ -60,8 +60,16 @@ module WOW::DBC::Records
       (fields[:flags] & MapFlags::GARRISON) != 0
     end
 
-    def world_map?
+    def worldmap?
       fields[:instance_type] == MapTypes::COMMON
+    end
+
+    def arena?
+      fields[:instance_type] == MapTypes::ARENA
+    end
+
+    def scenario?
+      fields[:instance_type] == MapTypes::SCENARIO
     end
 
     def continent?
