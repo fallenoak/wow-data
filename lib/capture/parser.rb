@@ -7,6 +7,8 @@ module WOW::Capture
       V3_1 = 0x301
     end
 
+    DIRECTIONS = ['CMSG', 'SMSG']
+
     def initialize(path, opts = {})
       @file = File.open(path, 'rb')
 
@@ -101,15 +103,24 @@ module WOW::Capture
       string
     end
 
-    private def opcode_to_packet_class(direction, opcode)
-      directory_entry = Opcodes.const_get(direction)::DIRECTORY[opcode]
+    private def valid_direction?(direction)
+      DIRECTIONS.include?(direction)
+    end
 
-      if directory_entry.nil?
+    private def opcode_to_packet_class(direction, opcode)
+      if !valid_direction?(direction)
         packet_module = Packets
-        packet_class_name = 'Unparsed'
+        packet_class_name = Opcodes::INVALID_PACKET_CLASS_NAME
       else
-        packet_module = Packets.const_get(direction)
-        packet_class_name = directory_entry[1]
+        directory_entry = Opcodes.const_get(direction)::DIRECTORY[opcode]
+
+        if directory_entry.nil?
+          packet_module = Packets
+          packet_class_name = Opcodes::UNHANDLED_PACKET_CLASS_NAME
+        else
+          packet_module = Packets.const_get(direction)
+          packet_class_name = directory_entry[1]
+        end
       end
 
       packet_class = packet_module.const_get(packet_class_name)

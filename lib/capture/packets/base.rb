@@ -13,6 +13,14 @@ module WOW::Capture::Packets
       parse!
     end
 
+    def handled?
+      true
+    end
+
+    def valid?
+      true
+    end
+
     def parse!
     end
 

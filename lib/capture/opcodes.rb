@@ -1,5 +1,8 @@
 module WOW::Capture
   module Opcodes
+    INVALID_PACKET_CLASS_NAME    = 'Invalid'
+    UNHANDLED_PACKET_CLASS_NAME  = 'Unhandled'
+
     # Messages from server
     module SMSG
       DIRECTORY = {
