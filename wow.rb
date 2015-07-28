@@ -4,6 +4,10 @@ module WOW
   module ADT; end;
 end
 
+require 'date'
+
+require_relative 'lib/bit_array'
+
 require_relative 'lib/dbc/parser'
 require_relative 'lib/dbc/records'
 require_relative 'lib/dbc/records/base'
@@ -25,6 +29,7 @@ require_relative 'lib/adt/records/mfbo'
 require_relative 'lib/adt/records/mh2o'
 
 require_relative 'lib/capture/parser'
+require_relative 'lib/capture/object_types'
 require_relative 'lib/capture/guid_types'
 require_relative 'lib/capture/guid128'
 require_relative 'lib/capture/opcodes'
@@ -34,4 +39,9 @@ require_relative 'lib/capture/packets/unhandled'
 require_relative 'lib/capture/packets/invalid'
 require_relative 'lib/capture/packets/smsg/auth_challenge'
 require_relative 'lib/capture/packets/smsg/on_monster_move'
+require_relative 'lib/capture/packets/smsg/update_object'
+require_relative 'lib/capture/packets/smsg/update_object/update_fields'
+require_relative 'lib/capture/packets/smsg/update_object/entry_types'
+require_relative 'lib/capture/packets/smsg/update_object/readers'
+require_relative 'lib/capture/packets/smsg/update_object/entries'
 require_relative 'lib/capture/packets/cmsg/auth_session'

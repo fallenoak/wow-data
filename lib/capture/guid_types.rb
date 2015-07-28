@@ -1,6 +1,6 @@
 module WOW::Capture
   module GuidTypes
-    HighTypes = {
+    HIGH_TYPES = {
       0   => :null,
       1   => :uniq,
       2   => :player,
@@ -46,5 +46,7 @@ module WOW::Capture
       42  => :unique_user_client,
       43  => :battle_pet
     }
+
+    HIGH_TYPES_INVERSE = HIGH_TYPES.invert
   end
 end

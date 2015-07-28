@@ -7,7 +7,8 @@ module WOW::Capture
     module SMSG
       DIRECTORY = {
         0x1102 => ['SMSG_AUTH_CHALLENGE',   :AuthChallenge],
-        0x0C28 => ['SMSG_ON_MONSTER_MOVE',  :OnMonsterMove]
+        0x0C28 => ['SMSG_ON_MONSTER_MOVE',  :OnMonsterMove],
+        0x0D36 => ['SMSG_UPDATE_OBJECT',    :UpdateObject]
       }
     end
 

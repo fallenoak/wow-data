@@ -25,6 +25,8 @@ module WOW::Capture
 
       @sniffer_hello = nil
 
+      @packet_index = 0
+
       read_header
     end
 
@@ -66,7 +68,9 @@ module WOW::Capture
       data = read_char(length - 4)
 
       packet_class = opcode_to_packet_class(direction, opcode)
-      packet = packet_class.new(direction, connection_index, tick, time, data)
+      packet = packet_class.new(@packet_index, direction, connection_index, tick, time, data)
+
+      @packet_index += 1
 
       packet
     end
