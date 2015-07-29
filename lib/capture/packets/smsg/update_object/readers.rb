@@ -511,13 +511,6 @@ module WOW::Capture::Packets::SMSG
           dynamic_updates = read_dynamic_values
           updates.merge!(dynamic_updates)
 
-          # Think we might have to write a bitarray lib ourselves.
-          # negative numbers?
-
-          #save_pos = @packet.pos
-          #puts "NEXT 32 BYTES WOULD BE: #{@packet.read_char(32).inspect}"
-          #@packet.pos = save_pos
-
           updates
         end
 
