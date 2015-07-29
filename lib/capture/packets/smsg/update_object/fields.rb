@@ -285,6 +285,39 @@ module WOW::Capture::Packets::SMSG
           BASELINE + 0x011 => :gameobject_state_world_effect_id
         }
       end
+
+      module CorpseFields
+        BASELINE = ObjectFields::BOUNDARY + 0x000
+        BOUNDARY = ObjectFields::BOUNDARY + 0x021
+
+        DEFINITIONS = {
+          BASELINE + 0x000 => :corpse_owner,
+          BASELINE + 0x004 => :corpse_party,
+          BASELINE + 0x008 => :corpse_display_id,
+          BASELINE + 0x009 => :corpse_item,
+          BASELINE + 0x01C => :corpse_bytes_1,
+          BASELINE + 0x01D => :corpse_bytes_2,
+          BASELINE + 0x01E => :corpse_flags,
+          BASELINE + 0x01F => :corpse_dynamic_flags,
+          BASELINE + 0x020 => :corpse_faction_template
+        }
+      end
+
+      module AreaTriggerFields
+        BASELINE = ObjectFields::BOUNDARY + 0x000
+        BOUNDARY = ObjectFields::BOUNDARY + 0x011
+
+        DEFINITIONS = {
+          BASELINE + 0x000 => :areatrigger_override_scale_curve,
+          BASELINE + 0x007 => :areatrigger_caster,
+          BASELINE + 0x00B => :areatrigger_duration,
+          BASELINE + 0x00C => :areatrigger_time_to_target_scale,
+          BASELINE + 0x00D => :areatrigger_spell_id,
+          BASELINE + 0x00E => :areatrigger_spell_visual_id,
+          BASELINE + 0x00F => :areatrigger_bounds_radius_2d,
+          BASELINE + 0x010 => :areatrigger_explicit_scale
+        }
+      end
     end
   end
 end

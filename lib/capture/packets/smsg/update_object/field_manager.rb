@@ -20,6 +20,10 @@ module WOW::Capture::Packets::SMSG
           [Fields::ObjectFields, Fields::GameObjectFields]
         when :container
           [Fields::ObjectFields, Fields::ItemFields, Fields::ContainerFields]
+        when :corpse
+          [Fields::ObjectFields, Fields::CorpseFields]
+        when :area_trigger
+          [Fields::ObjectFields, Fields::AreaTriggerFields]
         else
           [nil]
         end
