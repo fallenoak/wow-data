@@ -25,6 +25,20 @@ module WOW::Capture
       [@low, @high].hash
     end
 
+    def pretty_print
+      output = ''
+
+      output << "{guid128:0x#{to_i.abs.to_s(16)}"
+      output << " type:#{@type};"
+      output << " realm_id:#{@realm_id};"
+      output << " server_id:#{@server_id};"
+      output << " map_id:#{@map_id};"
+      output << " entry_id:#{@entry_id}"
+      output << "}"
+
+      output
+    end
+
     private def get_type
       WOW::Capture::GuidTypes::HIGH_TYPES[@high_type_id]
     end

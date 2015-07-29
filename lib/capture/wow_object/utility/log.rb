@@ -6,8 +6,8 @@ module WOW::Capture::WOWObject::Utility
       @items = []
     end
 
-    def items_by_type(type)
-      @items.select { |i| i.type == type }
+    def items_by_type(*types)
+      @items.select { |i| types.include?(i.type) }
     end
 
     def add(item)

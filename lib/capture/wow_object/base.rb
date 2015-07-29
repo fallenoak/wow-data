@@ -27,6 +27,16 @@ module WOW::Capture::WOWObject
       @storage.trigger(:move, self)
     end
 
+    def emote_text!(packet)
+      log_item = Utility::LogItems::EmotedText.new(self, packet)
+      @log << log_item
+    end
+
+    def emote!(packet)
+      log_item = Utility::LogItems::Emoted.new(self, packet)
+      @log << log_item
+    end
+
     def update_values!(updated_values)
       @values.merge!(updated_values)
       @storage.trigger(:update, self)
