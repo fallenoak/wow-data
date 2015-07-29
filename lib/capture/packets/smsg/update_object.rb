@@ -56,7 +56,7 @@ module WOW::Capture::Packets::SMSG
       end
 
       @destroyed_objects.each do |guid|
-        storage.destroy(guid)
+        parser.objects.destroy(guid, self)
       end
     end
   end

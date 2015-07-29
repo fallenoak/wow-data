@@ -12,7 +12,7 @@ module WOW::Capture
     def initialize(path, opts = {})
       @file = File.open(path, 'rb')
 
-      @storage = Storage.new
+      @objects = ObjectStorage.new
 
       @magic = nil
       @format_version = nil
@@ -44,8 +44,8 @@ module WOW::Capture
       @file.eof?
     end
 
-    def storage
-      @storage
+    def objects
+      @objects
     end
 
     private def read_header

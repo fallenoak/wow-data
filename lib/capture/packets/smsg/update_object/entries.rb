@@ -17,30 +17,31 @@ module WOW::Capture::Packets::SMSG
       end
 
       class ValuesEntry < Entries::Base
-        attr_reader :guid, :updated_values
+        attr_reader :guid, :raw_updated_values
 
         private def parse!
           @guid = @packet.read_packed_guid128
           @object_type = @guid.object_type
-          @updated_values = read_values
+          @raw_updated_values = read_values
 
-          wow_object = @packet.storage.find(@guid)
-          wow_object.update!(@updated_values)
+          wow_object = @packet.parser.objects.find(@guid)
+          wow_object.update_values!(@raw_updated_values)
         end
       end
 
       class CreateObjectEntry < Entries::Base
-        attr_reader :guid, :object_type, :object_type_id, :movement, :values
+        attr_reader :guid, :object_type, :object_type_id, :raw_movement_state, :raw_values_state
 
         private def parse!
           @guid = @packet.read_packed_guid128
           @object_type_id = @packet.read_byte
           @object_type = WOW::Capture::OBJECT_TYPES[@object_type_id]
-          @movement = read_movements
-          @values = read_values
+          @raw_movement_state = read_movements
+          @raw_values_state = read_values
 
-          wow_object = WOW::Capture::WOWObject.new(@guid, @object_type, @movement, @values)
-          @packet.storage.save(wow_object)
+          wow_object_class = WOW::Capture::WOWObject::Manager.class_for_guid(@guid)
+          wow_object = wow_object_class.new(@guid, @object_type, @raw_movement_state, @raw_values_state)
+          @packet.parser.objects.create(wow_object, @packet)
         end
       end
 
