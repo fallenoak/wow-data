@@ -12,6 +12,8 @@ module WOW::Capture
     def initialize(path, opts = {})
       @file = File.open(path, 'rb')
 
+      @storage = Storage.new
+
       @magic = nil
       @format_version = nil
       @sniffer_id = nil
@@ -42,6 +44,10 @@ module WOW::Capture
       @file.eof?
     end
 
+    def storage
+      @storage
+    end
+
     private def read_header
       @magic = read_char(3)
       @format_version = read_uint16
@@ -68,7 +74,7 @@ module WOW::Capture
       data = read_char(length - 4)
 
       packet_class = opcode_to_packet_class(direction, opcode)
-      packet = packet_class.new(@packet_index, direction, connection_index, tick, time, data)
+      packet = packet_class.new(self, @packet_index, direction, connection_index, tick, time, data)
 
       @packet_index += 1
 

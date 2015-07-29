@@ -2,7 +2,8 @@ module WOW::Capture::Packets
   class Base
     attr_reader :index, :direction, :connection_index, :tick, :time
 
-    def initialize(index, direction, connection_index, tick, time, data)
+    def initialize(parser, index, direction, connection_index, tick, time, data)
+      @parser = parser
       @index = index
       @direction = direction
       @connection_index = connection_index
@@ -15,6 +16,10 @@ module WOW::Capture::Packets
       @curbitval = nil
 
       parse!
+    end
+
+    def storage
+      @parser.storage
     end
 
     def handled?

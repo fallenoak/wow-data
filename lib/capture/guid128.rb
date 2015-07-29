@@ -21,6 +21,10 @@ module WOW::Capture
       @entry_id = (high >> 6) & 0x7FFFFF
     end
 
+    def to_i
+      [@low, @high].hash
+    end
+
     private def get_type
       WOW::Capture::GuidTypes::HIGH_TYPES[@high_type_id]
     end

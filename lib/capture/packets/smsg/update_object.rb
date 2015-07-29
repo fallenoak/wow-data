@@ -54,6 +54,10 @@ module WOW::Capture::Packets::SMSG
           @destroyed_objects << read_packed_guid128
         end
       end
+
+      @destroyed_objects.each do |guid|
+        storage.destroy(guid)
+      end
     end
   end
 end
