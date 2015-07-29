@@ -497,7 +497,7 @@ module WOW::Capture::Packets::SMSG
 
             block_value = @packet.read_update_field
 
-            field_name = UpdateFields.field_name_at_index(@object_type, field_index)
+            field_name = FieldManager.field_name_at_index(@object_type, field_index)
             field_name = "field-#{field_index}" if field_name.nil?
 
             updates[field_name] = block_value
