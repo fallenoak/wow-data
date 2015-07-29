@@ -21,6 +21,7 @@ module WOW::Capture::Packets::SMSG
 
         private def parse!
           @guid = @packet.read_packed_guid128
+          @object_type = @guid.object_type
           @updates = read_values
         end
       end

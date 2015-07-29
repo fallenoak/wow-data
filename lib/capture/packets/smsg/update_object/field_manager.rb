@@ -16,6 +16,10 @@ module WOW::Capture::Packets::SMSG
           [Fields::ObjectFields, Fields::UnitFields, Fields::PlayerFields]
         when :item
           [Fields::ObjectFields, Fields::ItemFields]
+        when :game_object
+          [Fields::ObjectFields, Fields::GameObjectFields]
+        when :container
+          [Fields::ObjectFields, Fields::ItemFields, Fields::ContainerFields]
         else
           [nil]
         end

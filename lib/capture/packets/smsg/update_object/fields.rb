@@ -39,6 +39,16 @@ module WOW::Capture::Packets::SMSG
         }
       end
 
+      module ContainerFields
+        BASELINE = ItemFields::BOUNDARY + 0x000
+        BOUNDARY = ItemFields::BOUNDARY + 0x091
+
+        DEFINITIONS = {
+          BASELINE + 0x000 => :container_slot,
+          BASELINE + 0x090 => :container_num_slots
+        }
+      end
+
       module UnitFields
         BASELINE = ObjectFields::BOUNDARY + 0x000
         BOUNDARY = ObjectFields::BOUNDARY + 0x0C8
@@ -253,6 +263,26 @@ module WOW::Capture::Packets::SMSG
           BASELINE + 0x9C8 => :player_bank_bag_slot_flags,
           BASELINE + 0x9CF => :player_insert_items_left_to_right,
           BASELINE + 0x9D0 => :player_quest_completed
+        }
+      end
+
+      module GameObjectFields
+        BASELINE = ObjectFields::BOUNDARY + 0x000
+        BOUNDARY = ObjectFields::BOUNDARY + 0x015
+
+        DEFINITIONS = {
+          BASELINE + 0x000 => :gameobject_created_by,
+          BASELINE + 0x004 => :gameobject_display_id,
+          BASELINE + 0x005 => :gameobject_flags,
+          BASELINE + 0x006 => :gameobject_parent_rotation,
+          BASELINE + 0x00A => :gameobject_faction,
+          BASELINE + 0x00B => :gameobject_level,
+          BASELINE + 0x00C => :gameobject_bytes_1,
+          BASELINE + 0x00D => :gameobject_visual_id,
+          BASELINE + 0x00E => :gameobject_state_spell_visual_id,
+          BASELINE + 0x00F => :gameobject_state_anim_id,
+          BASELINE + 0x010 => :gameobject_state_anim_kit_id,
+          BASELINE + 0x011 => :gameobject_state_world_effect_id
         }
       end
     end
