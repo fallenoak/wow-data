@@ -32,7 +32,12 @@ module WOW::Capture::WOWObject::Utility::LogItems
     end
 
     private def pretty_prefix
-      "##{'%-6s' % @packet_index} #{@tick} #{@time} [#{type.to_s.upcase}]"
+      output = ''
+
+      output << "##{'%-6s' % @packet_index} #{@tick} #{@time}"
+      output << ' ' << '%14s' % "[#{type.to_s.upcase}]"
+
+      output
     end
   end
 end
