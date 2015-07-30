@@ -26,7 +26,7 @@ module WOW::Capture
       @storage[wow_object.guid.to_i] = wow_object
 
       if !packet.nil?
-        log_item = WOWObject::Utility::LogItems::Created.new(wow_object, packet)
+        log_item = WOWObject::Utility::LogItems::Create.new(wow_object, packet)
         wow_object.log << log_item
       end
 
@@ -41,7 +41,7 @@ module WOW::Capture
       end
 
       if !packet.nil?
-        log_item = WOWObject::Utility::LogItems::Destroyed.new(wow_object, packet)
+        log_item = WOWObject::Utility::LogItems::Destroy.new(wow_object, packet)
         wow_object.log << log_item
       end
 

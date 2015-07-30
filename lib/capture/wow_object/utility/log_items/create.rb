@@ -1,7 +1,7 @@
 module WOW::Capture::WOWObject::Utility::LogItems
-  class Destroyed < Base
+  class Create < Base
     def type
-      :destroyed
+      :create
     end
   end
 end

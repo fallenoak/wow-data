@@ -1,9 +1,9 @@
 module WOW::Capture::WOWObject::Utility::LogItems
-  class Moved < Base
+  class Move < Base
     attr_reader :from, :to
 
     def type
-      :moved
+      :move
     end
 
     def parse!
