@@ -25,10 +25,14 @@ module WOW::Capture
       [@low, @high].hash
     end
 
+    def hex_id
+      to_i.abs.to_s(16)[0, 6]
+    end
+
     def pretty_print
       output = ''
 
-      output << "{guid128:0x#{to_i.abs.to_s(16)}"
+      output << "{guid128:0x#{hex_id}"
       output << " type:#{@type};"
       output << " realm_id:#{@realm_id};"
       output << " server_id:#{@server_id};"

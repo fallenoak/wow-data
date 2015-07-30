@@ -35,7 +35,10 @@ module WOW::Capture::WOWObject::Utility::LogItems
       output = ''
 
       output << "##{'%-6s' % @packet_index} #{@tick} #{@time}"
-      output << ' ' << '%14s' % "[#{type.to_s.upcase}]"
+      output << " M:#{'%-4s' % @object.guid.map_id}"
+      output << " E:#{'%-6s' % @object.guid.entry_id}"
+      output << " G:#{@object.guid.hex_id}"
+      output << ' [ ' << ('%-10s' % "#{type.to_s.upcase}") << ' ]'
 
       output
     end
