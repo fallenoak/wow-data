@@ -48,6 +48,10 @@ module WOW::Capture
       @objects
     end
 
+    def replay!
+      next_packet while !eof?
+    end
+
     private def read_header
       @magic = read_char(3)
       @format_version = read_uint16
