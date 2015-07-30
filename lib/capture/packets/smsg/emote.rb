@@ -12,8 +12,8 @@ module WOW::Capture::Packets::SMSG
     end
 
     private def update_wow_object
-      wow_object = parser.objects.find(@guid)
-      wow_object.emote!(self) if !wow_object.nil?
+      wow_object = parser.objects.find_or_create(@guid)
+      wow_object.emote!(self)
     end
   end
 end

@@ -2,16 +2,22 @@ module WOW::Capture::WOWObject
   class Base
     attr_reader :guid, :type, :movement, :log, :current_position
 
-    def initialize(guid, object_type, raw_movement_state, raw_values_state)
+    def initialize(guid)
       @guid = guid
       @type = guid.type
-      @object_type = object_type
-      @movement = raw_movement_state
-      @values = raw_values_state
+      @object_type = guid.object_type
 
       @current_position = WOW::Capture::Coordinate.new(nil, nil, nil)
 
       @log = Utility::Log.new
+    end
+
+    def initialize_movement_state(raw_movement_state)
+      @movement = raw_movement_state
+    end
+
+    def initialize_values_state(raw_values_state)
+      @values = raw_values_state
     end
 
     def storage=(storage)

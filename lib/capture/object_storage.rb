@@ -54,6 +54,17 @@ module WOW::Capture
       @storage[guid.to_i]
     end
 
+    def find_or_create(guid)
+      wow_object = find(guid)
+      return wow_object if !wow_object.nil?
+
+      # We didn't find the object, so we're creating it manually.
+      wow_object = WOWObject::Manager.build_from_guid(guid)
+      create(wow_object)
+
+      wow_object
+    end
+
     def length
       @storage.keys.length
     end

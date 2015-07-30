@@ -15,11 +15,11 @@ module WOW::Capture::Packets::SMSG
     end
 
     private def update_wow_object
-      source_wow_object = parser.objects.find(@source_guid)
-      source_wow_object.text_emote!(self) if !source_wow_object.nil?
+      source_wow_object = parser.objects.find_or_create(@source_guid)
+      source_wow_object.text_emote!(self)
 
-      target_wow_object = parser.objects.find(@target_guid)
-      target_wow_object.text_emote!(self) if !target_wow_object.nil?
+      target_wow_object = parser.objects.find_or_create(@target_guid)
+      target_wow_object.text_emote!(self)
     end
   end
 end

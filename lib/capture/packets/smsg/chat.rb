@@ -42,9 +42,7 @@ module WOW::Capture::Packets::SMSG
     end
 
     private def update_wow_object
-      wow_object = parser.objects.find(@sender_guid)
-      return if wow_object.nil?
-
+      wow_object = parser.objects.find_or_create(@sender_guid)
       wow_object.chat!(self)
     end
   end

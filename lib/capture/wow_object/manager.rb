@@ -1,5 +1,10 @@
 module WOW::Capture::WOWObject
   class Manager
+    def self.build_from_guid(guid)
+      object_class = class_for_guid(guid)
+      object_class.new(guid)
+    end
+
     def self.class_for_guid(guid)
       case guid.type
       when :creature

@@ -10,9 +10,7 @@ module WOW::Capture::Packets::SMSG
     end
 
     private def update_wow_object
-      wow_object = parser.objects.find(@guid)
-      return if wow_object.nil?
-
+      wow_object = parser.objects.find_or_create(@guid)
       wow_object.move!(self)
     end
   end
