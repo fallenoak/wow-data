@@ -14,8 +14,22 @@ module WOW::Capture
       output = ''
 
       output << "#<#{self.class}:0x#{self.__id__.to_s(16)}"
-      output << " X: #{'%9.3f' % @x}; Y: #{'%10.3f' % @y}; Z: #{ '%8.3f' % @z}"
+      output << " @x= #{@x ? '%10.3f' % @x : '%10s' % '---'}"
+      output << " @y= #{@y ? '%10.3f' % @y : '%10s' % '---' }"
+      output << " @z= #{@z ? '%8.3f' % @z : '%8s' % '---' }"
       output << ">"
+
+      output
+    end
+
+    def pretty_print
+      output = ''
+
+      output << "{coord"
+      output << " x: #{@x ? '%10.3f' % @x : '%10s' % '---'}"
+      output << "; y: #{@y ? '%10.3f' % @y : '%10s' % '---'}"
+      output << "; z: #{@z ? '%8.3f' % @z : '%8s' % '---'}"
+      output << "}"
 
       output
     end
