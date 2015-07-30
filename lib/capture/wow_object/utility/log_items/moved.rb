@@ -15,8 +15,8 @@ module WOW::Capture::WOWObject::Utility::LogItems
       output = ''
 
       output << pretty_prefix
-      output << " From: #{@from.x || '?'},#{@from.y || '?'},#{@from.z || '?'}"
-      output << " To: #{@to.x || '?'},#{@to.y || '?'},#{@to.z || '?'}"
+      output << " From: #{@from.pretty_print}"
+      output << " ==> To: #{@to.pretty_print}"
 
       output
     end
