@@ -37,13 +37,15 @@ module WOW::Capture::Packets::SMSG
       @addon_message_prefix = read_char(prefix_len)
       @channel_name = read_char(channel_len)
       @text = read_char(text_len)
-
-      update_wow_object
     end
 
-    private def update_wow_object
-      wow_object = parser.objects.find_or_create(@sender_guid)
-      wow_object.chat!(self)
+    private def update_wow_objects!
+      # Targets might not be loaded yet, such as in the case of zone-wide yells referencing a
+      # different player when they turned in a quest.
+      target = parser.objects.find_or_create(@target_guid)
+
+      sender = parser.objects.find_or_create(@sender_guid)
+      sender.chat!(self)
     end
   end
 end

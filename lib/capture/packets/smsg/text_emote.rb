@@ -10,16 +10,13 @@ module WOW::Capture::Packets::SMSG
       @target_guid = read_packed_guid128
 
       @emote_type = WOW::Capture::Packets::Entities::TextEmote::TYPES[@emote_id]
-
-      update_wow_object
     end
 
-    private def update_wow_object
-      source_wow_object = parser.objects.find_or_create(@source_guid)
-      source_wow_object.text_emote!(self)
+    private def update_wow_objects!
+      target = parser.objects.find_or_create(@target_guid)
 
-      target_wow_object = parser.objects.find_or_create(@target_guid)
-      target_wow_object.text_emote!(self)
+      source = parser.objects.find_or_create(@source_guid)
+      source.text_emote!(self)
     end
   end
 end
