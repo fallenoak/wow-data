@@ -47,37 +47,3 @@ module WOW::Capture::Packets::SMSG
     end
   end
 end
-
-<<-eos
-
-[Parser(Opcode.SMSG_CHAT)]
-public static void HandleServerChatMessage(Packet packet)
-{
-    var bits24 = packet.ReadBits(11);
-    var bits1121 = packet.ReadBits(11);
-    var prefixLen = packet.ReadBits(5);
-    var channelLen = packet.ReadBits(7);
-    var textLen = packet.ReadBits(12);
-    packet.ReadBits("ChatFlags", ClientVersion.AddedInVersion(ClientVersionBuild.V6_1_2_19802) ? 11 : 10);
-
-    packet.ReadBit("HideChatLog");
-    packet.ReadBit("FakeSenderName");
-
-    text.SenderName = packet.ReadWoWString("Sender Name", bits24);
-    text.ReceiverName = packet.ReadWoWString("Receiver Name", bits1121);
-    packet.ReadWoWString("Addon Message Prefix", prefixLen);
-    packet.ReadWoWString("Channel Name", channelLen);
-
-    text.Text = packet.ReadWoWString("Text", textLen);
-
-    uint entry = 0;
-    if (text.SenderGUID.GetObjectType() == ObjectType.Unit)
-        entry = text.SenderGUID.GetEntry();
-    else if (text.ReceiverGUID.GetObjectType() == ObjectType.Unit)
-        entry = text.ReceiverGUID.GetEntry();
-
-    if (entry != 0)
-        Storage.CreatureTexts.Add(entry, text, packet.TimeSpan);
-}
-
-eos
