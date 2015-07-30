@@ -27,13 +27,18 @@ module WOW::Capture::WOWObject
       @storage.trigger(:move, self)
     end
 
-    def emote_text!(packet)
-      log_item = Utility::LogItems::EmotedText.new(self, packet)
+    def text_emote!(packet)
+      log_item = Utility::LogItems::TextEmoted.new(self, packet)
       @log << log_item
     end
 
     def emote!(packet)
       log_item = Utility::LogItems::Emoted.new(self, packet)
+      @log << log_item
+    end
+
+    def chat!(packet)
+      log_item = Utility::LogItems::Chatted.new(self, packet)
       @log << log_item
     end
 

@@ -1,9 +1,9 @@
 module WOW::Capture::WOWObject::Utility::LogItems
-  class EmotedText < Base
+  class TextEmoted < Base
     attr_reader :source, :target, :emote_id, :sound_index
 
     def type
-      :emoted_text
+      :text_emoted
     end
 
     def parse!
