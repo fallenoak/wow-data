@@ -67,5 +67,11 @@ module WOW::Capture
       last_key = @storage.keys.last
       @storage[last_key]
     end
+
+    def each(&block)
+      @storage.each_pair do |pair|
+        block.call(pair[1])
+      end
+    end
   end
 end
