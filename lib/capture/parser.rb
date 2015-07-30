@@ -128,7 +128,7 @@ module WOW::Capture
       else
         directory_entry = Opcodes.const_get(direction)::DIRECTORY[opcode]
 
-        if directory_entry.nil?
+        if directory_entry.nil? || directory_entry[1] == :Unhandled
           packet_module = Packets
           packet_class_name = Opcodes::UNHANDLED_PACKET_CLASS_NAME
         else
