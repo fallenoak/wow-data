@@ -1,27 +1,28 @@
-module WOW::Capture::Definitions::B20253
-  module Emote
-    TYPES = {
-      0   => :one_shot_none,
-      1   => :one_shot_talk,
-      2   => :one_shot_bow,
-      3   => :one_shot_wave,
-      4   => :one_shot_cheer,
-      5   => :one_shot_exclamation,
-      6   => :one_shot_question,
-      7   => :one_shot_eat,
-      10  => :state_dance,
-      11  => :one_shot_laugh,
-      12  => :state_sleep,
-      13  => :state_sit,
-      14  => :one_shot_rude,
-      15  => :one_shot_roar,
-      16  => :one_shot_kneel,
-      17  => :one_shot_kiss,
-      18  => :one_shot_cry,
-      19  => :one_shot_chicken,
-    }
+module WOW::Capture::Definitions
+  build 20253 do
+    table :emotes do
+      e   0,    :one_shot_none
+      e   1,    :one_shot_talk
+      e   2,    :one_shot_bow
+      e   3,    :one_shot_wave
+      e   4,    :one_shot_cheer
+      e   5,    :one_shot_exclamation
+      e   6,    :one_shot_question
+      e   7,    :one_shot_eat
+      e   10,   :state_dance
+      e   11,   :one_shot_laugh
+      e   12,   :state_sleep
+      e   13,   :state_sit
+      e   14,   :one_shot_rude
+      e   15,   :one_shot_roar
+      e   16,   :one_shot_kneel
+      e   17,   :one_shot_kiss
+      e   18,   :one_shot_cry
+      e   19,   :one_shot_chicken
+    end
   end
 end
+
 
 <<-addtheseemotes
 OneShotBeg                             = 20,

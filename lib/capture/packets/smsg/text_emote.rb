@@ -9,7 +9,7 @@ module WOW::Capture::Packets::SMSG
       @sound_index = read_int32
       @target_guid = read_packed_guid128
 
-      @emote_type = parser.defs::TextEmote::TYPES[@emote_id]
+      @emote_type = parser.defs.text_emotes[@emote_id]
     end
 
     private def update_wow_objects!

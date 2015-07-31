@@ -30,9 +30,9 @@ require_relative 'lib/adt/records/mfbo'
 require_relative 'lib/adt/records/mh2o'
 
 require_relative 'lib/capture/definitions'
-require_relative 'lib/capture/definitions/opcodes'
-require_relative 'lib/capture/definitions/emote'
-require_relative 'lib/capture/definitions/text_emote'
+require_relative 'lib/capture/definitions/20253/opcodes'
+require_relative 'lib/capture/definitions/20253/emotes'
+require_relative 'lib/capture/definitions/20253/text_emotes'
 
 require_relative 'lib/capture/parser'
 require_relative 'lib/capture/object_types'

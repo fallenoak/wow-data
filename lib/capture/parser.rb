@@ -33,7 +33,7 @@ module WOW::Capture
 
       read_header
       ensure_supported_client
-      set_definitions
+      select_definitions
     end
 
     # Returns the instance of ObjectStorage used by this parser instance.
@@ -73,16 +73,13 @@ module WOW::Capture
     # Identifies a stub to a module appropriate for the client build of this capture. May not be an
     # exact match if the definitions didn't change between builds -- as is common with hotfix
     # releases.
-    private def set_definitions
+    private def select_definitions
       truncated_builds = CLIENT_BUILDS.select { |build| build <= @client_build }.sort.reverse
 
       # Find the first existing module walking down from the actual build.
       truncated_builds.each do |potential_match|
-        build_module = "B#{potential_match}"
-
-        if WOW::Capture::Definitions.const_defined?(build_module)
-          @definitions = WOW::Capture::Definitions.const_get(build_module)
-        end
+        definitions = WOW::Capture::Definitions.for_build(potential_match)
+        @definitions = definitions if !definitions.nil?
       end
 
       raise "Unable to identify appropriate definitions: #{@client_build}" if @definitions.nil?
@@ -160,19 +157,16 @@ module WOW::Capture
     end
 
     private def opcode_to_packet_class(direction, opcode)
-      if !valid_direction?(direction)
-        packet_module = Packets
-        packet_class_name = Packets::INVALID_PACKET_CLASS_NAME
-      else
-        directory_entry = defs::Opcodes.const_get(direction)::DIRECTORY[opcode]
+      return Packets::Invalid if !valid_direction?(direction)
 
-        if directory_entry.nil? || directory_entry[1] == :Unhandled
-          packet_module = Packets
-          packet_class_name = Packets::UNHANDLED_PACKET_CLASS_NAME
-        else
-          packet_module = Packets.const_get(direction)
-          packet_class_name = directory_entry[1]
-        end
+      opcode_entry = defs.opcodes[direction.downcase][opcode]
+
+      if opcode_entry.nil? || opcode_entry.value == :Unhandled
+        packet_module = Packets
+        packet_class_name = Packets::UNHANDLED_PACKET_CLASS_NAME
+      else
+        packet_module = Packets.const_get(direction)
+        packet_class_name = opcode_entry.value
       end
 
       packet_class = packet_module.const_get(packet_class_name)
