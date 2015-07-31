@@ -1,7 +1,8 @@
 module WOW
-  module DBC; end;
-  module DB2; end;
-  module ADT; end;
+  module DBC; end
+  module DB2; end
+  module ADT; end
+  module Capture; end
 end
 
 require 'date'
@@ -28,6 +29,11 @@ require_relative 'lib/adt/records/mcnk'
 require_relative 'lib/adt/records/mfbo'
 require_relative 'lib/adt/records/mh2o'
 
+require_relative 'lib/capture/definitions'
+require_relative 'lib/capture/definitions/opcodes'
+require_relative 'lib/capture/definitions/emote'
+require_relative 'lib/capture/definitions/text_emote'
+
 require_relative 'lib/capture/parser'
 require_relative 'lib/capture/object_types'
 require_relative 'lib/capture/guid_types'
@@ -49,11 +55,7 @@ require_relative 'lib/capture/wow_object/base'
 require_relative 'lib/capture/wow_object/player'
 require_relative 'lib/capture/wow_object/creature'
 require_relative 'lib/capture/object_storage'
-require_relative 'lib/capture/opcodes'
 require_relative 'lib/capture/packets'
-require_relative 'lib/capture/packets/entities'
-require_relative 'lib/capture/packets/entities/text_emote'
-require_relative 'lib/capture/packets/entities/emote'
 require_relative 'lib/capture/packets/base'
 require_relative 'lib/capture/packets/unhandled'
 require_relative 'lib/capture/packets/invalid'

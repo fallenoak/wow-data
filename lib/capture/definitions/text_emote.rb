@@ -1,4 +1,4 @@
-module WOW::Capture::Packets::Entities
+module WOW::Capture::Definitions::B20253
   module TextEmote
     TYPES = {
       1   => :agree,

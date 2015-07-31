@@ -6,7 +6,7 @@ module WOW::Capture::Packets::SMSG
       @guid = read_packed_guid128
       @emote_id = read_int32
 
-      @emote_type = WOW::Capture::Packets::Entities::Emote::TYPES[@emote_id]
+      @emote_type = parser.defs::Emote::TYPES[@emote_id]
     end
 
     private def update_wow_objects!

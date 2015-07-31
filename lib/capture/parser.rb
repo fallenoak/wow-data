@@ -7,6 +7,8 @@ module WOW::Capture
       V3_1 = 0x301
     end
 
+    CLIENT_BUILDS = [20338, 20253]
+
     DIRECTIONS = ['CMSG', 'SMSG']
 
     def initialize(path, opts = {})
@@ -30,7 +32,20 @@ module WOW::Capture
       @packet_index = 0
 
       read_header
+      ensure_supported_client
+      set_definitions
     end
+
+    # Returns the instance of ObjectStorage used by this parser instance.
+    def objects
+      @objects
+    end
+
+    # Returns a stub to the module appropriate for the client build of this capture.
+    def definitions
+      @definitions
+    end
+    alias_method :defs, :definitions
 
     def next_packet
       read_packet
@@ -44,14 +59,36 @@ module WOW::Capture
       @file.eof?
     end
 
-    def objects
-      @objects
-    end
-
+    # Drives the parser across all packets within the capture. Useful when relying on event
+    # subscriptions to process the capture.
     def replay!
       next_packet while !eof?
     end
 
+    # Checks if the capture's build is in the set of supported client builds.
+    private def ensure_supported_client
+      raise "Unsupported client build: #{@client_build}" if !CLIENT_BUILDS.include?(@client_build)
+    end
+
+    # Identifies a stub to a module appropriate for the client build of this capture. May not be an
+    # exact match if the definitions didn't change between builds -- as is common with hotfix
+    # releases.
+    private def set_definitions
+      truncated_builds = CLIENT_BUILDS.select { |build| build <= @client_build }.sort.reverse
+
+      # Find the first existing module walking down from the actual build.
+      truncated_builds.each do |potential_match|
+        build_module = "B#{potential_match}"
+
+        if WOW::Capture::Definitions.const_defined?(build_module)
+          @definitions = WOW::Capture::Definitions.const_get(build_module)
+        end
+      end
+
+      raise "Unable to identify appropriate definitions: #{@client_build}" if @definitions.nil?
+    end
+
+    # Read the capture header.
     private def read_header
       @magic = read_char(3)
       @format_version = read_uint16
@@ -66,6 +103,7 @@ module WOW::Capture
       @sniffer_hello = read_char(hello_length)
     end
 
+    # Read a single packet.
     private def read_packet
       direction = read_char(4)
       connection_index = read_int32
@@ -124,13 +162,13 @@ module WOW::Capture
     private def opcode_to_packet_class(direction, opcode)
       if !valid_direction?(direction)
         packet_module = Packets
-        packet_class_name = Opcodes::INVALID_PACKET_CLASS_NAME
+        packet_class_name = Packets::INVALID_PACKET_CLASS_NAME
       else
-        directory_entry = Opcodes.const_get(direction)::DIRECTORY[opcode]
+        directory_entry = defs::Opcodes.const_get(direction)::DIRECTORY[opcode]
 
         if directory_entry.nil? || directory_entry[1] == :Unhandled
           packet_module = Packets
-          packet_class_name = Opcodes::UNHANDLED_PACKET_CLASS_NAME
+          packet_class_name = Packets::UNHANDLED_PACKET_CLASS_NAME
         else
           packet_module = Packets.const_get(direction)
           packet_class_name = directory_entry[1]
