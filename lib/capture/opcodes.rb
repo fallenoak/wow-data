@@ -11,6 +11,7 @@ module WOW::Capture
         0x144A => ['SMSG_CHAT',                                 :Chat],
         0x0531 => ['SMSG_EMOTE',                                :Emote],
         0x0C28 => ['SMSG_ON_MONSTER_MOVE',                      :OnMonsterMove],
+        0x0331 => ['SMSG_QUERY_PLAYER_NAME_RESPONSE',           :QueryPlayerNameResponse],
         0x0C54 => ['SMSG_TEXT_EMOTE',                           :TextEmote],
         0x0D36 => ['SMSG_UPDATE_OBJECT',                        :UpdateObject],
 
@@ -685,7 +686,6 @@ module WOW::Capture
         0x0022 => ['SMSG_QUERY_PAGE_TEXT_RESPONSE',             :Unhandled],
         0x00A2 => ['SMSG_QUERY_PETITION_RESPONSE',              :Unhandled],
         0x064F => ['SMSG_QUERY_PET_NAME_RESPONSE',              :Unhandled],
-        0x0331 => ['SMSG_QUERY_PLAYER_NAME_RESPONSE',           :Unhandled],
         0x0C09 => ['SMSG_QUERY_QUEST_INFO_RESPONSE',            :Unhandled],
         0x05A6 => ['SMSG_QUERY_TIME_RESPONSE',                  :Unhandled],
         0x0E8A => ['SMSG_QUEST_COMPLETION_NPC_RESPONSE',        :Unhandled],
