@@ -15,6 +15,7 @@ module WOW::Capture
       @file = File.open(path, 'rb')
 
       @objects = ObjectStorage.new
+      @session = SessionStorage.new
 
       @magic = nil
       @format_version = nil
@@ -36,16 +37,20 @@ module WOW::Capture
       select_definitions
     end
 
-    # Returns the instance of ObjectStorage used by this parser instance.
-    def objects
-      @objects
-    end
-
     # Returns a stub to the module appropriate for the client build of this capture.
     def definitions
       @definitions
     end
     alias_method :defs, :definitions
+
+    # Returns the instance of ObjectStorage used by this parser instance.
+    def objects
+      @objects
+    end
+
+    def session
+      @session
+    end
 
     def next_packet
       read_packet

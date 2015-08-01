@@ -927,6 +927,7 @@ module WOW::Capture::Definitions
       table :cmsg do
         # Implemented
         e   0x045A,   :AuthSession,                             tc_value: 'CMSG_AUTH_SESSION'
+        e   0x0921,   :PlayerLogin,                             tc_value: 'CMSG_PLAYER_LOGIN'
 
         # Not Implemented
         e   0x00A6,   :Unhandled,                               tc_value: 'CMSG_ACCEPT_GUILD_INVITE'
@@ -1385,7 +1386,6 @@ module WOW::Capture::Definitions
         e   0x0083,   :Unhandled,                               tc_value: 'CMSG_PET_SPELL_AUTOCAST'
         e   0x0694,   :Unhandled,                               tc_value: 'CMSG_PET_STOP_ATTACK'
         e   0x0659,   :Unhandled,                               tc_value: 'CMSG_PING'
-        e   0x0921,   :Unhandled,                               tc_value: 'CMSG_PLAYER_LOGIN'
         e   0x0419,   :Unhandled,                               tc_value: 'CMSG_PROTOCOL_MISMATCH'
         e   0x044F,   :Unhandled,                               tc_value: 'CMSG_PUSH_QUEST_TO_PARTY'
         e   0x1CC3,   :Unhandled,                               tc_value: 'CMSG_PVP_LOG_DATA'
