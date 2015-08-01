@@ -21,16 +21,9 @@ module WOW::Capture
       end
     end
 
-    def create(wow_object, packet = nil)
+    def store(wow_object)
       wow_object.storage = self
       @storage[wow_object.guid.to_i] = wow_object
-
-      if !packet.nil?
-        log_item = WOWObject::Utility::LogItems::Create.new(wow_object, packet)
-        wow_object.log << log_item
-      end
-
-      trigger(:create, wow_object)
     end
 
     def destroy(wow_object_or_guid, packet = nil)
@@ -60,7 +53,9 @@ module WOW::Capture
 
       # We didn't find the object, so we're creating it manually.
       wow_object = WOWObject::Manager.build_from_guid(guid)
-      create(wow_object)
+      store(wow_object)
+
+      trigger(:create, wow_object)
 
       wow_object
     end

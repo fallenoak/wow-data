@@ -12,16 +12,16 @@ module WOW::Capture::WOWObject
       @log = Utility::Log.new
     end
 
-    def initialize_movement_state(raw_movement_state)
-      @movement = raw_movement_state
-    end
-
-    def initialize_values_state(raw_values_state)
-      @values = raw_values_state
-    end
-
     def storage=(storage)
       @storage = storage
+    end
+
+    def spawn!(packet, raw_movement_state, raw_values_state)
+      log_item = Utility::LogItems::Spawn.new(self, packet)
+      @log << log_item
+
+      @movement = raw_movement_state
+      @values = raw_values_state
     end
 
     def move!(packet)

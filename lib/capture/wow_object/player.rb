@@ -1,7 +1,7 @@
 module WOW::Capture::WOWObject
-  attr_reader :name, :race
-
   class Player < Base
+    attr_reader :name, :race
+
     def set_name!(name)
       @name = name
     end
