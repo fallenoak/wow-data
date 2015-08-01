@@ -32,6 +32,7 @@ require_relative 'lib/adt/records/mh2o'
 
 require_relative 'lib/capture/definitions'
 require_relative 'lib/capture/definitions/20253/opcodes'
+require_relative 'lib/capture/definitions/20253/classes'
 require_relative 'lib/capture/definitions/20253/emotes'
 require_relative 'lib/capture/definitions/20253/races'
 require_relative 'lib/capture/definitions/20253/text_emotes'

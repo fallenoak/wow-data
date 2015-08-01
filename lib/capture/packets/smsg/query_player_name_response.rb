@@ -1,7 +1,7 @@
 module WOW::Capture::Packets::SMSG
   class QueryPlayerNameResponse < WOW::Capture::Packets::Base
     attr_reader :player_guid, :account_guid, :bnet_account_guid, :virtual_realm_address,
-      :race_id, :gender_id, :class_id, :level, :name
+      :race_id, :gender_id, :class_id, :level, :name, :race, :character_class
 
     def parse!
       @has_data = read_byte == 0
@@ -35,6 +35,7 @@ module WOW::Capture::Packets::SMSG
       @level = read_byte
 
       @race = parser.defs.races[@race_id]
+      @character_class = parser.defs.classes[@class_id]
 
       @name = read_char(name_length)
     end
@@ -49,6 +50,7 @@ module WOW::Capture::Packets::SMSG
       if has_data?
         player_object.set_name!(@name)
         player_object.set_race!(@race)
+        player_object.set_character_class!(@character_class)
       end
     end
   end
