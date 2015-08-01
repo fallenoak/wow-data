@@ -21,18 +21,25 @@ module WOW::Capture
       @entry_id = (high >> 6) & 0x7FFFFF
     end
 
+    # Represent the Guid128 as an integer.
     def to_i
-      [@low, @high].hash
+      "#{@high.to_s(16)}#{@low.to_s(16)}".to_i(16)
     end
 
-    def hex_id
-      to_i.abs.to_s(16)[0, 6]
+    # Represent the Guid128 as a hex string.
+    def hex
+      to_i.to_s(16)
+    end
+
+    # Represent the Guid128 as a truncated hex string.
+    def short_id
+      hex[0, 6]
     end
 
     def pretty_print
       output = ''
 
-      output << "{guid128:0x#{hex_id}"
+      output << "{guid128:0x#{short_id}"
       output << " type:#{@type};"
       output << " realm_id:#{@realm_id};"
       output << " server_id:#{@server_id};"
