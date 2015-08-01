@@ -34,6 +34,8 @@ module WOW::Capture::Packets::SMSG
       @class_id = read_byte
       @level = read_byte
 
+      @race = parser.defs.races[@race_id]
+
       @name = read_char(name_length)
     end
 
@@ -46,6 +48,7 @@ module WOW::Capture::Packets::SMSG
 
       if has_data?
         player_object.set_name!(@name)
+        player_object.set_race!(@race)
       end
     end
   end
