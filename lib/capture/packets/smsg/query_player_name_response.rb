@@ -43,7 +43,7 @@ module WOW::Capture::Packets::SMSG
       @has_data == true
     end
 
-    def update_wow_objects!
+    def update_state!
       player_object = parser.objects.find_or_create(@player_guid)
 
       if has_data?

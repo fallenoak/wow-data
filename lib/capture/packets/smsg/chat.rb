@@ -39,7 +39,7 @@ module WOW::Capture::Packets::SMSG
       @text = read_char(text_len)
     end
 
-    private def update_wow_objects!
+    private def update_state!
       # Targets might not be loaded yet, such as in the case of zone-wide yells referencing a
       # different player when they turned in a quest.
       target = parser.objects.find_or_create(@target_guid)

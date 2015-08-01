@@ -7,7 +7,7 @@ module WOW::Capture::Packets::SMSG
       @position = WOW::Capture::Coordinate.new(read_vector(3))
     end
 
-    private def update_wow_objects!
+    private def update_state!
       wow_object = parser.objects.find_or_create(@guid)
       wow_object.move!(self)
     end

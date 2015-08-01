@@ -16,7 +16,7 @@ module WOW::Capture::Packets
       @curbitval = nil
 
       parse!
-      update_wow_objects!
+      update_state!
     end
 
     def handled?
@@ -30,7 +30,7 @@ module WOW::Capture::Packets
     def parse!
     end
 
-    def update_wow_objects!
+    def update_state!
     end
 
     def pos
