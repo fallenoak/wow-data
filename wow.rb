@@ -78,3 +78,4 @@ require_relative 'lib/capture/packets/smsg/update_object/readers'
 require_relative 'lib/capture/packets/smsg/update_object/entries'
 
 require_relative 'lib/capture/packets/cmsg/auth_session'
+require_relative 'lib/capture/packets/cmsg/player_login'
