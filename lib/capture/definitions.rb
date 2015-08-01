@@ -86,6 +86,10 @@ module WOW::Capture
         @value.to_s
       end
 
+      private def to_ary
+        nil
+      end
+
       def method_missing(extra)
         if @extras.has_key?(extra.to_sym)
           @extras[extra]
