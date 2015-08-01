@@ -6,6 +6,7 @@ module WOW
 end
 
 require 'date'
+require 'digest/sha1'
 
 require_relative 'lib/bit_array'
 

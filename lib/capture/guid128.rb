@@ -31,9 +31,9 @@ module WOW::Capture
       to_i.to_s(16)
     end
 
-    # Represent the Guid128 as a truncated hex string.
+    # Represent the Guid128 as a truncated hex string of a hash.
     def short_id
-      hex[0, 6]
+      Digest::SHA1.hexdigest(hex)[0, 6]
     end
 
     def pretty_print
