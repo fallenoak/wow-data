@@ -36,6 +36,7 @@ require_relative 'lib/capture/definitions/20253/classes'
 require_relative 'lib/capture/definitions/20253/emotes'
 require_relative 'lib/capture/definitions/20253/races'
 require_relative 'lib/capture/definitions/20253/text_emotes'
+require_relative 'lib/capture/definitions/20253/unit_flags'
 
 require_relative 'lib/capture/parser'
 require_relative 'lib/capture/object_types'
