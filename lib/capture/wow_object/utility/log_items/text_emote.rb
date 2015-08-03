@@ -18,7 +18,6 @@ module WOW::Capture::WOWObject::Utility::LogItems
       output = ''
 
       output << pretty_prefix
-      output << " Source: #{@source ? @source.guid.pretty_print : '?'};"
       output << " Target: #{@target ? @target.guid.pretty_print : '?'};"
       output << " Emote ID: #{@emote_id};"
       output << " Emote Type: #{@emote_type};"

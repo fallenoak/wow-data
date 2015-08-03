@@ -26,23 +26,6 @@ module WOW::Capture
       @storage[wow_object.guid.to_i] = wow_object
     end
 
-    def destroy(wow_object_or_guid, packet = nil)
-      if wow_object_or_guid.is_a?(WOW::Capture::Guid128)
-        wow_object = find(wow_object_or_guid)
-      else
-        wow_object = wow_object_or_guid
-      end
-
-      if !packet.nil?
-        log_item = WOWObject::Utility::LogItems::Destroy.new(wow_object, packet)
-        wow_object.log << log_item
-      end
-
-      @storage.delete(wow_object.guid.to_i)
-
-      trigger(:destroy, wow_object)
-    end
-
     def find(guid)
       @storage[guid.to_i]
     end

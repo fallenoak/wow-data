@@ -1,7 +1,10 @@
 module WOW::Capture::WOWObject::Utility::LogItems
-  class Destroy < Base
+  class ExitCombat < Base
     def type
-      :destroy
+      :exit_combat
+    end
+
+    def parse!
     end
   end
 end

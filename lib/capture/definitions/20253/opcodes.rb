@@ -10,6 +10,8 @@ module WOW::Capture::Definitions
         e   0x0331,   :QueryPlayerNameResponse,                 tc_value: 'SMSG_QUERY_PLAYER_NAME_RESPONSE'
         e   0x0C54,   :TextEmote,                               tc_value: 'SMSG_TEXT_EMOTE'
         e   0x0D36,   :UpdateObject,                            tc_value: 'SMSG_UPDATE_OBJECT'
+        e   0x01B5,   :AttackStart,                             tc_value: 'SMSG_ATTACK_START'
+        e   0x0C57,   :AttackStop,                              tc_value: 'SMSG_ATTACK_STOP'
 
         # Not Implemented
         e   0x0895,   :Unhandled,                               tc_value: 'SMSG_ABORT_NEW_WORLD'
@@ -42,8 +44,6 @@ module WOW::Capture::Definitions
         e   0x0816,   :Unhandled,                               tc_value: 'SMSG_ARENA_ERROR'
         e   0x0E50,   :Unhandled,                               tc_value: 'SMSG_ARENA_PREP_OPPONENT_SPECIALIZATIONS'
         e   0x0813,   :Unhandled,                               tc_value: 'SMSG_ATTACKER_STATE_UPDATE'
-        e   0x01B5,   :Unhandled,                               tc_value: 'SMSG_ATTACK_START'
-        e   0x0C57,   :Unhandled,                               tc_value: 'SMSG_ATTACK_STOP'
         e   0x0A95,   :Unhandled,                               tc_value: 'SMSG_ATTACK_SWING_ERROR'
         e   0x0526,   :Unhandled,                               tc_value: 'SMSG_ATTACK_SWING_LANDED_LOG'
         e   0x0C18,   :Unhandled,                               tc_value: 'SMSG_AUCTION_CLOSED_NOTIFICATION'
