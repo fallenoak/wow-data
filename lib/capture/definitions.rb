@@ -86,6 +86,19 @@ module WOW::Capture
         @value.to_s
       end
 
+      def ==(other)
+        other == @value || other.to_s == @value.to_s
+      end
+      alias_method :eql?, :==
+
+      def ===(other)
+        other === @value || other.to_s === @value.to_s
+      end
+
+      def hash
+        @value.hash
+      end
+
       private def to_ary
         nil
       end
@@ -114,6 +127,43 @@ module WOW::Capture
 
     def self.for_build(build_number)
       @builds[build_number]
+    end
+  end
+end
+
+# Override String and Symbol equality to support table entries.
+class String
+  def ==(other)
+    if other.is_a?(WOW::Capture::Definitions::Entry)
+      return other == self
+    else
+      super(other)
+    end
+  end
+
+  def ===(other)
+    if other.is_a?(WOW::Capture::Definitions::Entry)
+      return other === self
+    else
+      super(other)
+    end
+  end
+end
+
+class Symbol
+  def ==(other)
+    if other.is_a?(WOW::Capture::Definitions::Entry)
+      return other == self
+    else
+      super(other)
+    end
+  end
+
+  def ===(other)
+    if other.is_a?(WOW::Capture::Definitions::Entry)
+      return other === self
+    else
+      super(other)
     end
   end
 end
