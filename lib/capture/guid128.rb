@@ -36,6 +36,12 @@ module WOW::Capture
       Digest::SHA1.hexdigest(hex)[0, 6]
     end
 
+    # Handle equality checks using the #to_i representation of the Guid128s.
+    def ==(other)
+      other.is_a?(Guid128) && self.to_i == other.to_i
+    end
+    alias_method :eql?, :==
+
     def pretty_print
       output = ''
 
