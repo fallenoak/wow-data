@@ -3,14 +3,16 @@ module WOW::Capture
     attr_reader :realm_id, :server_id, :high_type_id, :sub_type_id, :object_type_id,
       :type, :object_type, :map_id, :entry_id
 
-    def initialize(low, high)
+    def initialize(parser, low, high)
+      @parser = parser
+
       @low = low
       @high = high
 
       @high_type_id = (high >> 58) & 0x3F
       @sub_type_id = (high & 0x3F)
 
-      @type = get_type
+      @type = parser.defs.guid_types.high[@high_type_id]
 
       @object_type_id = get_object_type_id
       @object_type = get_object_type
@@ -54,10 +56,6 @@ module WOW::Capture
       output << "}"
 
       output
-    end
-
-    private def get_type
-      WOW::Capture::GuidTypes::HIGH_TYPES[@high_type_id]
     end
 
     private def get_object_type

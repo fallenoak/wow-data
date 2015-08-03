@@ -95,7 +95,7 @@ module WOW::Capture::Packets
       guid_low = read_packed_uint64(guid_low_mask)
       guid_high = read_packed_uint64(guid_high_mask)
 
-      guid = WOW::Capture::Guid128.new(guid_low, guid_high)
+      guid = WOW::Capture::Guid128.new(parser, guid_low, guid_high)
 
       guid
     end
