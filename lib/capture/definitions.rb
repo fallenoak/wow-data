@@ -60,9 +60,10 @@ module WOW::Capture
         @entries[entry.index] = entry
       end
 
-      def [](index)
+      def find(index)
         @entries[index]
       end
+      alias_method :[], :find
 
       def find_by_value(value)
         @entries.select { |entry| entry.value == value }.first
