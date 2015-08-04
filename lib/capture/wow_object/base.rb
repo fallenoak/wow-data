@@ -1,6 +1,6 @@
 module WOW::Capture::WOWObject
   class Base
-    attr_reader :guid, :type, :log, :movement, :current_position, :active_combat_sessions
+    attr_reader :guid, :type, :log, :movement, :attributes, :current_position, :active_combat_sessions
 
     def initialize(guid)
       @guid = guid
@@ -15,6 +15,8 @@ module WOW::Capture::WOWObject
 
       @is_spawned = false
       @is_despawned = false
+
+      @attributes = Utility::Attributes.new(self)
     end
 
     def storage=(storage)
@@ -41,7 +43,7 @@ module WOW::Capture::WOWObject
       to_log!(:Spawn, packet, contextual: false)
 
       @movement = raw_movement_state
-      @values = raw_values_state
+      @attributes.set!(raw_values_state)
 
       @storage.trigger(:spawn, self)
     end
@@ -112,8 +114,11 @@ module WOW::Capture::WOWObject
       to_log!(:Died, packet)
     end
 
-    def update_values!(updated_values)
-      @values.merge!(updated_values)
+    def update_attributes!(packet, new_attributes)
+      delta = @attributes.update!(new_attributes)
+
+      to_log!(:Update, packet, delta: delta)
+
       @storage.trigger(:update, self)
     end
 
@@ -137,19 +142,19 @@ module WOW::Capture::WOWObject
     end
 
     private def to_log!(item_class_name, packet, opts = {})
+      contextual = opts.delete(:contextual) != false
+
+      # Standard logging.
       item_class = Utility::LogItems.const_get(item_class_name)
-      log_item = item_class.new(self, packet, {})
+      log_item = item_class.new(self, packet, opts)
       log.add(log_item)
 
-      return if opts[:contextual] == false
+      return if !contextual
 
+      # Contextual logging.
       related_combat_sessions.each do |combat_session|
         combat_session.log.add(log_item)
       end
     end
-
-    #def method_missing(method_name)
-    #  @values[method_name]
-    #end
   end
 end

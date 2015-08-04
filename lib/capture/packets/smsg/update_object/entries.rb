@@ -25,7 +25,7 @@ module WOW::Capture::Packets::SMSG
           @raw_updated_values = read_values
 
           wow_object = @packet.parser.objects.find(@guid)
-          wow_object.update_values!(@raw_updated_values)
+          wow_object.update_attributes!(@packet, @raw_updated_values)
         end
       end
 

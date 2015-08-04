@@ -1,6 +1,6 @@
 module WOW::Capture::WOWObject::Utility::LogItems
   class Base
-    attr_reader :packet_index, :tick, :time, :context, :embed
+    attr_reader :packet_index, :tick, :time, :context, :embed, :extras
 
     def initialize(object, packet, opts = {})
       @object = object
@@ -10,8 +10,9 @@ module WOW::Capture::WOWObject::Utility::LogItems
       @tick = packet.tick
       @time = packet.time
 
-      @context = opts.has_key?(:context) ? opts[:context] : nil
-      @embed = opts.has_key?(:embed) ? opts[:embed] : nil
+      @context = opts.has_key?(:context) ? opts.delete(:context) : nil
+      @embed = opts.has_key?(:embed) ? opts.delete(:embed) : nil
+      @extras = opts
 
       parse!
 
