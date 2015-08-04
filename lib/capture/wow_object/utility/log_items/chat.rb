@@ -16,11 +16,14 @@ module WOW::Capture::WOWObject::Utility::LogItems
       output = ''
 
       output << pretty_prefix
-      output << " Channel: [#{@channel_name}]" if !@channel_name.to_s.empty?
-      output << " Sender: [#{@sender_name}]" if !@sender_name.to_s.empty?
-      output << " Text: #{@text}"
 
-      output
+      lines = []
+
+      lines << " Channel: [#{@channel_name}]" if !@channel_name.to_s.empty?
+      lines << " Sender:  [#{@sender_name}]" if !@sender_name.to_s.empty?
+      lines << " Text:    #{@text}"
+
+      output << lines.join(pretty_line)
     end
   end
 end
