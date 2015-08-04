@@ -62,6 +62,10 @@ module WOW::Capture::WOWObject
       @storage.trigger(:despawn, self)
     end
 
+    def loot_response!(packet)
+      to_log!(:LootResponse, packet)
+    end
+
     def move!(packet)
       to_log!(:Move, packet)
 
