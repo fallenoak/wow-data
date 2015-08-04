@@ -156,7 +156,7 @@ module WOW::Capture::Packets::Readers
       power = {}
 
       power[:cost] = read_int32
-      power[:type] = read_byte
+      power[:type] = parser.defs.power_types.find(read_byte)
 
       power
     end
