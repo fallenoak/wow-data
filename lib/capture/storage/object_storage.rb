@@ -66,6 +66,26 @@ module WOW::Capture
       end
     end
 
+    def find_by_guid_type(type)
+      results = []
+
+      @storage.each_pair do |index, object|
+        results << object if object.guid.type == type
+      end
+
+      results
+    end
+
+    def find_by_object_type(type)
+      results = []
+
+      @storage.each_pair do |index, object|
+        results << object if object.guid.object_type == type
+      end
+
+      results
+    end
+
     private def build_from_guid(guid)
       object_class = class_for_guid(guid)
       object = object_class.new(guid)
