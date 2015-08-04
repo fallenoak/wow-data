@@ -14,6 +14,8 @@ module WOW::Capture::WOWObject::Utility
             @difference = @new_value
           elsif !@old_value.nil? && @new_value.nil?
             @difference = -@old_value
+          elsif !@old_value.nil? && !@new_value.nil?
+            @difference = @new_value - @old_value
           else
             @difference = nil
           end
