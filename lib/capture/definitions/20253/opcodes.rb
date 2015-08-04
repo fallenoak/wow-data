@@ -12,6 +12,8 @@ module WOW::Capture::Definitions
         e   0x0D36,   :UpdateObject,                            tc_value: 'SMSG_UPDATE_OBJECT'
         e   0x01B5,   :AttackStart,                             tc_value: 'SMSG_ATTACK_START'
         e   0x0C57,   :AttackStop,                              tc_value: 'SMSG_ATTACK_STOP'
+        e   0x046E,   :SpellGo,                                 tc_value: 'SMSG_SPELL_GO'
+        e   0x007D,   :SpellStart,                              tc_value: 'SMSG_SPELL_START'
 
         # Not Implemented
         e   0x0895,   :Unhandled,                               tc_value: 'SMSG_ABORT_NEW_WORLD'
@@ -818,7 +820,6 @@ module WOW::Capture::Definitions
         e   0x0C39,   :Unhandled,                               tc_value: 'SMSG_SPELL_EXECUTE_LOG'
         e   0x0BAA,   :Unhandled,                               tc_value: 'SMSG_SPELL_FAILED_OTHER'
         e   0x00EA,   :Unhandled,                               tc_value: 'SMSG_SPELL_FAILURE'
-        e   0x046E,   :Unhandled,                               tc_value: 'SMSG_SPELL_GO'
         e   0x02A9,   :Unhandled,                               tc_value: 'SMSG_SPELL_HEAL_LOG'
         e   0x02FA,   :Unhandled,                               tc_value: 'SMSG_SPELL_INSTAKILL_LOG'
         e   0x05A9,   :Unhandled,                               tc_value: 'SMSG_SPELL_INTERRUPT_LOG'
@@ -827,7 +828,6 @@ module WOW::Capture::Definitions
         e   0x062E,   :Unhandled,                               tc_value: 'SMSG_SPELL_NON_MELEE_DAMAGE_LOG'
         e   0x00BE,   :Unhandled,                               tc_value: 'SMSG_SPELL_OR_DAMAGE_IMMUNE'
         e   0x06FA,   :Unhandled,                               tc_value: 'SMSG_SPELL_PERIODIC_AURA_LOG'
-        e   0x007D,   :Unhandled,                               tc_value: 'SMSG_SPELL_START'
         e   0x04A9,   :Unhandled,                               tc_value: 'SMSG_SPELL_UPDATE_CHAIN_TARGETS'
         e   0x0E4C,   :Unhandled,                               tc_value: 'SMSG_SPIRIT_HEALER_CONFIRM'
         e   0x0A52,   :Unhandled,                               tc_value: 'SMSG_STAND_STATE_UPDATE'

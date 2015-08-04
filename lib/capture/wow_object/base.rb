@@ -117,6 +117,14 @@ module WOW::Capture::WOWObject
       @storage.trigger(:update, self)
     end
 
+    def spell_start!(packet)
+      to_log!(:SpellStart, packet)
+    end
+
+    def spell_go!(packet)
+      to_log!(:SpellGo, packet)
+    end
+
     private def related_combat_sessions(mode = :any)
       case mode
       when :attacker
