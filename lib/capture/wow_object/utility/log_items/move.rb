@@ -16,7 +16,8 @@ module WOW::Capture::WOWObject::Utility::LogItems
 
       output << pretty_prefix
       output << " From: #{@from.pretty_print}"
-      output << " ==> To: #{@to.pretty_print}"
+      output << pretty_line
+      output << " To:   #{@to.pretty_print}"
 
       output
     end
