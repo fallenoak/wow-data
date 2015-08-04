@@ -14,8 +14,9 @@ module WOW::Capture
     def initialize(path, opts = {})
       @file = File.open(path, 'rb')
 
-      @objects = ObjectStorage.new
+      @objects = ObjectStorage.new(self)
       @session = SessionStorage.new
+      @combat_sessions = CombatSessionStorage.new(self)
 
       @magic = nil
       @format_version = nil
@@ -50,6 +51,10 @@ module WOW::Capture
 
     def session
       @session
+    end
+
+    def combat_sessions
+      @combat_sessions
     end
 
     def next_packet

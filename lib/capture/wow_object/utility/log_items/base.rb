@@ -67,5 +67,13 @@ module WOW::Capture::WOWObject::Utility::LogItems
 
       output
     end
+
+    private def pretty_line
+      output = ''
+
+      output = "\n" << (' ' * pretty_prefix.length)
+
+      output
+    end
   end
 end

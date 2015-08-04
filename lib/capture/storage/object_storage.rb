@@ -1,6 +1,9 @@
 module WOW::Capture
   class ObjectStorage
-    def initialize
+    attr_reader :parser
+
+    def initialize(parser)
+      @parser = parser
       @storage = {}
       @subscriptions = {}
     end
@@ -35,7 +38,7 @@ module WOW::Capture
       return wow_object if !wow_object.nil?
 
       # We didn't find the object, so we're creating it manually.
-      wow_object = WOWObject::Manager.build_from_guid(guid)
+      wow_object = build_from_guid(guid)
       store(wow_object)
 
       trigger(:create, wow_object)
@@ -60,6 +63,24 @@ module WOW::Capture
     def each(&block)
       @storage.each_pair do |pair|
         block.call(pair[1])
+      end
+    end
+
+    private def build_from_guid(guid)
+      object_class = class_for_guid(guid)
+      object = object_class.new(guid)
+
+      object
+    end
+
+    private def class_for_guid(guid)
+      case guid.type
+      when :creature
+        WOW::Capture::WOWObject::Creature
+      when :player
+        WOW::Capture::WOWObject::Player
+      else
+        WOW::Capture::WOWObject::Base
       end
     end
   end
