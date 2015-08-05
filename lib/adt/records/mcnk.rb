@@ -27,9 +27,9 @@ module WOW::ADT::Records
       [:uint32, :n_sound_emitters],
       [:uint32, :offset_mclq],
       [:uint32, :size_liquid],
-      [:float,  :position1],
-      [:float,  :position2],
-      [:float,  :position3],
+      [:float,  :position_x],
+      [:float,  :position_y],
+      [:float,  :position_z],
       [:uint32, :offset_mccv],
       [:uint32, :offset_mclv],
       [:uint32, :unused]
