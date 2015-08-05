@@ -1,6 +1,9 @@
 module WOW::ADT::Records
   class Base
-    def initialize(data)
+    attr_reader :type
+
+    def initialize(type, data)
+      @type = type.to_sym
       @data = StringIO.new(data)
 
       parse
