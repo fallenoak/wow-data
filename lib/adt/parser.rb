@@ -9,13 +9,31 @@ module WOW::ADT
 
       @records = []
 
-      read_records
+      # Default to caching
+      @cache = opts[:cache] != false
 
-      close
+      # Default to non lazy
+      @lazy = opts[:lazy] != false
+
+      if !@lazy
+        # Force caching if not lazy
+        @cache = true
+
+        read_records
+        close
+      end
     end
 
     def close
       @file.close
+    end
+
+    def lazy?
+      @lazy == true
+    end
+
+    def cache?
+      @cache == true
     end
 
     def eof?
@@ -31,16 +49,24 @@ module WOW::ADT
       end
     end
 
+    def next_record
+      read_record
+    end
+
+    private def read_record
+      record_type = read_type
+      record_length = read_uint32
+      record_data = read_data(record_length)
+
+      record = Records.const_get(record_type).new(record_type, record_data)
+
+      @records << record if cache?
+
+      record
+    end
+
     private def read_records
-      while !eof?
-        record_type = read_type
-        record_length = read_uint32
-        record_data = read_data(record_length)
-
-        record = Records.const_get(record_type).new(record_data)
-
-        @records << record
-      end
+      read_record while !eof?
     end
 
     private def read_type
