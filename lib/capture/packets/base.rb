@@ -174,5 +174,17 @@ module WOW::Capture::Packets
 
       return [x, y, z, w]
     end
+
+    def read_string
+      buffer = ''
+
+      loop do
+        char = read_char(1)
+        break if char == "\x00" || char.nil?
+        buffer << char
+      end
+
+      buffer
+    end
   end
 end
