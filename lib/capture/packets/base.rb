@@ -10,10 +10,10 @@ module WOW::Capture::Packets
       @tick = tick
       @time = time
 
-      @data = StringIO.new(data)
+      @_data = StringIO.new(data)
 
-      @bitpos = 8
-      @curbitval = nil
+      @_bitpos = 8
+      @_curbitval = nil
 
       parse!
       update_state!
@@ -34,22 +34,22 @@ module WOW::Capture::Packets
     end
 
     def pos
-      @data.pos
+      @_data.pos
     end
 
     def pos=(new_pos)
-      @data.pos = new_pos
+      @_data.pos = new_pos
     end
 
     def read_bit
-      @bitpos += 1
+      @_bitpos += 1
 
-      if @bitpos > 7
-        @bitpos = 0
-        @curbitval = read_byte
+      if @_bitpos > 7
+        @_bitpos = 0
+        @_curbitval = read_byte
       end
 
-      value = ((@curbitval >> (7 - @bitpos)) & 1) != 0
+      value = ((@_curbitval >> (7 - @_bitpos)) & 1) != 0
 
       value
     end
@@ -65,27 +65,27 @@ module WOW::Capture::Packets
     end
 
     def reset_bit_reader
-      @bitpos = 8
+      @_bitpos = 8
     end
 
     def read_int64
-      @data.read(8).unpack('q<').first
+      @_data.read(8).unpack('q<').first
     end
 
     def read_uint32
-      @data.read(4).unpack('V').first
+      @_data.read(4).unpack('V').first
     end
 
     def read_int32
-      @data.read(4).unpack('i<').first
+      @_data.read(4).unpack('i<').first
     end
 
     def read_uint16
-      @data.read(2).unpack('s<').first
+      @_data.read(2).unpack('s<').first
     end
 
     def read_float
-      @data.read(4).unpack('e').first
+      @_data.read(4).unpack('e').first
     end
 
     def read_packed_guid128
@@ -101,11 +101,11 @@ module WOW::Capture::Packets
     end
 
     def read_byte
-      @data.read(1).ord
+      @_data.read(1).ord
     end
 
     def read_char(length)
-      @data.read(length)
+      @_data.read(length)
     end
 
     def read_packed_uint64(mask)
@@ -188,7 +188,7 @@ module WOW::Capture::Packets
     end
 
     def inspect
-      excluded_variables = [:@parser, :@data, :@bitpos, :@curbitval]
+      excluded_variables = [:@parser, :@_data, :@_bitpos, :@_curbitval]
       all_variables = instance_variables
       variables = all_variables - excluded_variables
 
