@@ -20,6 +20,7 @@ require_relative 'lib/db2/parser'
 require_relative 'lib/db2/records'
 require_relative 'lib/db2/records/base'
 require_relative 'lib/db2/records/item_sparse'
+require_relative 'lib/db2/records/creature'
 
 require_relative 'lib/adt/parser'
 require_relative 'lib/adt/records'
