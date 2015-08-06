@@ -33,6 +33,8 @@ module WOW::Capture
 
       @packet_index = 0
 
+      @subscriptions = {}
+
       read_header
       ensure_supported_client
       select_definitions
@@ -55,6 +57,28 @@ module WOW::Capture
 
     def combat_sessions
       @combat_sessions
+    end
+
+    def on(event_name, filters = {}, &block)
+      if !@subscriptions.has_key?(event_name)
+        @subscriptions[event_name] = []
+      end
+
+      @subscriptions[event_name] << [block, filters]
+    end
+
+    def publish(event_name, payload = nil, filters = {})
+      return if !@subscriptions.has_key?(event_name)
+
+      matching_subscriptions = @subscriptions[event_name].select { |s| s[1].empty? || s[1] == filters }
+
+      matching_subscriptions.each do |subscription|
+        if payload.nil?
+          subscription[0].call
+        else
+          subscription[0].call(payload)
+        end
+      end
     end
 
     def next_packet
@@ -126,6 +150,8 @@ module WOW::Capture
       packet = packet_class.new(self, @packet_index, direction, connection_index, tick, time, data)
 
       @packet_index += 1
+
+      publish(:packet, packet, direction: direction.to_sym, opcode: packet_class.to_s.split('::').last.to_sym)
 
       packet
     end
