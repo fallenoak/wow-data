@@ -60,6 +60,12 @@ module WOW::Capture
         @entries[entry.index] = entry
       end
 
+      def each(&block)
+        @entries.each_pair do |index, entry|
+          block.call(entry)
+        end
+      end
+
       def find(index)
         @entries[index]
       end
