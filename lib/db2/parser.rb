@@ -1,7 +1,7 @@
 module WOW::DB2
   class Parser
     attr_reader :record_count, :field_count, :record_size, :string_table_size, :records, :build,
-      :min_id, :max_id, :locale
+      :min_id, :max_id, :locale, :string_table
 
     def initialize(path, opts = {})
       @file = File.open(path, 'rb')
@@ -26,11 +26,13 @@ module WOW::DB2
       @unk1 = nil
 
       @index = {}
+      @string_table = StringIO.new('')
 
       @records = []
 
       read_header
       read_index
+      read_string_table
 
       # If we're not in lazy mode, read all records now.
       read_record until eof? if opts[:lazy] == false
@@ -57,50 +59,50 @@ module WOW::DB2
       @table_hash = read_uint32
       @build = read_uint32
       @timestamp_last_written = read_uint32
-      @min_id = read_uint32
-      @max_id = read_uint32
+      @min_index = read_uint32
+      @max_index = read_uint32
+      @index_count = @max_index > 0 ? (@max_index - @min_index) + 1 : 0
       @locale = read_uint32
       @unk1 = read_uint32
 
-      @index_size = (((@max_id - @min_id) + 1) * 4) + (((@max_id - @min_id) + 1) * 2)
+      @index_size = (@index_count * 4) + (@index_count * 2)
 
       @string_table_start = @header_size + @index_size + (@record_size * @record_count)
     end
 
     private def read_index
-      index_entries_count = (@max_id - @min_id) + 1
+      return if @index_size == 0
 
-      cursor = @min_id
+      cursor = @min_index
 
-      index_entries_count.times do
+      @index_count.times do
         record_offset = read_uint32
         @index[cursor] = record_offset
         cursor += 1
       end
 
-      index_entries_count.times do
+      @index_count.times do
         read_char(2)
       end
     end
 
+    private def read_string_table
+      saved_pos = @file.pos
+
+      @file.pos = @string_table_start
+      @string_table = StringIO.new(@file.read(@string_table_size))
+
+      @file.pos = saved_pos
+    end
+
     private def read_record
-      record = Records.const_get(record_class_name).new(read_fields)
+      record_data = read_char(@record_size)
+      record = Records.const_get(record_class_name).new(self, record_data)
 
       @records << record
 
       # Ensure we return the record.
       record
-    end
-
-    private def read_fields
-      fields = {}
-
-      Records.const_get(record_class_name).const_get(:STRUCTURE).each do |field_definition|
-        field_type, field_name = field_definition
-        fields[field_name] = send("read_#{field_type}")
-      end
-
-      fields
     end
 
     private def read_char(length)
@@ -117,26 +119,6 @@ module WOW::DB2
 
     private def read_float
       @file.read(4).unpack('e').first
-    end
-
-    private def read_string
-      offset = read_uint32
-
-      saved_pos = @file.pos
-
-      @file.pos = @string_table_start + offset
-
-      string = ''
-
-      loop do
-        character = @file.read(1)
-        break if character == "\x00" || character.nil?
-        string << character
-      end
-
-      @file.pos = saved_pos
-
-      string
     end
 
     private def record_class_name
