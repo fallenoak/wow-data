@@ -22,6 +22,7 @@ require_relative 'lib/db2/records'
 require_relative 'lib/db2/records/base'
 require_relative 'lib/db2/records/item_sparse'
 require_relative 'lib/db2/records/creature'
+require_relative 'lib/db2/records/creature_display_info'
 require_relative 'lib/db2/records/creature_type'
 
 require_relative 'lib/adt/parser'
