@@ -34,8 +34,20 @@ module WOW::DB2
       read_index
       read_string_table
 
+      # Default to non-lazy.
+      @lazy = opts[:lazy] == true
+
+      # Default to cache.
+      @cache = opts[:cache] != false
+
       # If we're not in lazy mode, read all records now.
-      read_record until eof? if opts[:lazy] == false
+      if !lazy?
+        # Force caching in non-lazy mode.
+        @cache = true
+
+        read_record until eof?
+        close
+      end
     end
 
     def close
@@ -44,6 +56,14 @@ module WOW::DB2
 
     def eof?
       @file.pos >= @header_size + (@record_size * @record_count)
+    end
+
+    def lazy?
+      @lazy == true
+    end
+
+    def cache?
+      @cache == true
     end
 
     def next_record
@@ -99,7 +119,8 @@ module WOW::DB2
       record_data = read_char(@record_size)
       record = Records.const_get(record_class_name).new(self, record_data)
 
-      @records << record
+      # Cache record if requested.
+      @records << record if cache?
 
       # Ensure we return the record.
       record
