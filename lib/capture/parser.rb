@@ -8,8 +8,9 @@ module WOW::Capture
     end
 
     CLIENT_BUILDS = [20338, 20253]
-
     DIRECTIONS = ['CMSG', 'SMSG']
+
+    attr_reader :client_build, :client_locale, :packet_index
 
     def initialize(path, opts = {})
       @file = File.open(path, 'rb')
