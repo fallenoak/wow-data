@@ -81,6 +81,10 @@ module WOW::Capture::Packets
     end
 
     def read_uint16
+      @_data.read(2).unpack('S<').first
+    end
+
+    def read_int16
       @_data.read(2).unpack('s<').first
     end
 
@@ -102,6 +106,16 @@ module WOW::Capture::Packets
 
     def read_byte
       @_data.read(1).ord
+    end
+
+    def read_sbyte
+      byte = @_data.read(1).ord
+
+      # Signed byte, wraps around to -128 after +127. No native Ruby unpacker, so we need to
+      # manually handle this.
+      byte = 0 - (256 - byte) if byte > 127
+
+      byte
     end
 
     def read_char(length)
