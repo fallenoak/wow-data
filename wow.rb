@@ -92,6 +92,7 @@ require_relative 'lib/capture/packets/invalid'
 require_relative 'lib/capture/packets/readers'
 require_relative 'lib/capture/packets/readers/item'
 require_relative 'lib/capture/packets/readers/loot'
+require_relative 'lib/capture/packets/readers/pet_battle'
 require_relative 'lib/capture/packets/readers/spell'
 
 require_relative 'lib/capture/packets/smsg/attack_start'
