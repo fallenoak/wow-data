@@ -100,6 +100,10 @@ module WOW::Capture::Packets::SMSG
       @racial_leader == true
     end
 
+    def track_references!
+      add_reference!('Creature', :creature, :creature, @entry_id)
+    end
+
     def update_state!
     end
   end

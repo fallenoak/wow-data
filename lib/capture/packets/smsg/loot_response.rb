@@ -50,6 +50,17 @@ module WOW::Capture::Packets::SMSG
       @ae_looting == true
     end
 
+    private def track_references!
+      if @owner_guid.creature?
+        add_reference!('Owner', :owner, :creature, @owner_guid.entry_id)
+      end
+
+      @items.each do |item|
+        entry_id = item[:instance][:item_id]
+        add_reference!('Loot', :item, :item, entry_id)
+      end
+    end
+
     private def update_state!
       owner = parser.objects.find_or_create(@owner_guid)
       owner.loot_response!(self)

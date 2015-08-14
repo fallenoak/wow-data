@@ -12,6 +12,16 @@ module WOW::Capture::Packets::SMSG
       @emote_type = parser.defs.text_emotes[@emote_id]
     end
 
+    private def track_references!
+      if @source_guid.creature?
+        add_reference!('Sender', :sender, :creature, @source_guid.entry_id)
+      end
+
+      if @target_guid.creature?
+        add_reference!('Target', :target, :creature, @target_guid.entry_id)
+      end
+    end
+
     private def update_state!
       target = parser.objects.find_or_create(@target_guid)
 

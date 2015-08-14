@@ -1,6 +1,6 @@
 module WOW::Capture::Packets
   class Base
-    attr_reader :parser, :index, :direction, :connection_index, :tick, :time
+    attr_reader :parser, :index, :direction, :connection_index, :tick, :time, :references
 
     def initialize(parser, index, direction, connection_index, tick, time, data)
       @parser = parser
@@ -10,13 +10,20 @@ module WOW::Capture::Packets
       @tick = tick
       @time = time
 
+      @references = []
+
       @_data = StringIO.new(data)
 
       @_bitpos = 8
       @_curbitval = nil
 
       parse!
+      track_references!
       update_state!
+    end
+
+    private def add_reference!(reference_label, reference_type, entry_type, entry_id)
+      @references << Utility::Reference.new(@index, reference_label, reference_type, entry_type, entry_id)
     end
 
     def handled?
@@ -30,7 +37,10 @@ module WOW::Capture::Packets
     def parse!
     end
 
-    def update_state!
+    private def track_references!
+    end
+
+    private def update_state!
     end
 
     def pos

@@ -8,6 +8,14 @@ module WOW::Capture::Packets::SMSG
       read_spell_cast_data
     end
 
+    def track_references!
+      if @caster_guid.creature?
+        add_reference!('Caster', :caster, :creature, @caster_guid.entry_id)
+      end
+
+      add_reference!('Spell', :spell, :spell, @spell_id)
+    end
+
     def update_state!
       caster = parser.objects.find_or_create(@caster_guid)
       caster.spell_start!(self)

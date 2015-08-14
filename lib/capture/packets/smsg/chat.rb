@@ -39,6 +39,16 @@ module WOW::Capture::Packets::SMSG
       @text = read_char(text_len)
     end
 
+    private def track_references!
+      if @sender_guid.creature?
+        add_reference!('Sender', :sender, :creature, @sender_guid.entry_id)
+      end
+
+      if @target_guid.creature?
+        add_reference!('Target', :target, :creature, @target_guid.entry_id)
+      end
+    end
+
     private def update_state!
       # Targets might not be loaded yet, such as in the case of zone-wide yells referencing a
       # different player when they turned in a quest.
