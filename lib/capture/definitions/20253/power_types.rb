@@ -6,7 +6,7 @@ module WOW::Capture::Definitions
       e   1,  :rage,            tc_value: 'Rage',           label: 'Rage'
       e   2,  :focus,           tc_value: 'Focus',          label: 'Focus'
       e   3,  :energy,          tc_value: 'Energy',         label: 'Energy'
-      e   4,  :happiness,       tc_value: 'Happiness'       label: 'Happiness'      # Removed from >= 4.x
+      e   4,  :happiness,       tc_value: 'Happiness',      label: 'Happiness'      # Removed from >= 4.x
       e   5,  :rune,            tc_value: 'Rune',           label: 'Rune'
       e   6,  :runic_power,     tc_value: 'RunicPower',     label: 'Runic Power'
       e   7,  :soul_shards,     tc_value: 'SoulShards',     label: 'Soul Shards'
