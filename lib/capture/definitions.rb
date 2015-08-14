@@ -112,7 +112,7 @@ module WOW::Capture
 
       def method_missing(extra)
         if @extras.has_key?(extra.to_sym)
-          @extras[extra]
+          return @extras[extra.to_sym]
         else
           raise "Unknown attribute! #{extra}"
         end
