@@ -93,7 +93,7 @@ module WOW::Capture::Definitions
       end
 
       table :trade_good do
-        e   0,  :trade_good,         tc_value: nil,    label: 'Trade Good'
+        e   0,  :trade_good,          tc_value: nil,    label: 'Trade Good'
         e   1,  :parts,               tc_value: nil,    label: 'Parts'
         e   2,  :explosives,          tc_value: nil,    label: 'Explosive'
         e   3,  :devices,             tc_value: nil,    label: 'Device'
