@@ -15,9 +15,7 @@ module WOW::Capture
     def initialize(path, opts = {})
       @file = File.open(path, 'rb')
 
-      @objects = ObjectStorage.new(self)
-      @session = SessionStorage.new
-      @combat_sessions = CombatSessionStorage.new(self)
+      setup_storage
 
       @magic = nil
       @format_version = nil
@@ -60,6 +58,12 @@ module WOW::Capture
       @combat_sessions
     end
 
+    private def setup_storage
+      @objects = ObjectStorage.new(self)
+      @session = SessionStorage.new
+      @combat_sessions = CombatSessionStorage.new(self)
+    end
+
     def on(event_name, filters = {}, &block)
       if !@subscriptions.has_key?(event_name)
         @subscriptions[event_name] = []
@@ -100,6 +104,13 @@ module WOW::Capture
       next_packet while !eof?
     end
 
+    def rewind!
+      @file.pos = @packet_start
+
+      # Wipe storage since we're presumably going to run through packets again.
+      setup_storage
+    end
+
     # Checks if the capture's build is in the set of supported client builds.
     private def ensure_supported_client
       raise "Unsupported client build: #{@client_build}" if !CLIENT_BUILDS.include?(@client_build)
@@ -133,6 +144,8 @@ module WOW::Capture
 
       hello_length = read_uint32
       @sniffer_hello = read_char(hello_length)
+
+      @packet_start = @file.pos
     end
 
     # Read a single packet.
@@ -147,8 +160,8 @@ module WOW::Capture
       opcode = read_int32
       data = read_char(length - 4)
 
-      packet_class = opcode_to_packet_class(direction, opcode)
-      packet = packet_class.new(self, @packet_index, direction, connection_index, tick, time, data)
+      packet_class, opcode_entry = lookup_opcode(direction, opcode)
+      packet = packet_class.new(self, opcode_entry, @packet_index, direction, connection_index, tick, time, data)
 
       @packet_index += 1
 
@@ -193,8 +206,8 @@ module WOW::Capture
       DIRECTIONS.include?(direction)
     end
 
-    private def opcode_to_packet_class(direction, opcode)
-      return Packets::Invalid if !valid_direction?(direction)
+    private def lookup_opcode(direction, opcode)
+      return [Packets::Invalid, nil] if !valid_direction?(direction)
 
       opcode_entry = defs.opcodes[direction.downcase][opcode]
 
@@ -208,7 +221,7 @@ module WOW::Capture
 
       packet_class = packet_module.const_get(packet_class_name)
 
-      packet_class
+      [packet_class, opcode_entry]
     end
   end
 end
