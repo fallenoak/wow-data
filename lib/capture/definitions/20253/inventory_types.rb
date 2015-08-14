@@ -1,0 +1,35 @@
+module WOW::Capture::Definitions
+  build 20253 do
+    table :inventory_types do
+      e   0,  :non_equip,           tc_value: 'NonEquip',         label: 'Non-Equippable'
+      e   1,  :head,                tc_value: 'Head',             label: 'Head'
+      e   2,  :neck,                tc_value: 'Neck',             label: 'Neck'
+      e   3,  :shoulders,           tc_value: 'Shoulders',        label: 'Shoulder'
+      e   4,  :body,                tc_value: 'Body',             label: 'Shirt'
+      e   5,  :chest,               tc_value: 'Chest',            label: 'Chest'
+      e   6,  :waist,               tc_value: 'Waist',            label: 'Waist'
+      e   7,  :legs,                tc_value: 'Legs',             label: 'Legs'
+      e   8,  :feet,                tc_value: 'Feet',             label: 'Feet'
+      e   9,  :wrists,              tc_value: 'Wrists',           label: 'Wrists'
+      e   10, :hands,               tc_value: 'Hands',            label: 'Hands'
+      e   11, :finger,              tc_value: 'Finger',           label: 'Finger'
+      e   12, :trinket,             tc_value: 'Trinket',          label: 'Trinket'
+      e   13, :weapon,              tc_value: 'Weapon',           label: 'Weapon'
+      e   14, :shield,              tc_value: 'Shield',           label: 'Shield'
+      e   15, :ranged,              tc_value: 'Ranged',           label: 'Ranged'
+      e   16, :cloak,               tc_value: 'Cloak',            label: 'Cloak'
+      e   17, :two_handed_weapon,   tc_value: 'TwoHandedWeapon',  label: 'Two-Hand'
+      e   18, :bag,                 tc_value: 'Bag',              label: 'Bag'
+      e   19, :tabard,              tc_value: 'Tabard',           label: 'Tabard'
+      e   20, :robe,                tc_value: 'Robe',             label: 'Robe'
+      e   21, :main_hand_weapon,    tc_value: 'MainHandWeapon',   label: 'Main Hand'
+      e   22, :off_hand_weapon,     tc_value: 'OffHandWeapon',    label: 'Held In Off-Hand'
+      e   23, :holdable,            tc_value: 'Holdable',         label: 'Held'
+      e   24, :ammo,                tc_value: 'Ammo',             label: 'Ammo'
+      e   25, :thrown,              tc_value: 'Thrown',           label: 'Thrown'
+      e   26, :ranged_right,        tc_value: 'RangedRight',      label: 'Ranged'
+      e   27, :quiver,              tc_value: 'Quiver',           label: 'Quiver'
+      e   28, :relic,               tc_value: 'Relic',            label: 'Relic'
+    end
+  end
+end
