@@ -27,6 +27,10 @@ module WOW::Capture::Packets
       @references << Utility::Reference.new(@index, reference_label, reference_type, entry_type, entry_id)
     end
 
+    def has_references?
+      @references.length > 0
+    end
+
     def handled?
       true
     end
