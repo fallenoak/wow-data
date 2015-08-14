@@ -58,6 +58,14 @@ module WOW::Capture
       output
     end
 
+    def creature?
+      @type == :creature
+    end
+
+    def item?
+      @type == :item
+    end
+
     private def get_object_type
       WOW::Capture::OBJECT_TYPES[@object_type_id]
     end
