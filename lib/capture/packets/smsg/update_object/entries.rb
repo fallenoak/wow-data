@@ -14,6 +14,24 @@ module WOW::Capture::Packets::SMSG
 
         def parse!
         end
+
+        def inspect
+          excluded_variables = [:@packet]
+          all_variables = instance_variables
+          variables = all_variables - excluded_variables
+
+          prefix = "#<#{self.class}:0x#{self.__id__.to_s(16)}"
+
+          parts = []
+
+          variables.each do |var|
+            parts << "#{var}=#{instance_variable_get(var).inspect}"
+          end
+
+          str = parts.empty? ? "#{prefix}>" : "#{prefix} #{parts.join(' ')}>"
+
+          str
+        end
       end
 
       class ValuesEntry < Entries::Base

@@ -1,5 +1,7 @@
 module WOW::Capture::Packets::SMSG
   class UpdateObject < WOW::Capture::Packets::Base
+    include WOW::Capture::Packets::Readers::PetBattle
+
     attr_reader :entries_count, :entries, :destroyed_objects
 
     def parse!
@@ -32,10 +34,9 @@ module WOW::Capture::Packets::SMSG
       when EntryTypes::CREATE_OBJECT_1, EntryTypes::CREATE_OBJECT_2
         entry = Entries::CreateObjectEntry.new(self, index)
       when EntryTypes::DESTROY_OBJECTS
-        raise "Deprecated Entry Type: #{type}, #{index}"
-        #entry = Entries::DestroyObjectsEntry.new(self, index)
+        raise "Deprecated entry type: #{type} at index #{index}"
       else
-        raise "UNEXPECTED ENTRY TYPE: #{type}, #{index}"
+        raise "Unexpected entry type: #{type} at index #{index}"
       end
 
       @entries << entry

@@ -205,9 +205,8 @@ module WOW::Capture::Packets::SMSG
               scene_obj[:local_script_data] = data
             end
 
-            if scene_obj[:pet_battle_full_update]
-              raise "FRARZED"
-              #todo pet_battle = packet.read_pet_battle_full_update
+            if scene_obj[:has_pet_battle_full_update]
+              scene_obj[:pet_battle_full_update] = @packet.read_pet_battle_full_update
             end
 
             movements[:scene_obj] = scene_obj
