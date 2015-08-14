@@ -6,13 +6,13 @@ module WOW::DBC::Records
       [:uint32, :min_scale_level],
       [:float,  :max_scale],
       [:uint32, :max_scale_level],
-      [:uint32, :skill_line_1],
-      [:uint32, :skill_line_2],
+      [:uint32, :skill_line_1_id],
+      [:uint32, :skill_line_2_id],
       [:uint32, :pet_food_mask],
-      [:uint32, :pet_talent_type],
+      [:int32,  :pet_talent_type],
       [:uint32, :category_enum_id],
       [:string, :name],
-      [:string, :icon_file]
+      [:string, :icon_path]
     ]
   end
 end

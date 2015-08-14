@@ -2,7 +2,7 @@ module WOW::DB2::Records
   class Creature < WOW::DB2::Records::Base
     STRUCTURE = [
       [:uint32, :id],
-      [:uint32, :unk1],
+      [:uint32, :creature_type_id],
       [:uint32, :unk2],
       [:uint32, :unk3],
       [:uint32, :unk4],
