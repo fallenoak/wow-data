@@ -174,5 +174,26 @@ module WOW::Capture::Packets::Readers
 
       status
     end
+
+    def read_rune_data
+      runes = {}
+
+      runes[:start] = read_byte
+      runes[:count] = read_byte
+
+      reset_bit_reader
+
+      cooldown_count = read_bits(3)
+
+      cooldowns = []
+
+      cooldown_count.times do
+        cooldowns << read_byte
+      end
+
+      runes[:cooldowns] = cooldowns
+
+      runes
+    end
   end
 end
