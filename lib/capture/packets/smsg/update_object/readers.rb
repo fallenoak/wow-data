@@ -474,6 +474,8 @@ module WOW::Capture::Packets::SMSG
         private def read_values
           updates = {}
 
+          update_fields = @packet.parser.definitions.update_fields
+
           mask_size = @packet.read_byte
 
           mask_values = []
@@ -494,15 +496,28 @@ module WOW::Capture::Packets::SMSG
               next
             end
 
-            block_value = @packet.read_update_field
+            field_entry, difference = FieldManager.field_at_index(update_fields, @object_type, field_index)
 
-            field_name = FieldManager.field_name_at_index(@object_type, field_index)
-            field_name = "field-#{field_index}" if field_name.nil?
+            if field_entry.nil?
+              field_name = "field_#{field_index}"
+            elsif difference == 0
+              field_name = field_entry.value
+            else
+              field_name = "#{field_entry}_#{difference + 1}"
+            end
 
-            updates[field_name] = block_value
+            if field_entry.nil? || !field_entry.has_extra?(:type)
+              field_value = @packet.read_update_field
+              blocks_read = 1
+            else
+              field_value = @packet.send("read_#{field_entry.type}")
+              blocks_read = field_entry.blocks
+            end
 
-            field_index += 1
-            fields_found += 1
+            updates[field_name] = field_value
+
+            field_index += blocks_read
+            fields_found += blocks_read
           end
 
           # Newer than 16016
@@ -539,7 +554,7 @@ module WOW::Capture::Packets::SMSG
             flag = @packet.read_byte
 
             if (flag & 0x80) != 0
-              packet.read_uint16
+              @packet.read_uint16
             end
 
             count = flag & 0x7F
