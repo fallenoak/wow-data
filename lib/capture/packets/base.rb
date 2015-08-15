@@ -83,6 +83,10 @@ module WOW::Capture::Packets
       @_bitpos = 8
     end
 
+    def read_uint64
+      @_data.read(8).unpack('L<').first
+    end
+
     def read_int64
       @_data.read(8).unpack('q<').first
     end
@@ -113,6 +117,15 @@ module WOW::Capture::Packets
 
       guid_low = read_packed_uint64(guid_low_mask)
       guid_high = read_packed_uint64(guid_high_mask)
+
+      guid = WOW::Capture::Guid128.new(parser, guid_low, guid_high)
+
+      guid
+    end
+
+    def read_guid128
+      guid_low = read_uint64
+      guid_high = read_uint64
 
       guid = WOW::Capture::Guid128.new(parser, guid_low, guid_high)
 
