@@ -2,7 +2,7 @@ module WOW::Capture::Definitions
   build 20253 do
     namespace :update_fields do
       table :object_fields do
-        e   0x000,  :object_guid,                             type: :guid128,   blocks: 4
+        e   0x000,  :object_guid,                             type: :uint32,    blocks: 1
         e   0x004,  :object_data,                             type: :uint32,    blocks: 1
         e   0x008,  :object_type,                             type: :uint32,    blocks: 1
         e   0x009,  :object_entry,                            type: :uint32,    blocks: 1
@@ -15,7 +15,7 @@ module WOW::Capture::Definitions
       table :item_fields do
         i   :object_fields
 
-        e   0x000,  :item_owner_guid,                         type: :guid128,   blocks: 4
+        e   0x000,  :item_owner_guid,                         type: :uint32,    blocks: 1
         e   0x004,  :item_contained,                          type: :uint32,    blocks: 1
         e   0x008,  :item_creator,                            type: :uint32,    blocks: 1
         e   0x00C,  :item_gift_creator,                       type: :uint32,    blocks: 1
