@@ -17,7 +17,7 @@ module WOW::Capture
       end
 
       def table(table_name, &definition)
-        table = Table.new(&definition)
+        table = Table.new(self, &definition)
 
         @tables[table_name] = table
 
@@ -48,16 +48,48 @@ module WOW::Capture
     end
 
     class Table
-      attr_reader :entries
+      attr_reader :entries, :start_index, :end_index
 
-      def initialize(&definition)
+      def initialize(parent, &definition)
+        @parent = parent
+
+        @start_index = nil
+        @end_index = nil
+        @index_offset = nil
+
         @entries = {}
+
         instance_eval(&definition)
       end
 
+      # Table entry
       def e(*definition)
+        # Bump the definition's index by index offset if index offset is set.
+        definition[0] += @index_offset if !@index_offset.nil?
+
         entry = Entry.new(*definition)
         @entries[entry.index] = entry
+
+        @start_index = entry.index if @start_index.nil? || @start_index > entry.index
+        @end_index = entry.index if @end_index.nil? || @end_index < entry.index
+      end
+
+      # Insert other table, and ensure index offset prevents overwriting inserted entries. The
+      # other table must reside within the same parent namespace as this table.
+      def i(table_name)
+        other_table = @parent.send(table_name)
+
+        other_table.entries.each_pair do |other_index, other_entry|
+          e(other_entry.index, other_entry.value, other_entry.extras)
+        end
+
+        # Set index offset to other table's end index + 1.
+        @index_offset = other_table.end_index + 1
+      end
+
+      # Extend this table to given index.
+      def x(index)
+        @end_index = index
       end
 
       def each(&block)
@@ -70,6 +102,20 @@ module WOW::Capture
         @entries[index]
       end
       alias_method :[], :find
+
+      def prev(target_index)
+        previous_entry = nil
+
+        @entries.each_pair do |index, entry|
+          if index >= target_index
+            return previous_entry
+          else
+            previous_entry = entry
+          end
+        end
+
+        previous_entry
+      end
 
       def find_by_value(value)
         @entries.select { |entry| entry.value == value }.first
@@ -104,6 +150,10 @@ module WOW::Capture
 
       def hash
         @value.hash
+      end
+
+      def has_extra?(extra)
+        @extras.has_key?(extra)
       end
 
       private def to_ary
