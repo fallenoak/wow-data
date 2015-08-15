@@ -64,6 +64,12 @@ module WOW::Capture::WOWObject::Utility
       delta
     end
 
+    def each_pair(&block)
+      @attributes.each_pair.each do |key, value|
+        block.call(key, value)
+      end
+    end
+
     def method_missing(method_name)
       @attributes[method_name.to_sym]
     end
