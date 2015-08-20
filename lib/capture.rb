@@ -63,6 +63,7 @@ require_relative 'capture/packets/utility/reference'
 require_relative 'capture/packets/readers'
 require_relative 'capture/packets/readers/item'
 require_relative 'capture/packets/readers/loot'
+require_relative 'capture/packets/readers/movement'
 require_relative 'capture/packets/readers/pet_battle'
 require_relative 'capture/packets/readers/spell'
 

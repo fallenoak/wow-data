@@ -1,6 +1,7 @@
 module WOW::Capture::Packets::SMSG
   class UpdateObject < WOW::Capture::Packets::Base
     include WOW::Capture::Packets::Readers::PetBattle
+    include WOW::Capture::Packets::Readers::Movement
 
     attr_reader :entries_count, :entries, :destroyed_objects
 

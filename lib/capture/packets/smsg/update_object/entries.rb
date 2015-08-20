@@ -54,7 +54,7 @@ module WOW::Capture::Packets::SMSG
           @guid = @packet.read_packed_guid128
           @object_type_id = @packet.read_byte
           @object_type = WOW::Capture::OBJECT_TYPES[@object_type_id]
-          @raw_movement_state = read_movements
+          @raw_movement_state = @packet.read_movement_state
           @raw_values_state = read_values
 
           wow_object = @packet.parser.objects.find_or_create(@guid)
