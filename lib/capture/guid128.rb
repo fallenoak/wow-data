@@ -66,6 +66,24 @@ module WOW::Capture
       @type == :item
     end
 
+    def inspect
+      excluded_variables = [:@parser]
+      all_variables = instance_variables
+      variables = all_variables - excluded_variables
+
+      prefix = "#<#{self.class}:0x#{self.__id__.to_s(16)}"
+
+      parts = []
+
+      variables.each do |var|
+        parts << "#{var}=#{instance_variable_get(var).inspect}"
+      end
+
+      str = parts.empty? ? "#{prefix}>" : "#{prefix} #{parts.join(' ')}>"
+
+      str
+    end
+
     private def get_object_type
       WOW::Capture::OBJECT_TYPES[@object_type_id]
     end
