@@ -2,8 +2,8 @@ module WOW::Capture::Packets::SMSG
   class QueryCreatureResponse < WOW::Capture::Packets::Base
     attr_reader :entry_id, :name, :female_name, :flags_1, :flags_2, :creature_type_id,
       :creature_family_id, :creature_rank, :creature_kill_credit_ids, :creature_display_ids,
-      :health_multiplier, :power_multiplier, :creature_movement_info_id, :required_expansion,
-      :quest_flags, :title, :alternate_title, :cursor_name, :quest_item_ids
+      :health_multiplier, :power_multiplier, :creature_movement_info_id, :expansion, :quest_flags,
+      :title, :female_title, :cursor_name, :quest_item_ids
 
     def parse!
       raw_entry_id = read_uint32
@@ -15,7 +15,7 @@ module WOW::Capture::Packets::SMSG
       reset_bit_reader
 
       has_title = read_bits(11) > 1
-      has_alternate_title = read_bits(11) > 1
+      has_female_title = read_bits(11) > 1
       has_cursor_name = read_bits(6) > 1
 
       @racial_leader = read_bit
@@ -24,16 +24,16 @@ module WOW::Capture::Packets::SMSG
       @female_name = nil
 
       name_lengths = []
-      alternate_name_lengths = []
+      female_name_lengths = []
 
       4.times do
         name_lengths << read_bits(11)
-        alternate_name_lengths << read_bits(11)
+        female_name_lengths << read_bits(11)
       end
 
       (0...4).each do |i|
         @name = read_string if name_lengths[i] > 1
-        @female_name = read_string if alternate_name_lengths[i] > 1
+        @female_name = read_string if female_name_lengths[i] > 1
       end
 
       @flags_1 = read_uint32
@@ -64,21 +64,21 @@ module WOW::Capture::Packets::SMSG
 
       @creature_movement_info_id = read_uint32
 
-      required_expansion_index = read_int32
-      @required_expansion = parser.defs.expansions[required_expansion_index]
+      expansion_index = read_int32
+      @expansion = parser.defs.expansions[expansion_index]
 
       @quest_flags = read_int32
 
       @title = nil
-      @alternate_title = nil
+      @female_title = nil
       @cursor_name = nil
 
       if has_title
         @title = read_string
       end
 
-      if has_alternate_title
-        @alternate_title = read_string
+      if has_female_title
+        @female_title = read_string
       end
 
       if has_cursor_name
