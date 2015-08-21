@@ -1,6 +1,6 @@
 module WOW::Capture::WOWObject
   class Base
-    attr_reader :guid, :type, :log, :movement, :attributes, :current_position, :active_combat_sessions
+    attr_reader :guid, :type, :log, :positions, :movement, :attributes, :current_position, :active_combat_sessions
 
     def initialize(guid)
       @guid = guid
@@ -8,6 +8,7 @@ module WOW::Capture::WOWObject
       @object_type = guid.object_type
 
       @current_position = WOW::Capture::Coordinate.new(nil, nil, nil)
+      @positions = []
 
       @log = Utility::Log.new
 
@@ -45,6 +46,15 @@ module WOW::Capture::WOWObject
       @movement = raw_movement_state
       @attributes.set!(raw_values_state)
 
+      if !@movement.nil? && !@movement.update.nil? && !@movement.update.status.nil?
+        status_position = @movement.update.status.position
+
+        if !status_position.nil?
+          @current_position = status_position
+          @positions << status_position
+        end
+      end
+
       @storage.trigger(:spawn, self)
     end
 
@@ -70,6 +80,7 @@ module WOW::Capture::WOWObject
       to_log!(:Move, packet)
 
       @current_position = packet.position
+      @positions << packet.position
 
       @storage.trigger(:move, self)
     end
