@@ -254,7 +254,7 @@ module WOW::Capture::Packets::Readers
       status.guid = read_packed_guid128
 
       status.move_index = read_uint32
-      status.position = read_vector(3)
+      status.position = WOW::Capture::Coordinate.new(read_vector(3))
       status.orientation = read_float
 
       status.pitch = read_float
