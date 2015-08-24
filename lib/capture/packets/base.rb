@@ -84,7 +84,7 @@ module WOW::Capture::Packets
     end
 
     def read_uint64
-      @_data.read(8).unpack('L<').first
+      @_data.read(8).unpack('Q<').first
     end
 
     def read_int64
@@ -92,11 +92,11 @@ module WOW::Capture::Packets
     end
 
     def read_uint32
-      @_data.read(4).unpack('V').first
+      @_data.read(4).unpack('L<').first
     end
 
     def read_int32
-      @_data.read(4).unpack('i<').first
+      @_data.read(4).unpack('l<').first
     end
 
     def read_uint16
