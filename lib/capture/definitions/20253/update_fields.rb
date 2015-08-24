@@ -76,17 +76,18 @@ module WOW::Capture::Definitions
         e   0x04D,  :unit_virtual_item_slot_id,               type: :uint32,    blocks: 1
         e   0x053,  :unit_flags,                              type: :uint32,    blocks: 1
         e   0x056,  :unit_aura_state,                         type: :uint32,    blocks: 1
-        e   0x057,  :unit_base_attack_time,                   type: :uint32,    blocks: 1
+        e   0x057,  :unit_main_hand_attack_time,              type: :uint32,    blocks: 1
+        e   0x058,  :unit_off_hand_attack_time,               type: :uint32,    blocks: 1
         e   0x059,  :unit_ranged_attack_time,                 type: :uint32,    blocks: 1
         e   0x05A,  :unit_bounding_radius,                    type: :float,     blocks: 1
         e   0x05B,  :unit_combat_reach,                       type: :float,     blocks: 1
         e   0x05C,  :unit_display_id,                         type: :uint32,    blocks: 1
         e   0x05D,  :unit_native_display_id,                  type: :uint32,    blocks: 1
         e   0x05E,  :unit_mount_display_id,                   type: :uint32,    blocks: 1
-        e   0x05F,  :unit_min_damage,                         type: :uint32,    blocks: 1
-        e   0x060,  :unit_max_damage,                         type: :uint32,    blocks: 1
-        e   0x061,  :unit_min_offhand_damage,                 type: :uint32,    blocks: 1
-        e   0x062,  :unit_max_offhand_damage,                 type: :uint32,    blocks: 1
+        e   0x05F,  :unit_min_main_hand_damage,               type: :uint32,    blocks: 1
+        e   0x060,  :unit_max_main_hand_damage,               type: :uint32,    blocks: 1
+        e   0x061,  :unit_min_off_hand_damage,                type: :uint32,    blocks: 1
+        e   0x062,  :unit_max_off_hand_damage,                type: :uint32,    blocks: 1
         e   0x063,  :unit_bytes_1,                            type: :uint32,    blocks: 1
         e   0x064,  :unit_pet_number,                         type: :uint32,    blocks: 1
         e   0x065,  :unit_pet_name_timestamp,                 type: :uint32,    blocks: 1
