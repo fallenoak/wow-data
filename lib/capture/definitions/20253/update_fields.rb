@@ -124,7 +124,7 @@ module WOW::Capture::Definitions
         e   0x0A3,  :unit_power_cost_modifier,                type: :uint32,    blocks: 1
         e   0x0AA,  :unit_power_cost_multiplier,              type: :uint32,    blocks: 1
         e   0x0B1,  :unit_max_health_modifier,                type: :uint32,    blocks: 1
-        e   0x0B2,  :unit_hover_height,                       type: :uint32,    blocks: 1
+        e   0x0B2,  :unit_hover_height,                       type: :float,     blocks: 1
         e   0x0B3,  :unit_min_item_level_cutoff,              type: :uint32,    blocks: 1
         e   0x0B4,  :unit_min_item_level,                     type: :uint32,    blocks: 1
         e   0x0B5,  :unit_max_item_level,                     type: :uint32,    blocks: 1
@@ -138,7 +138,7 @@ module WOW::Capture::Definitions
         e   0x0C0,  :unit_scale_duration,                     type: :uint32,    blocks: 1
         e   0x0C1,  :unit_looks_like_mount_id,                type: :uint32,    blocks: 1
         e   0x0C2,  :unit_looks_like_creature_id,             type: :uint32,    blocks: 1
-        e   0x0C3,  :unit_look_at_controller_id,              type: :uint32,    blocks: 1
+        e   0x0C3,  :unit_look_at_controller_id,              type: :int32,     blocks: 1
         e   0x0C4,  :unit_look_at_controller_target,          type: :uint32,    blocks: 1
 
         x   0x0C7
