@@ -3,7 +3,34 @@ module WOW::Capture::Packets::SMSG
     module FieldManager
       def self.field_at_index(update_fields, object_type, field_index)
         fields_table = table_for(update_fields, object_type)
-        fields_table.nil? ? [nil, nil] : find_field_entry(fields_table, field_index)
+
+        if fields_table.nil?
+          field_entry, field_offset = [nil, nil]
+        else
+          field_entry, field_offset = find_field_entry(fields_table, field_index)
+        end
+
+        # Unknown field
+        if field_entry.nil?
+          field_name = "field_#{field_index}"
+          field_type = :uint32
+          field_size = 1
+          block_offset = 0
+        # Repeated single-block field
+        elsif field_entry.blocks == 1 && field_offset > 0
+          field_name = "#{field_entry.value}_#{field_offset + 1}"
+          field_type = field_entry.type
+          field_size = field_entry.blocks
+          block_offset = 0
+        # Multi-block field
+        else
+          field_name = field_entry.value
+          field_type = field_entry.type
+          field_size = field_entry.blocks
+          block_offset = field_offset
+        end
+
+        [field_name, field_type, field_size, block_offset]
       end
 
       def self.table_for(update_fields, object_type)

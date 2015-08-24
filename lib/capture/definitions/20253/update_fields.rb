@@ -2,7 +2,7 @@ module WOW::Capture::Definitions
   build 20253 do
     namespace :update_fields do
       table :object_fields do
-        e   0x000,  :object_guid,                             type: :uint32,    blocks: 1
+        e   0x000,  :object_guid,                             type: :guid128,   blocks: 4
         e   0x004,  :object_data,                             type: :uint32,    blocks: 1
         e   0x008,  :object_type,                             type: :uint32,    blocks: 1
         e   0x009,  :object_entry,                            type: :uint32,    blocks: 1
@@ -47,15 +47,15 @@ module WOW::Capture::Definitions
       table :unit_fields do
         i   :object_fields
 
-        e   0x000,  :unit_charm,                              type: :uint32,    blocks: 1
-        e   0x004,  :unit_summon,                             type: :uint32,    blocks: 1
-        e   0x008,  :unit_critter,                            type: :uint32,    blocks: 1
-        e   0x00C,  :unit_charmed_by,                         type: :uint32,    blocks: 1
-        e   0x010,  :unit_summoned_by,                        type: :uint32,    blocks: 1
-        e   0x014,  :unit_created_by,                         type: :uint32,    blocks: 1
-        e   0x018,  :unit_demon_creator,                      type: :uint32,    blocks: 1
-        e   0x01C,  :unit_target,                             type: :uint32,    blocks: 1
-        e   0x020,  :unit_battle_pet_companion_guid,          type: :uint32,    blocks: 1
+        e   0x000,  :unit_charm,                              type: :guid128,   blocks: 4
+        e   0x004,  :unit_summon,                             type: :guid128,   blocks: 4
+        e   0x008,  :unit_critter,                            type: :guid128,   blocks: 4
+        e   0x00C,  :unit_charmed_by,                         type: :guid128,   blocks: 4
+        e   0x010,  :unit_summoned_by,                        type: :guid128,   blocks: 4
+        e   0x014,  :unit_created_by,                         type: :guid128,   blocks: 4
+        e   0x018,  :unit_demon_creator,                      type: :guid128,   blocks: 4
+        e   0x01C,  :unit_target,                             type: :guid128,   blocks: 4
+        e   0x020,  :unit_battle_pet_companion_guid,          type: :guid128,   blocks: 4
         e   0x024,  :unit_battle_pet_db_id,                   type: :uint32,    blocks: 1
         e   0x026,  :unit_channel_object,                     type: :uint32,    blocks: 1
         e   0x02A,  :unit_channel_spell,                      type: :uint32,    blocks: 1

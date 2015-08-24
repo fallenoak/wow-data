@@ -23,6 +23,7 @@ require_relative 'capture/definitions/20253/update_fields'
 require_relative 'capture/object_types'
 require_relative 'capture/guid128'
 require_relative 'capture/coordinate'
+require_relative 'capture/update_value'
 
 require_relative 'capture/wow_object'
 require_relative 'capture/wow_object/utility/log'

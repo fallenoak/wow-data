@@ -27,27 +27,26 @@ module WOW::Capture::Packets::SMSG
               next
             end
 
-            field_entry, difference = FieldManager.field_at_index(update_fields, @object_type, field_index)
+            # Obtain relevant field details for the current field index.
+            field_lookup = FieldManager.field_at_index(update_fields, @object_type, field_index)
+            field_name, field_type, field_size, block_offset = field_lookup
 
-            if field_entry.nil?
-              field_name = "field_#{field_index}"
-            elsif difference == 0
-              field_name = field_entry.value
-            else
-              field_name = "#{field_entry}_#{difference + 1}"
+            # Read the block.
+            block_value = @packet.read_update_block
+            blocks_read = 1
+
+            if !updates.has_key?(field_name)
+              updates[field_name] = {
+                type: field_type,
+                size: field_size,
+                blocks: []
+              }
             end
 
-            if field_entry.nil? || !field_entry.has_extra?(:type)
-              field_value = @packet.read_update_field
-              blocks_read = 1
-            else
-              field_value = @packet.send("read_#{field_entry.type}")
-              blocks_read = field_entry.blocks
-            end
-
-            field_name = field_name.to_sym
-
-            updates[field_name] = field_value
+            updates[field_name][:blocks] << {
+              offset: block_offset,
+              value: block_value
+            }
 
             field_index += blocks_read
             fields_found += blocks_read
@@ -113,7 +112,7 @@ module WOW::Capture::Packets::SMSG
                 next
               end
 
-              block_value = @packet.read_update_field
+              block_value = @packet.read_update_block
 
               values_index += 1
               values_found += 1

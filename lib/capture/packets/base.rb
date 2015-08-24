@@ -167,7 +167,7 @@ module WOW::Capture::Packets
       res
     end
 
-    def read_update_field
+    def read_update_block
       read_uint32
     end
 
