@@ -16,6 +16,9 @@ module WOW::Capture::Definitions
         e   0x0C57,   :AttackStop,                              tc_value: 'SMSG_ATTACK_STOP'
         e   0x046E,   :SpellGo,                                 tc_value: 'SMSG_SPELL_GO'
         e   0x007D,   :SpellStart,                              tc_value: 'SMSG_SPELL_START'
+        e   0x0C36,   :PhaseShiftChange,                        tc_value: 'SMSG_PHASE_SHIFT_CHANGE'
+        e   0x0CD3,   :LoginVerifyWorld,                        tc_value: 'SMSG_LOGIN_VERIFY_WORLD'
+        e   0x0026,   :NewWorld,                                tc_value: 'SMSG_NEW_WORLD'
 
         # Not Implemented
         e   0x0895,   :Unhandled,                               tc_value: 'SMSG_ABORT_NEW_WORLD'
@@ -477,7 +480,6 @@ module WOW::Capture::Definitions
         e   0x048B,   :Unhandled,                               tc_value: 'SMSG_LOAD_EQUIPMENT_SET'
         e   0x02A2,   :Unhandled,                               tc_value: 'SMSG_LOAD_SELECTED_TROPHY_RESULT'
         e   0x0C47,   :Unhandled,                               tc_value: 'SMSG_LOGIN_SET_TIME_SPEED'
-        e   0x0CD3,   :Unhandled,                               tc_value: 'SMSG_LOGIN_VERIFY_WORLD'
         e   0x0817,   :Unhandled,                               tc_value: 'SMSG_LOGOUT_CANCEL_ACK'
         e   0x0618,   :Unhandled,                               tc_value: 'SMSG_LOGOUT_COMPLETE'
         e   0x0535,   :Unhandled,                               tc_value: 'SMSG_LOGOUT_RESPONSE'
@@ -591,7 +593,6 @@ module WOW::Capture::Definitions
         e   0x1206,   :Unhandled,                               tc_value: 'SMSG_MULTIPLE_PACKETS'
         e   0x0C9F,   :Unhandled,                               tc_value: 'SMSG_NEUTRAL_PLAYER_FACTION_SELECT_RESULT'
         e   0x02B5,   :Unhandled,                               tc_value: 'SMSG_NEW_TAXI_PATH'
-        e   0x0026,   :Unhandled,                               tc_value: 'SMSG_NEW_WORLD'
         e   0x0AAD,   :Unhandled,                               tc_value: 'SMSG_NOTIFY_DEST_LOC_SPELL_CAST'
         e   0x0A03,   :Unhandled,                               tc_value: 'SMSG_NOTIFY_MISSILE_TRAJECTORY_COLLISION'
         e   0x01D1,   :Unhandled,                               tc_value: 'SMSG_NOTIFY_MONEY'
@@ -649,7 +650,6 @@ module WOW::Capture::Definitions
         e   0x0054,   :Unhandled,                               tc_value: 'SMSG_PET_STABLE_RESULT'
         e   0x09D1,   :Unhandled,                               tc_value: 'SMSG_PET_TAME_FAILURE'
         e   0x06BE,   :Unhandled,                               tc_value: 'SMSG_PET_UNLEARNED_SPELLS'
-        e   0x0C36,   :Unhandled,                               tc_value: 'SMSG_PHASE_SHIFT_CHANGE'
         e   0x0842,   :Unhandled,                               tc_value: 'SMSG_PLAYED_TIME'
         e   0x08A0,   :Unhandled,                               tc_value: 'SMSG_PLAYER_BOUND'
         e   0x02EB,   :Unhandled,                               tc_value: 'SMSG_PLAYER_SAVE_GUILD_EMBLEM'
