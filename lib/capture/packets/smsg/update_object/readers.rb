@@ -45,6 +45,8 @@ module WOW::Capture::Packets::SMSG
               blocks_read = field_entry.blocks
             end
 
+            field_name = field_name.to_sym
+
             updates[field_name] = field_value
 
             field_index += blocks_read
