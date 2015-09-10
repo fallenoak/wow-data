@@ -10,11 +10,11 @@ module WOW::ADT
       # Default to caching
       @cache = opts[:cache] != false
 
-      # Default to non lazy
-      @lazy = opts[:lazy] != false
+      # Default to non-lazy
+      @lazy = opts[:lazy] == true
 
       if !@lazy
-        # Force caching if not lazy
+        # Force caching if non-lazy
         @cache = true
 
         read_records
