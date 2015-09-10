@@ -18,7 +18,23 @@ module WOW::Capture::WOWObject::Utility::LogItems
 
       @delta.each do |entry|
         output << pretty_line
-        output << " Update:     #{entry.attribute_name}: #{entry.old_value} -> #{entry.new_value} (#{entry.difference})"
+
+        update_prefix = " Update:     #{entry.attribute_name}: "
+
+        output << update_prefix
+
+        if entry.old_value.respond_to?(:pretty_print)
+          output << "#{entry.old_value.pretty_print} ->"
+          output << pretty_line
+          output << " " * update_prefix.length
+          output << "#{entry.new_value.pretty_print}"
+        else
+          output << "#{entry.old_value.inspect} -> #{entry.new_value.inspect}"
+        end
+
+        if !entry.difference.nil?
+          output << " (#{entry.difference})"
+        end
       end
 
       output
