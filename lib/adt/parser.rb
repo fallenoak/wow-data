@@ -1,5 +1,3 @@
-require 'stringio'
-
 module WOW::ADT
   class Parser
     def initialize(path, opts = {})

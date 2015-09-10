@@ -2,6 +2,8 @@ module WOW
   module Capture; end
 end
 
+require_relative 'common'
+
 require_relative 'capture/definitions'
 require_relative 'capture/definitions/20253/opcodes'
 require_relative 'capture/definitions/20253/classes'
