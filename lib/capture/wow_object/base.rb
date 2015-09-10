@@ -1,11 +1,15 @@
 module WOW::Capture::WOWObject
   class Base
-    attr_reader :guid, :type, :log, :positions, :movement, :attributes, :current_position, :active_combat_sessions
+    attr_reader :guid, :map_id, :session_map_id, :type, :log, :positions, :movement, :attributes,
+      :current_position, :active_combat_sessions
 
     def initialize(guid)
       @guid = guid
       @type = guid.type
       @object_type = guid.object_type
+
+      @map_id = @guid.map_id
+      @session_map_id = @map_id
 
       @current_position = WOW::Capture::Coordinate.new(nil, nil, nil)
       @positions = []
@@ -55,6 +59,9 @@ module WOW::Capture::WOWObject
         end
       end
 
+      @is_spawned = true
+      @session_map_id = packet.parser.session.current_map_id
+
       @storage.trigger(:spawn, self)
     end
 
@@ -66,6 +73,8 @@ module WOW::Capture::WOWObject
       related_combat_sessions(:victim).each do |combat_session|
         combat_session.remove_victim(self)
       end
+
+      @is_despawned = true
 
       to_log!(:Despawn, packet, contextual: false)
 
