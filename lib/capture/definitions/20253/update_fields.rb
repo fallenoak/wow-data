@@ -104,9 +104,27 @@ module WOW::Capture::Definitions
         e   0x071,  :unit_stat,                               type: :uint32,    blocks: 1
         e   0x076,  :unit_pos_stat,                           type: :uint32,    blocks: 1
         e   0x07B,  :unit_neg_stat,                           type: :uint32,    blocks: 1
-        e   0x080,  :unit_resistances,                        type: :uint32,    blocks: 1
-        e   0x087,  :unit_resistance_buff_mods_positive,      type: :uint32,    blocks: 1
-        e   0x08E,  :unit_resistance_buff_mods_negative,      type: :uint32,    blocks: 1
+        e   0x080,  :unit_resistance_armor,                   type: :uint32,    blocks: 1 # order taken from 3.x and 4.x update field enums in wpp. order is: armor, holy, fire, nature, frost, shadow, arcane
+        e   0x081,  :unit_resistance_holy,                    type: :uint32,    blocks: 1
+        e   0x082,  :unit_resistance_fire,                    type: :uint32,    blocks: 1
+        e   0x083,  :unit_resistance_nature,                  type: :uint32,    blocks: 1
+        e   0x084,  :unit_resistance_frost,                   type: :uint32,    blocks: 1
+        e   0x085,  :unit_resistance_shadow,                  type: :uint32,    blocks: 1
+        e   0x086,  :unit_resistance_arcane,                  type: :uint32,    blocks: 1
+        e   0x087,  :unit_resistance_armor_buff_positive,     type: :uint32,    blocks: 1 # see above for order
+        e   0x088,  :unit_resistance_holy_buff_positive,      type: :uint32,    blocks: 1
+        e   0x089,  :unit_resistance_fire_buff_positive,      type: :uint32,    blocks: 1
+        e   0x08A,  :unit_resistance_nature_buff_positive,    type: :uint32,    blocks: 1
+        e   0x08B,  :unit_resistance_frost_buff_positive,     type: :uint32,    blocks: 1
+        e   0x08C,  :unit_resistance_shadow_buff_positive,    type: :uint32,    blocks: 1
+        e   0x08D,  :unit_resistance_arcane_buff_positive,    type: :uint32,    blocks: 1
+        e   0x08E,  :unit_resistance_armor_buff_negative,     type: :uint32,    blocks: 1 # see above for order
+        e   0x08F,  :unit_resistance_holy_buff_negative,      type: :uint32,    blocks: 1
+        e   0x090,  :unit_resistance_fire_buff_negative,      type: :uint32,    blocks: 1
+        e   0x091,  :unit_resistance_nature_buff_negative,    type: :uint32,    blocks: 1
+        e   0x092,  :unit_resistance_frost_buff_negative,     type: :uint32,    blocks: 1
+        e   0x093,  :unit_resistance_shadow_buff_negative,    type: :uint32,    blocks: 1
+        e   0x094,  :unit_resistance_arcane_buff_negative,    type: :uint32,    blocks: 1
         e   0x095,  :unit_mod_bonus_armor,                    type: :uint32,    blocks: 1
         e   0x096,  :unit_base_mana,                          type: :uint32,    blocks: 1
         e   0x097,  :unit_base_health,                        type: :uint32,    blocks: 1
