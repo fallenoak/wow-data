@@ -1,4 +1,4 @@
-module WOW::Capture::Definitions
+module WOW::Definitions
   build 20253 do
     table :text_emotes do
       e   1,    :agree

@@ -1,4 +1,4 @@
-module WOW::Capture::Definitions
+module WOW::Definitions
   build 20253 do
     table :inventory_types do
       e   0,  :non_equip,           tc_value: 'NonEquip',         label: 'Non-Equippable'

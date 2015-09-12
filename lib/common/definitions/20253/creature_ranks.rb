@@ -1,4 +1,4 @@
-module WOW::Capture::Definitions
+module WOW::Definitions
   build 20253 do
     table :creature_ranks do
       e   0,  :normal,          tc_value: 'Normal',       label: 'Normal'

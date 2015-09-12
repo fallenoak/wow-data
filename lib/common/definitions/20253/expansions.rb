@@ -1,4 +1,4 @@
-module WOW::Capture::Definitions
+module WOW::Definitions
   build 20253 do
     table :expansions do
       e   0,  :world_of_warcraft,       tc_value: 'WorldOfWarcraft',    label: 'World of Warcraft'

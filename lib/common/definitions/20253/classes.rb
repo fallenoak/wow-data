@@ -1,4 +1,4 @@
-module WOW::Capture::Definitions
+module WOW::Definitions
   build 20253 do
     table :classes do
       e   0,  :none,          tc_value: 'None',         label: 'None'

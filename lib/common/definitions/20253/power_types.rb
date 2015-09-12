@@ -1,4 +1,4 @@
-module WOW::Capture::Definitions
+module WOW::Definitions
   build 20253 do
     table :power_types do
       e   -2, :health,          tc_value: 'Health',         label: 'Health'

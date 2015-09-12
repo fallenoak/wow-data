@@ -1,4 +1,4 @@
-module WOW::Capture::Definitions
+module WOW::Definitions
   build 20253 do
     table :item_classes do
       e   0,  :consumable,    tc_value: 'Consumable',     label: 'Consumable'

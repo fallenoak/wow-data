@@ -1,4 +1,4 @@
-module WOW::Capture
+module WOW
   module Definitions
     class Namespace
       attr_reader :tables, :namespaces
@@ -191,7 +191,7 @@ end
 # Override String and Symbol equality to support table entries.
 class String
   def ==(other)
-    if other.is_a?(WOW::Capture::Definitions::Entry)
+    if other.is_a?(WOW::Definitions::Entry)
       return other == self
     else
       super(other)
@@ -199,7 +199,7 @@ class String
   end
 
   def ===(other)
-    if other.is_a?(WOW::Capture::Definitions::Entry)
+    if other.is_a?(WOW::Definitions::Entry)
       return other === self
     else
       super(other)
@@ -209,7 +209,7 @@ end
 
 class Symbol
   def ==(other)
-    if other.is_a?(WOW::Capture::Definitions::Entry)
+    if other.is_a?(WOW::Definitions::Entry)
       return other == self
     else
       super(other)
@@ -217,7 +217,7 @@ class Symbol
   end
 
   def ===(other)
-    if other.is_a?(WOW::Capture::Definitions::Entry)
+    if other.is_a?(WOW::Definitions::Entry)
       return other === self
     else
       super(other)

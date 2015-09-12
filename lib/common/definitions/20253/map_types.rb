@@ -1,4 +1,4 @@
-module WOW::Capture::Definitions
+module WOW::Definitions
   build 20253 do
     table :map_types do
       e   0,    :common,        tc_value: 'MAP_COMMON',         label: 'Common'

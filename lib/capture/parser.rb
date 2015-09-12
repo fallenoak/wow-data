@@ -124,7 +124,7 @@ module WOW::Capture
 
       # Find the first existing module walking down from the actual build.
       truncated_builds.each do |potential_match|
-        definitions = WOW::Capture::Definitions.for_build(potential_match)
+        definitions = WOW::Definitions.for_build(potential_match)
         @definitions = definitions if !definitions.nil?
       end
 

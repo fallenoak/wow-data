@@ -1,4 +1,4 @@
-module WOW::Capture::Definitions
+module WOW::Definitions
   build 20253 do
     table :item_qualities do
       e   0,  :poor,          tc_value: 'Poor',       label: 'Poor'
