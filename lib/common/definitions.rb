@@ -185,6 +185,13 @@ module WOW
     def self.for_build(build_number)
       @builds[build_number]
     end
+
+    def self.for_max_build(build_number)
+      limited = @builds.keys.select { |bn| bn <= build_number }.sort
+      highest_matching = limited.last
+
+      for_build(highest_matching)
+    end
   end
 end
 
