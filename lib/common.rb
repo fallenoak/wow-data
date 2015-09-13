@@ -7,6 +7,9 @@ require 'stringio'
 require_relative 'common/bit_array'
 
 require_relative 'common/definitions'
+
+require_relative 'common/definitions/20182/db2'
+
 require_relative 'common/definitions/20253/opcodes'
 require_relative 'common/definitions/20253/classes'
 require_relative 'common/definitions/20253/creature_ranks'

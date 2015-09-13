@@ -55,6 +55,7 @@ module WOW::DB2
     end
 
     def eof?
+      return true if @file.closed?
       @file.pos >= @header_size + (@record_size * @record_count)
     end
 
@@ -117,7 +118,7 @@ module WOW::DB2
 
     private def read_record
       record_data = read_char(@record_size)
-      record = Records.const_get(record_class_name).new(self, record_data)
+      record = Records.const_get(record_class_name).new(self, record_table_name, record_data)
 
       # Cache record if requested.
       @records << record if cache?
@@ -154,6 +155,18 @@ module WOW::DB2
       end
 
       name
+    end
+
+    private def record_table_name
+      underscore(record_class_name)
+    end
+
+    private def underscore(camel_cased_word)
+      camel_cased_word.gsub(/::/, '/').
+        gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+        gsub(/([a-z\d])([A-Z])/,'\1_\2').
+        tr("-", "_").
+        downcase
     end
   end
 end
