@@ -1,6 +1,7 @@
 module WOW::DBC
   class Parser
-    attr_reader :record_count, :field_count, :record_size, :string_block_size, :records
+    attr_reader :record_count, :field_count, :record_size, :string_table_size, :string_table,
+      :records
 
     def initialize(path, opts = {})
       @path = path
@@ -13,8 +14,9 @@ module WOW::DBC
       @record_count = nil
       @field_count = nil
       @record_size = nil
-      @string_block_start = nil
-      @string_block_size = nil
+      @string_table_start = nil
+      @string_table_size = nil
+      @string_table = nil
 
       @build = nil
 
@@ -23,19 +25,42 @@ module WOW::DBC
       @records = []
 
       read_header
+      read_string_table
       load_build_number
       load_structure
 
+      # Default to non-lazy w/ caching.
+      @lazy = opts[:lazy] == true
+      @cache = opts[:cache] != false
+
       # If we're not in lazy mode, read all records now.
-      read_record until eof? if opts[:lazy] == false
+      if !lazy?
+        # Force caching in non-lazy mode.
+        @cache = true
+
+        read_record until eof?
+        close
+      end
     end
 
     def close
       @file.close
     end
 
+    def closed?
+      @file.closed?
+    end
+
     def eof?
-      @file.pos >= @header_size + (@record_size * @record_count)
+      closed? || @file.pos >= @header_size + (@record_size * @record_count)
+    end
+
+    def lazy?
+      @lazy == true
+    end
+
+    def cache?
+      @cache == true
     end
 
     def next_record
@@ -47,29 +72,28 @@ module WOW::DBC
       @record_count = read_uint32
       @field_count = read_uint32
       @record_size = read_uint32
-      @string_block_size = read_uint32
-      @string_block_start = @header_size + (@record_size * @record_count)
+      @string_table_size = read_uint32
+      @string_table_start = @header_size + (@record_size * @record_count)
     end
 
     private def read_record
-      record = Records.const_get(record_class_name).new(read_fields)
+      record_data = read_char(@record_size)
+      record = Records.const_get(record_class_name).new(self, @structure, record_data)
 
-      @records << record
+      # Cache record if requested.
+      @records << record if cache?
 
       # Ensure we return the record.
       record
     end
 
-    private def read_fields
-      fields = {}
+    private def read_string_table
+      saved_pos = @file.pos
 
-      @structure.each do |field_definition|
-        field_type = field_definition.type
-        field_name = field_definition.value
-        fields[field_name] = send("read_#{field_type}")
-      end
+      @file.pos = @string_table_start
+      @string_table = StringIO.new(@file.read(@string_table_size))
 
-      fields
+      @file.pos = saved_pos
     end
 
     private def read_char(length)
@@ -77,35 +101,15 @@ module WOW::DBC
     end
 
     private def read_uint32
-      @file.read(4).unpack('V').first
+      @file.read(4).unpack('L<').first
     end
 
     private def read_int32
-      @file.read(4).unpack('i<').first
+      @file.read(4).unpack('l<').first
     end
 
     private def read_float
       @file.read(4).unpack('e').first
-    end
-
-    private def read_string
-      offset = read_uint32
-
-      saved_pos = @file.pos
-
-      @file.pos = @string_block_start + offset
-
-      string = ''
-
-      loop do
-        character = @file.read(1)
-        break if character == "\x00" || character.nil?
-        string << character
-      end
-
-      @file.pos = saved_pos
-
-      string
     end
 
     private def record_class_name
