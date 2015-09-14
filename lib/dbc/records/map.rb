@@ -1,30 +1,5 @@
 module WOW::DBC::Records
   class Map < WOW::DBC::Records::Base
-    STRUCTURE = [
-      [:uint32, :id],
-      [:string, :directory],
-      [:uint32, :instance_type],
-      [:uint32, :flags],
-      [:uint32, :map_type],
-      [:uint32, :unk5],
-      [:string, :map_name],
-      [:uint32, :area_table_id],
-      [:string, :map_description_horde],
-      [:string, :map_description_alliance],
-      [:int32,  :loading_screen_id],
-      [:float,  :minimap_icon_scale],
-      [:int32,  :corpse_map_id],
-      [:float,  :corpse_pos_x],
-      [:float,  :corpse_pos_y],
-      [:int32,  :time_of_day_override],
-      [:uint32, :expansion_id],
-      [:uint32, :raid_offset],
-      [:uint32, :max_players],
-      [:int32,  :parent_map_id],
-      [:int32,  :cosmetic_parent_map_id],
-      [:uint32, :time_offset]
-    ]
-
     CONTINENT_IDS = [0, 1, 530, 571, 870, 1116]
 
     module MapTypes
