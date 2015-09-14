@@ -37,10 +37,8 @@ module WOW::DB2
       read_index
       read_string_table
 
-      # Default to non-lazy.
+      # Default to non-lazy w/ caching.
       @lazy = opts[:lazy] == true
-
-      # Default to cache.
       @cache = opts[:cache] != false
 
       # If we're not in lazy mode, read all records now.
@@ -57,9 +55,12 @@ module WOW::DB2
       @file.close
     end
 
+    def closed?
+      @file.closed?
+    end
+
     def eof?
-      return true if @file.closed?
-      @file.pos >= @header_size + (@record_size * @record_count)
+      closed? || @file.pos >= @header_size + (@record_size * @record_count)
     end
 
     def lazy?
