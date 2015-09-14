@@ -3,6 +3,7 @@ module WOW::DBC
     attr_reader :record_count, :field_count, :record_size, :string_block_size, :records
 
     def initialize(path, opts = {})
+      @path = path
       @file = File.open(path, 'rb')
 
       @filename = path.split('/').last
@@ -15,9 +16,15 @@ module WOW::DBC
       @string_block_start = nil
       @string_block_size = nil
 
+      @build = nil
+
+      @structure = nil
+
       @records = []
 
       read_header
+      load_build_number
+      load_structure
 
       # If we're not in lazy mode, read all records now.
       read_record until eof? if opts[:lazy] == false
@@ -56,8 +63,9 @@ module WOW::DBC
     private def read_fields
       fields = {}
 
-      Records.const_get(record_class_name).const_get(:STRUCTURE).each do |field_definition|
-        field_type, field_name = field_definition
+      @structure.each do |field_definition|
+        field_type = field_definition.type
+        field_name = field_definition.value
         fields[field_name] = send("read_#{field_type}")
       end
 
@@ -112,6 +120,36 @@ module WOW::DBC
       end
 
       name
+    end
+
+    private def record_table_name
+      underscore(record_class_name)
+    end
+
+    private def underscore(camel_cased_word)
+      camel_cased_word.gsub(/::/, '/').
+        gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+        gsub(/([a-z\d])([A-Z])/,'\1_\2').
+        tr("-", "_").
+        downcase
+    end
+
+    private def load_build_number
+      digest = Digest::SHA256.file(@path).hexdigest
+      filename = @path.split('/').last.downcase.to_sym
+
+      matched_file = VERSIONS.keys.select { |v| v.to_s.downcase.to_sym == filename }.first
+      raise 'Unknown DBC file!' if matched_file.nil?
+
+      versions = VERSIONS[matched_file]
+      build_number = versions[digest.to_sym]
+      raise 'Unknown build!' if build_number.nil?
+
+      @build = build_number
+    end
+
+    private def load_structure
+      @structure = WOW::Definitions.for_build(@build, merged: true).dbc.send(record_table_name)
     end
   end
 end

@@ -4,6 +4,8 @@ end
 
 require_relative 'common'
 
+require_relative 'dbc/versions'
+
 require_relative 'dbc/parser'
 
 require_relative 'dbc/records'

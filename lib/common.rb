@@ -8,6 +8,8 @@ require_relative 'common/bit_array'
 
 require_relative 'common/definitions'
 
+require_relative 'common/definitions/19027/dbc'
+
 require_relative 'common/definitions/20182/db2'
 
 require_relative 'common/definitions/20253/opcodes'
