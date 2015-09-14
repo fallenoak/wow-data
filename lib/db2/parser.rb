@@ -136,11 +136,11 @@ module WOW::DB2
     end
 
     private def read_uint32
-      @file.read(4).unpack('V').first
+      @file.read(4).unpack('L<').first
     end
 
     private def read_int32
-      @file.read(4).unpack('i<').first
+      @file.read(4).unpack('l<').first
     end
 
     private def read_float

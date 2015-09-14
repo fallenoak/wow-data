@@ -45,11 +45,11 @@ module WOW::DB2::Records
     end
 
     private def read_uint32
-      @data.read(4).unpack('V').first
+      @data.read(4).unpack('L<').first
     end
 
     private def read_int32
-      @data.read(4).unpack('i<').first
+      @data.read(4).unpack('l<').first
     end
 
     private def read_float
