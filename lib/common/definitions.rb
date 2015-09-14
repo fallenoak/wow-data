@@ -12,11 +12,20 @@ module WOW
         instance_eval(&definition)
       end
 
-      def merge!(other_build)
-        copied_namespaces = other_build.namespaces.clone
-        copied_tables = other_build.tables.clone
+      def merge!(other_namespace)
+        copied_namespaces = other_namespace.namespaces.clone
+        copied_tables = other_namespace.tables.clone
 
-        @namespaces.merge!(copied_namespaces)
+        # Recursively merge namespaces.
+        copied_namespaces.each_pair do |copied_namespace_name, copied_namespace|
+          if @namespaces.has_key?(copied_namespace_name)
+            @namespaces[copied_namespace_name].merge!(copied_namespace)
+          else
+            @namespaces[copied_namespace_name] = copied_namespace
+          end
+        end
+
+        # Non-recursively merge tables (ie tables are overwritten).
         @tables.merge!(copied_tables)
 
         @namespaces.keys.each do |namespace_name|
