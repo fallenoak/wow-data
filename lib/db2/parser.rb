@@ -25,12 +25,15 @@ module WOW::DB2
       @locale = nil
       @unk1 = nil
 
+      @structure = nil
+
       @index = {}
       @string_table = StringIO.new('')
 
       @records = []
 
       read_header
+      load_structure
       read_index
       read_string_table
 
@@ -118,7 +121,7 @@ module WOW::DB2
 
     private def read_record
       record_data = read_char(@record_size)
-      record = Records.const_get(record_class_name).new(self, record_table_name, record_data)
+      record = Records.const_get(record_class_name).new(self, @structure, record_data)
 
       # Cache record if requested.
       @records << record if cache?
@@ -167,6 +170,10 @@ module WOW::DB2
         gsub(/([a-z\d])([A-Z])/,'\1_\2').
         tr("-", "_").
         downcase
+    end
+
+    private def load_structure
+      @structure = WOW::Definitions.for_build(@build, merged: true).db2.send(record_table_name)
     end
   end
 end

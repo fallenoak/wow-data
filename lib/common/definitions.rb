@@ -12,6 +12,28 @@ module WOW
         instance_eval(&definition)
       end
 
+      def merge!(other_build)
+        copied_namespaces = other_build.namespaces.clone
+        copied_tables = other_build.tables.clone
+
+        @namespaces.merge!(copied_namespaces)
+        @tables.merge!(copied_tables)
+
+        @namespaces.keys.each do |namespace_name|
+          define_singleton_method(namespace_name) do
+            @namespaces[namespace_name]
+          end
+        end
+
+        @tables.keys.each do |table_name|
+          define_singleton_method(table_name) do
+            @tables[table_name]
+          end
+        end
+
+        self
+      end
+
       def [](path_name)
         @tables[path_name.to_sym] || @namespaces[path_name.to_sym]
       end
@@ -182,15 +204,28 @@ module WOW
       end
     end
 
-    def self.for_build(build_number)
-      @builds[build_number]
+    def self.for_build(build_number, opts = {})
+      if opts[:merged] == true
+        merge_build(build_number)
+      else
+        @builds[build_number]
+      end
     end
 
-    def self.for_max_build(build_number)
-      limited = @builds.keys.select { |bn| bn <= build_number }.sort
-      highest_matching = limited.last
+    # Traverse all builds from lowest build number to highest, stopping at the given build number.
+    # For each build, merge the namespaces together into a merged build, such that the merged build
+    # contains the most recent tables for a given namespace 'path'.
+    def self.merge_build(build_number)
+      source_builds = @builds.keys.select { |bn| bn <= build_number }.sort
 
-      for_build(highest_matching)
+      merged_build = Build.new
+
+      source_builds.each do |source_build_number|
+        source_build = @builds[source_build_number]
+        merged_build.merge!(source_build)
+      end
+
+      merged_build
     end
   end
 end

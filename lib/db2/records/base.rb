@@ -2,11 +2,10 @@ module WOW::DB2::Records
   class Base
     attr_reader :fields
 
-    def initialize(parser, table_name, data)
+    def initialize(parser, structure, data)
       @parser = parser
       @data = StringIO.new(data)
-
-      @structure = WOW::Definitions.for_max_build(parser.build).db2.send(table_name)
+      @structure = structure
 
       @fields = {}
 
