@@ -31,6 +31,14 @@ module WOW::Capture::WOWObject::Utility::LogItems
       !@embed.nil?
     end
 
+    private def object
+      @object
+    end
+
+    private def packet
+      @packet
+    end
+
     private def parse!
     end
 

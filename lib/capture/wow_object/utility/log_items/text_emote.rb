@@ -7,11 +7,11 @@ module WOW::Capture::WOWObject::Utility::LogItems
     end
 
     def parse!
-      @source = @packet.parser.objects.find(@packet.source_guid)
-      @target = @packet.parser.objects.find(@packet.target_guid)
-      @emote_id = @packet.emote_id
-      @emote_type = @packet.emote_type
-      @sound_index = @packet.sound_index
+      @source = packet.parser.objects.find(packet.source_guid)
+      @target = packet.parser.objects.find(packet.target_guid)
+      @emote_id = packet.emote_id
+      @emote_type = packet.emote_type
+      @sound_index = packet.sound_index
     end
 
     def pretty_print

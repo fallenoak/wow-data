@@ -7,8 +7,8 @@ module WOW::Capture::WOWObject::Utility::LogItems
     end
 
     def parse!
-      @emote_id = @packet.emote_id
-      @emote_type = @packet.emote_type
+      @emote_id = packet.emote_id
+      @emote_type = packet.emote_type
     end
 
     def pretty_print

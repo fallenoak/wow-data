@@ -7,9 +7,9 @@ module WOW::Capture::WOWObject::Utility::LogItems
     end
 
     def parse!
-      @sender_name = @packet.sender_name
-      @channel_name = @packet.channel_name
-      @text = @packet.text
+      @sender_name = packet.sender_name
+      @channel_name = packet.channel_name
+      @text = packet.text
     end
 
     def pretty_print

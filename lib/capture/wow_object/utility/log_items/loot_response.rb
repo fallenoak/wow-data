@@ -7,9 +7,9 @@ module WOW::Capture::WOWObject::Utility::LogItems
     end
 
     def parse!
-      @coins = @packet.coins
-      @items = @packet.items
-      @currencies = @packet.currencies
+      @coins = packet.coins
+      @items = packet.items
+      @currencies = packet.currencies
     end
 
     def pretty_print

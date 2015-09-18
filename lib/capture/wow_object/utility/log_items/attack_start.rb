@@ -7,8 +7,8 @@ module WOW::Capture::WOWObject::Utility::LogItems
     end
 
     def parse!
-      @attacker = @packet.parser.objects.find_or_create(@packet.attacker_guid)
-      @victim = @packet.parser.objects.find_or_create(@packet.victim_guid)
+      @attacker = packet.parser.objects.find_or_create(packet.attacker_guid)
+      @victim = packet.parser.objects.find_or_create(packet.victim_guid)
     end
 
     def pretty_print
