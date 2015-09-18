@@ -7,7 +7,7 @@ module WOW::Capture
       V3_1 = 0x301
     end
 
-    CLIENT_BUILDS = [20338, 20253]
+    CLIENT_BUILDS = [20490, 20444, 20338, 20253]
     DIRECTIONS = ['CMSG', 'SMSG']
 
     attr_reader :client_build, :client_locale, :packet_index
@@ -120,14 +120,7 @@ module WOW::Capture
     # exact match if the definitions didn't change between builds -- as is common with hotfix
     # releases.
     private def select_definitions
-      truncated_builds = CLIENT_BUILDS.select { |build| build <= @client_build }.sort.reverse
-
-      # Find the first existing module walking down from the actual build.
-      truncated_builds.each do |potential_match|
-        definitions = WOW::Definitions.for_build(potential_match)
-        @definitions = definitions if !definitions.nil?
-      end
-
+      @definitions = WOW::Definitions.for_build(@client_build, merged: true)
       raise "Unable to identify appropriate definitions: #{@client_build}" if @definitions.nil?
     end
 
