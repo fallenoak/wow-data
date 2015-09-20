@@ -19,6 +19,8 @@ module WOW::Definitions
         e   0x0871,   :PhaseShiftChange,                        tc_value: 'SMSG_PHASE_SHIFT_CHANGE'
         e   0x03AB,   :LoginVerifyWorld,                        tc_value: 'SMSG_LOGIN_VERIFY_WORLD'
         e   0x061E,   :NewWorld,                                tc_value: 'SMSG_NEW_WORLD'
+        e   0x02E2,   :EncounterEnd,                            tc_value: 'SMSG_ENCOUNTER_END'
+        e   0x05CE,   :EncounterStart,                          tc_value: 'SMSG_ENCOUNTER_START'
       end
 
       table :cmsg do

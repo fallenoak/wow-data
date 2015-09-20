@@ -19,6 +19,8 @@ module WOW::Definitions
         e   0x0C36,   :PhaseShiftChange,                        tc_value: 'SMSG_PHASE_SHIFT_CHANGE'
         e   0x0CD3,   :LoginVerifyWorld,                        tc_value: 'SMSG_LOGIN_VERIFY_WORLD'
         e   0x0026,   :NewWorld,                                tc_value: 'SMSG_NEW_WORLD'
+        e   0x08DF,   :EncounterEnd,                            tc_value: 'SMSG_ENCOUNTER_END'
+        e   0x08D7,   :EncounterStart,                          tc_value: 'SMSG_ENCOUNTER_START'
 
         # Not Implemented
         e   0x0895,   :Unhandled,                               tc_value: 'SMSG_ABORT_NEW_WORLD'
@@ -259,8 +261,6 @@ module WOW::Definitions
         e   0x0698,   :Unhandled,                               tc_value: 'SMSG_DURABILITY_DAMAGE_DEATH'
         e   0x09C6,   :Unhandled,                               tc_value: 'SMSG_ENABLE_BARBER_SHOP'
         e   0x0926,   :Unhandled,                               tc_value: 'SMSG_ENCHANTMENT_LOG'
-        e   0x08DF,   :Unhandled,                               tc_value: 'SMSG_ENCOUNTER_END'
-        e   0x08D7,   :Unhandled,                               tc_value: 'SMSG_ENCOUNTER_START'
         e   0x0290,   :Unhandled,                               tc_value: 'SMSG_ENUM_CHARACTERS_RESULT'
         e   0x093D,   :Unhandled,                               tc_value: 'SMSG_ENVIRONMENTAL_DAMAGE_LOG'
         e   0x0843,   :Unhandled,                               tc_value: 'SMSG_EQUIPMENT_SET_ID'
