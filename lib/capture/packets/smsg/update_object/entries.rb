@@ -58,7 +58,7 @@ module WOW::Capture::Packets::SMSG
           @raw_values_state = read_values
 
           wow_object = @packet.parser.objects.find_or_create(@guid)
-          wow_object.spawn!(@packet, @raw_movement_state, @raw_values_state)
+          wow_object.create_object!(@packet, @raw_movement_state, @raw_values_state)
         end
       end
 

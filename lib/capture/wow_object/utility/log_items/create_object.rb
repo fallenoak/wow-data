@@ -1,7 +1,7 @@
 module WOW::Capture::WOWObject::Utility::LogItems
-  class Spawn < Base
+  class CreateObject < Base
     def type
-      :spawn
+      :create_obj
     end
   end
 end

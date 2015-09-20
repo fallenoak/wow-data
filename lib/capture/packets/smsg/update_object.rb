@@ -59,7 +59,7 @@ module WOW::Capture::Packets::SMSG
 
       @destroyed_objects.each do |guid|
         object = parser.objects.find(guid)
-        object.despawn!(self)
+        object.destroy_object!(self)
       end
     end
   end

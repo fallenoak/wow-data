@@ -11,15 +11,15 @@ module WOW::Capture::WOWObject
       @map_id = @guid.map_id
       @session_map_id = @map_id
 
-      @current_position = WOW::Capture::Coordinate.new(nil, nil, nil)
+      @current_position = WOW::Capture::Coordinate.new(nil, nil, nil, nil)
       @positions = []
 
       @log = Utility::Log.new
 
       @in_combat = false
 
-      @is_spawned = false
-      @is_despawned = false
+      @is_created = false
+      @is_destroyed = false
 
       @attributes = Utility::Attributes.new(self)
     end
@@ -32,20 +32,20 @@ module WOW::Capture::WOWObject
       @storage.parser
     end
 
-    def spawned?
-      @is_spawned == true
+    def created?
+      @is_created == true
     end
 
-    def despawned?
-      @is_spawned == false
+    def destroyed?
+      @is_created == false
     end
 
     def in_combat?
       @in_combat == true
     end
 
-    def spawn!(packet, raw_movement_state, raw_values_state)
-      to_log!(:Spawn, packet, contextual: false)
+    def create_object!(packet, raw_movement_state, raw_values_state)
+      to_log!(:CreateObject, packet, contextual: false)
 
       @movement = raw_movement_state
       @attributes.set!(raw_values_state)
@@ -59,13 +59,15 @@ module WOW::Capture::WOWObject
         end
       end
 
-      @is_spawned = true
+      @is_created = true
+      @is_destroyed = false
+
       @session_map_id = packet.parser.session.current_map_id
 
-      @storage.trigger(:spawn, self)
+      @storage.trigger(:object_created, self)
     end
 
-    def despawn!(packet)
+    def destroy_object!(packet)
       related_combat_sessions(:attacker).each do |combat_session|
         combat_session.remove_attacker(self)
       end
@@ -74,11 +76,12 @@ module WOW::Capture::WOWObject
         combat_session.remove_victim(self)
       end
 
-      @is_despawned = true
+      @is_created = false
+      @is_destroyed = true
 
-      to_log!(:Despawn, packet, contextual: false)
+      to_log!(:DestroyObject, packet, contextual: false)
 
-      @storage.trigger(:despawn, self)
+      @storage.trigger(:object_destroyed, self)
     end
 
     def loot_response!(packet)
@@ -91,7 +94,7 @@ module WOW::Capture::WOWObject
       @current_position = packet.position
       @positions << packet.position
 
-      @storage.trigger(:move, self)
+      @storage.trigger(:moved, self)
     end
 
     def text_emote!(packet)

@@ -1,7 +1,7 @@
 module WOW::Capture::WOWObject::Utility::LogItems
-  class Despawn < Base
+  class DestroyObject < Base
     def type
-      :despawn
+      :destroy_obj
     end
   end
 end
