@@ -9,6 +9,7 @@ module WOW::Capture::WOWObject::Utility::LogItems
       @packet_index = packet.index
       @tick = packet.tick
       @time = packet.time
+      @elapsed_time = packet.elapsed_time
 
       @context = opts.has_key?(:context) ? opts.delete(:context) : nil
       @embed = opts.has_key?(:embed) ? opts.delete(:embed) : nil
@@ -67,7 +68,7 @@ module WOW::Capture::WOWObject::Utility::LogItems
     private def pretty_prefix
       output = ''
 
-      output << "##{'%-6s' % @packet_index} #{@tick} #{@time}"
+      output << "##{'%-6s' % @packet_index} #{pretty_duration(@elapsed_time)}"
       output << " M:#{'%-4s' % @object.guid.map_id}"
       output << " E:#{'%-6s' % @object.guid.entry_id}"
       output << " G:#{@object.guid.short_id}"
@@ -83,6 +84,15 @@ module WOW::Capture::WOWObject::Utility::LogItems
       output = "\n" << (' ' * pretty_prefix.length)
 
       output
+    end
+
+    private def pretty_duration(total_seconds)
+      milliseconds = (total_seconds.modulo(1).round(3) * 1000).round
+      seconds = total_seconds % 60
+      minutes = (total_seconds / 60) % 60
+      hours = total_seconds / (60 * 60)
+
+      format("%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds)
     end
   end
 end

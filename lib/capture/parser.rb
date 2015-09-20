@@ -146,7 +146,8 @@ module WOW::Capture
       direction = read_char(4)
       connection_index = read_int32
       tick = read_uint32
-      time = @start_time + ((tick - @start_tick) / 1000.0)
+      elapsed_time = ((tick - @start_tick) / 1000.0)
+      time = @start_time + elapsed_time
       extra_length = read_int32
       length = read_int32
       read_char(extra_length)
@@ -154,7 +155,7 @@ module WOW::Capture
       data = read_char(length - 4)
 
       packet_class, opcode_entry = lookup_opcode(direction, opcode)
-      packet = packet_class.new(self, opcode_entry, @packet_index, direction, connection_index, tick, time, data)
+      packet = packet_class.new(self, opcode_entry, @packet_index, direction, connection_index, tick, time, elapsed_time, data)
 
       @packet_index += 1
 

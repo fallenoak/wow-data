@@ -1,8 +1,9 @@
 module WOW::Capture::Packets
   class Base
-    attr_reader :parser, :opcode, :index, :direction, :connection_index, :tick, :time, :references
+    attr_reader :parser, :opcode, :index, :direction, :connection_index, :tick, :time,
+      :elapsed_time, :references
 
-    def initialize(parser, opcode, index, direction, connection_index, tick, time, data)
+    def initialize(parser, opcode, index, direction, connection_index, tick, time, elapsed_time, data)
       @parser = parser
       @opcode = opcode
       @index = index
@@ -10,6 +11,7 @@ module WOW::Capture::Packets
       @connection_index = connection_index
       @tick = tick
       @time = time
+      @elapsed_time = elapsed_time
 
       @references = []
 
