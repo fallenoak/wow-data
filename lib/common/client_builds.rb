@@ -120,5 +120,9 @@ module WOW
       truncated_builds.sort_by! { |entry| entry[:released] }
       truncated_builds.last[:build]
     end
+
+    def self.known?(build)
+      BUILDS.select { |entry| entry[:build] == build }
+    end
   end
 end
