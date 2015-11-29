@@ -303,8 +303,13 @@ module WOW::Capture
     end
 
     private def lookup_opcode(direction, opcode)
-      return [Packets::Invalid, nil] if !valid_direction?(direction)
-      return [Packets::Unhandled, nil] if defs.nil? || !defs.respond_to?(:opcodes)
+      if !valid_direction?(direction)
+        return [Packets::Invalid, nil]
+      end
+
+      if defs.nil? || !defs.respond_to?(:opcodes) || defs.opcodes[direction.downcase].nil?
+        return [Packets::Unhandled, nil]
+      end
 
       opcode_entry = defs.opcodes[direction.downcase][opcode]
 
