@@ -1,25 +1,25 @@
 module WOW::Capture
   class Parser
-    module FormatVersions
-      V2_1 = 0x201
-      V2_2 = 0x202
-      V3_0 = 0x300
-      V3_1 = 0x301
-    end
-
     module Errors
       class FormatError < StandardError; end
-      class UnsupportedClientError < StandardError; end
+      class UnknownClientError < StandardError; end
     end
 
+    PKT_FORMAT_VERSIONS = {
+      0x201 => :v2_1,
+      0x202 => :v2_2,
+      0x300 => :v3_0,
+      0x301 => :v3_1
+    }
+
     PKT_MAGIC_HEADER = 'PKT'
-    CLIENT_BUILDS = [20490, 20444, 20338, 20253]
+
     DIRECTIONS = ['CMSG', 'SMSG']
 
     MIN_START_TIME = Time.utc(2005, 1, 1, 0, 0, 0)
     MAX_START_TIME = Time.utc(2020, 12, 31, 23, 59, 59)
 
-    attr_reader :type, :client_build, :client_locale, :packet_index
+    attr_reader :type, :format_version, :client_build, :client_locale, :start_time, :packet_index
 
     def initialize(path, opts = {})
       file_name = path.split('/').last
@@ -58,6 +58,7 @@ module WOW::Capture
       guess_build if headerless?
 
       validate_start_time
+      validate_client_build
 
       select_definitions
     end
@@ -138,13 +139,6 @@ module WOW::Capture
       @headerless == true
     end
 
-    # Checks if the capture's build is in the set of supported client builds.
-    private def ensure_supported_client
-      if !CLIENT_BUILDS.include?(@client_build)
-        raise Errors::UnsupportedClientError.new("Unsupported client build: #{@client_build}")
-      end
-    end
-
     # Identifies a stub to a module appropriate for the client build of this capture. May not be an
     # exact match if the definitions didn't change between builds -- as is common with hotfix
     # releases.
@@ -169,7 +163,7 @@ module WOW::Capture
 
       @headerless = false
 
-      @format_version = read_uint16
+      @format_version = PKT_FORMAT_VERSIONS[read_uint16]
 
       @sniffer_id = read_char(1)
       @client_build = read_uint32
@@ -196,13 +190,13 @@ module WOW::Capture
 
     private def read_pkt_packet
       case @format_version
-      when FormatVersions::V2_1
+      when :v2_1
         read_pkt_v2_1_packet
-      when FormatVersions::V2_2
+      when :v2_2
         read_pkt_v2_2_packet
-      when FormatVersions::V3_0
+      when :v3_0
         read_pkt_v3_0_packet
-      when FormatVersions::V3_1
+      when :v3_1
         read_pkt_v3_1_packet
       else
         read_pkt_default_packet
@@ -296,7 +290,7 @@ module WOW::Capture
 
     private def lookup_opcode(direction, opcode)
       return [Packets::Invalid, nil] if !valid_direction?(direction)
-      return [Packets::Unhandled, nil] if defs.nil?
+      return [Packets::Unhandled, nil] if defs.nil? || !defs.respond_to?(:opcodes)
 
       opcode_entry = defs.opcodes[direction.downcase][opcode]
 
@@ -332,6 +326,13 @@ module WOW::Capture
       if @start_time < MIN_START_TIME || @start_time > MAX_START_TIME
         raise Errors::FormatError.new("Capture file has packet timestamp outside of expected" <<
           " range: #{@start_time}")
+      end
+    end
+
+    # Checks if the capture's build is in the set of known client builds.
+    private def validate_client_build
+      if !WOW::ClientBuilds.known?(@client_build)
+        raise Errors::UnknownClientError.new("Unknown client build: #{@client_build}")
       end
     end
   end
