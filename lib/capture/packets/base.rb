@@ -41,6 +41,10 @@ module WOW::Capture::Packets
       true
     end
 
+    def client_build
+      @parser.client_build
+    end
+
     def parse!
     end
 
@@ -113,6 +117,14 @@ module WOW::Capture::Packets
       @_data.read(4).unpack('e').first
     end
 
+    def read_packed_guid64
+      guid_low = read_packed_uint64
+
+      guid = WOW::Capture::Guid64.new(parser, guid_low)
+
+      guid
+    end
+
     def read_packed_guid128
       guid_low_mask = read_byte
       guid_high_mask = read_byte
@@ -152,7 +164,9 @@ module WOW::Capture::Packets
       @_data.read(length)
     end
 
-    def read_packed_uint64(mask)
+    def read_packed_uint64(mask = nil)
+      mask = read_byte if mask.nil?
+
       return 0 if mask == 0
 
       res = 0

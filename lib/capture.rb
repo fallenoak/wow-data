@@ -6,6 +6,7 @@ require_relative 'common'
 
 require_relative 'capture/object_types'
 require_relative 'capture/guid128'
+require_relative 'capture/guid64'
 require_relative 'capture/coordinate'
 require_relative 'capture/update_value'
 
