@@ -149,11 +149,13 @@ module WOW
       end
 
       def find_by_value(value)
-        @entries.select { |entry| entry.value == value }.first
+        matches = @entries.select { |_, entry| entry.value == value }
+        matches[matches.keys.first]
       end
 
       def find_by_extra(extra_name, extra_value)
-        @entries.select { |entry| entry.extras[extra_name] == extra_value }.first
+        matches = @entries.select { |_, entry| entry.extras[extra_name] == extra_value }
+        matches[matches.keys.first]
       end
     end
 
