@@ -26,7 +26,7 @@ module WOW::Capture::Packets
     end
 
     private def add_reference!(reference_label, reference_type, entry_type, entry_id)
-      @references << Utility::Reference.new(@index, reference_label, reference_type, entry_type, entry_id)
+      @references << WOW::Capture::Utility::Reference.new(@index, reference_label, reference_type, entry_type, entry_id)
     end
 
     def has_references?

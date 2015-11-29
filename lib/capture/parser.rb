@@ -61,6 +61,7 @@ module WOW::Capture
       validate_client_build
 
       select_definitions
+      select_packet_module
     end
 
     # Returns a stub to the module appropriate for the client build of this capture.
@@ -145,6 +146,19 @@ module WOW::Capture
     private def select_definitions
       @definitions = WOW::Definitions.for_build(@client_build, merged: true)
       raise "Unable to identify appropriate definitions: #{@client_build}" if @definitions.nil?
+    end
+
+    private def select_packet_module
+      case WOW::ClientBuilds.build_era(@client_build)
+      when '6.x'
+        require_relative 'packets/6.x'
+      when '5.x'
+        require_relative 'packets/5.x'
+      when '4.x'
+        require_relative 'packets/4.x'
+      when '3.x'
+        require_relative 'packets/3.x'
+      end
     end
 
     # Read a .pkt file header.

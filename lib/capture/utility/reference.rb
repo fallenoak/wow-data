@@ -1,4 +1,4 @@
-module WOW::Capture::Packets::Utility
+module WOW::Capture::Utility
   class Reference
     ENTRY_TYPES = %i(creature item spell quest game_object dynamic_object)
 
