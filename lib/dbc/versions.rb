@@ -44,6 +44,11 @@ module WOW::DBC
       '7db64ecf76b566e9564537fb4f12238be92381ffeef5380b783000227d5061f7': 20338
     },
 
+    'Spell.dbc': {
+      '7535f55fa3eac69ce5711a0a766062998dad3276ce877dc2fa9dc48ea2e33de2': 20338,
+      'c1bc1354e72a4c8811261faf0c3f0b8572eb828fadae52ad78b56eecc180b32c': 20490
+    },
+
     'SpellIcon.dbc': {
       '376701360f9999cac9848acbb44af689fddfb34f0262fb848f395893ec307670': 20338
     }
