@@ -245,6 +245,10 @@ module WOW::Capture::Packets
       buffer
     end
 
+    def read_bool
+      read_byte != 0
+    end
+
     def inspect
       excluded_variables = [:@parser, :@_data, :@_bitpos, :@_curbitval]
       all_variables = instance_variables
