@@ -34,6 +34,27 @@ module WOW::Capture
       "#{@low.to_s(16)}".to_i(16)
     end
 
+    # Represent the Guid64 as a hex string.
+    def hex
+      to_i.to_s(16)
+    end
+
+    # Represent the Guid64 as a truncated hex string of a hash.
+    def short_id
+      Digest::SHA1.hexdigest(hex)[0, 6]
+    end
+
+    def pretty_print
+      output = ''
+
+      output << "{guid64:0x#{short_id}"
+      output << " type:#{@type};"
+      output << " entry_id:#{@entry_id}"
+      output << "}"
+
+      output
+    end
+
     private def client_build
       @client_build
     end
