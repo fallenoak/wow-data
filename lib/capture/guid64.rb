@@ -71,12 +71,16 @@ module WOW::Capture
       high_value = (@low & 0xF0F0000000000000) >> 52
 
       case high_value
-      when 0x0
+      when 0x0, 0x8
         return defs.legacy_guid_types.high.find_by_value(:player)
-      when 0x400
+      when 0x408
         return defs.legacy_guid_types.high.find_by_value(:item)
       else
-        return defs.legacy_guid_types.high[high_value]
+        if defs.legacy_guid_types.high[high_value]
+          return defs.legacy_guid_types.high[high_value]
+        else
+          raise StandardError.new("Unexpected high value: #{high_value}")
+        end
       end
     end
 
