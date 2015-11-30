@@ -1,6 +1,11 @@
 module WOW::Definitions
   build 15595 do
     namespace :opcodes do
+      table :cmsg do
+        # Implemented
+        e   0x05B1,   :PlayerLogin,                             tc_value: 'CMSG_PLAYER_LOGIN'
+      end
+
       table :smsg do
         # Implemented
         e   0x4542,   :AuthChallenge,                           tc_value: 'SMSG_AUTH_CHALLENGE'
