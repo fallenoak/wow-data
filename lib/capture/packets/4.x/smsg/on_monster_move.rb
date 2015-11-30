@@ -4,6 +4,9 @@ module WOW::Capture::Packets::SMSG
 
     def parse!
       @guid = read_packed_guid64
+
+      @toggle_anim_tier_in_trans = read_bool
+
       @position = WOW::Capture::Coordinate.new(read_vector(3))
     end
 
