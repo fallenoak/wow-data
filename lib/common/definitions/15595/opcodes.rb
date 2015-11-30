@@ -8,6 +8,8 @@ module WOW::Definitions
 
       table :smsg do
         # Implemented
+        e   0x2D15,   :AttackStart,                             tc_value: 'SMSG_ATTACK_START'
+        e   0x0934,   :AttackStop,                              tc_value: 'SMSG_ATTACK_STOP'
         e   0x4542,   :AuthChallenge,                           tc_value: 'SMSG_AUTH_CHALLENGE'
         e   0x6E17,   :OnMonsterMove,                           tc_value: 'SMSG_ON_MONSTER_MOVE'
         e   0x6024,   :QueryCreatureResponse,                   tc_value: 'SMSG_QUERY_CREATURE_RESPONSE'
