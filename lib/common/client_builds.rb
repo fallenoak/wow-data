@@ -112,7 +112,11 @@ module WOW
       { build: 20201, era: '6.x', released: Time.utc(2015,  6,  26) },
       { build: 20216, era: '6.x', released: Time.utc(2015,  7,  2)  },
       { build: 20253, era: '6.x', released: Time.utc(2015,  7,  9)  },
-      { build: 20338, era: '6.x', released: Time.utc(2015,  7,  27) }
+      { build: 20338, era: '6.x', released: Time.utc(2015,  7,  27) },
+      { build: 20444, era: '6.x', released: Time.utc(2015,  9,  1)  },
+      { build: 20490, era: '6.x', released: Time.utc(2015,  9,  9)  },
+      { build: 20574, era: '6.x', released: Time.utc(2015,  10, 5)  },
+      { build: 20726, era: '6.x', released: Time.utc(2015,  11, 17) }
     ]
 
     def self.in_use_at(time)
