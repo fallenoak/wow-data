@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 20444 do
     namespace :opcodes do
       table :smsg do
         # Implemented
