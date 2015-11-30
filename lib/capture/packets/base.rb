@@ -117,6 +117,14 @@ module WOW::Capture::Packets
       @_data.read(4).unpack('e').first
     end
 
+    def read_guid64
+      guid_low = read_uint64
+
+      guid = WOW::Capture::Guid64.new(parser, guid_low)
+
+      guid
+    end
+
     def read_packed_guid64
       guid_low = read_packed_uint64
 
@@ -247,6 +255,51 @@ module WOW::Capture::Packets
 
     def read_bool
       read_byte != 0
+    end
+
+    def read_bitstream_guid64(start_values, parse_values)
+      guid_low = read_bitstream_uint64(start_values, parse_values)
+
+      guid = WOW::Capture::Guid64.new(parser, guid_low)
+
+      guid
+    end
+
+    def read_bitstream_uint64(start_values, parse_values)
+      bitstream = read_bitstream_start(start_values)
+      read_bitstream_parse(bitstream, parse_values)
+
+      value = bitstream.reverse.map { |v| sprintf('%02X' % v) }.join.to_i(16)
+
+      value
+    end
+
+    def read_bitstream_start(values)
+      bytes = []
+
+      values.each do |value|
+        bytes[value] = read_bit ? 1 : 0
+      end
+
+      bytes
+    end
+
+    def read_bitstream_parse(bitstream, values)
+      temp_bytes = []
+
+      i = 0
+
+      values.each do |value|
+        if bitstream[value] != 0
+          bitstream[value] ^= read_byte
+        end
+
+        i += 1
+
+        temp_bytes[i] = bitstream[value]
+      end
+
+      temp_bytes
     end
 
     def inspect
