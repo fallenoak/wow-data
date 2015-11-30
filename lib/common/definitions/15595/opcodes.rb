@@ -11,6 +11,7 @@ module WOW::Definitions
         e   0x4542,   :AuthChallenge,                           tc_value: 'SMSG_AUTH_CHALLENGE'
         e   0x6E17,   :OnMonsterMove,                           tc_value: 'SMSG_ON_MONSTER_MOVE'
         e   0x6024,   :QueryCreatureResponse,                   tc_value: 'SMSG_QUERY_CREATURE_RESPONSE'
+        e   0x6E04,   :QueryPlayerNameResponse,                 tc_value: 'SMSG_QUERY_PLAYER_NAME_RESPONSE'
       end
     end
   end
