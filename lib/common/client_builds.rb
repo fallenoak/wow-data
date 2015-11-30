@@ -126,7 +126,7 @@ module WOW
     end
 
     def self.known?(build)
-      BUILDS.select { |entry| entry[:build] == build }
+      BUILDS.select { |entry| entry[:build] == build }.length > 0
     end
   end
 end
