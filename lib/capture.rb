@@ -53,7 +53,6 @@ require_relative 'capture/packets'
 require_relative 'capture/packets/structure'
 require_relative 'capture/packets/header'
 require_relative 'capture/packets/base'
-require_relative 'capture/packets/utility'
 require_relative 'capture/packets/unhandled'
 require_relative 'capture/packets/invalid'
 
@@ -66,23 +65,12 @@ Dir.glob("#{File.dirname(__FILE__)}/capture/packets/records/**/*.rb").each do |r
   require record_file
 end
 
-require_relative 'capture/packets/cmsg/auth_session'
-require_relative 'capture/packets/cmsg/player_login'
+Dir.glob("#{File.dirname(__FILE__)}/capture/packets/cmsg/**/*.rb").each do |cmsg_file|
+  require cmsg_file
+end
 
-require_relative 'capture/packets/smsg/attack_start'
-require_relative 'capture/packets/smsg/attack_stop'
-require_relative 'capture/packets/smsg/auth_challenge'
-require_relative 'capture/packets/smsg/chat'
-require_relative 'capture/packets/smsg/emote'
-require_relative 'capture/packets/smsg/encounter_end'
-require_relative 'capture/packets/smsg/encounter_start'
-require_relative 'capture/packets/smsg/loot_response'
-require_relative 'capture/packets/smsg/on_monster_move'
-require_relative 'capture/packets/smsg/query_creature_response'
-require_relative 'capture/packets/smsg/query_player_name_response'
-require_relative 'capture/packets/smsg/spell_go'
-require_relative 'capture/packets/smsg/spell_start'
-require_relative 'capture/packets/smsg/text_emote'
-require_relative 'capture/packets/smsg/update_object'
+Dir.glob("#{File.dirname(__FILE__)}/capture/packets/smsg/**/*.rb").each do |smsg_file|
+  require smsg_file
+end
 
 require_relative 'capture/parser'
