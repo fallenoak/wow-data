@@ -6,10 +6,10 @@ module WOW::Capture::WOWObject::Utility::LogItems
       @object = object
       @packet = packet
 
-      @packet_index = packet.index
-      @tick = packet.tick
-      @time = packet.time
-      @elapsed_time = packet.elapsed_time
+      @packet_index = packet.header.index
+      @tick = packet.header.tick
+      @time = packet.header.time
+      @elapsed_time = packet.header.elapsed_time
 
       @context = opts.has_key?(:context) ? opts.delete(:context) : nil
       @embed = opts.has_key?(:embed) ? opts.delete(:embed) : nil

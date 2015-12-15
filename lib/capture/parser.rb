@@ -1,10 +1,5 @@
 module WOW::Capture
   class Parser
-    module Errors
-      class FormatError < StandardError; end
-      class UnknownClientError < StandardError; end
-    end
-
     PKT_FORMAT_VERSIONS = {
       0x201 => :v2_1,
       0x202 => :v2_2,
@@ -12,9 +7,20 @@ module WOW::Capture
       0x301 => :v3_1
     }
 
-    PKT_MAGIC_HEADER = 'PKT'
+    PKT_MAGIC_HEADER = 'PKT'.freeze
 
-    DIRECTIONS = ['CMSG', 'SMSG']
+    BIN_FORMAT_EXT = 'bin'.freeze
+
+    DIRECTIONS = %i(CMSG SMSG BNC BNS)
+
+    DIRECTION_MAP = {
+      'CMSG'.freeze => :CMSG,
+      'SMSG'.freeze => :SMSG,
+      'BN_C'.freeze => :BNC,
+      'BN_S'.freeze => :BNS,
+      0 => :CMSG,
+      1 => :SMSG
+    }
 
     MIN_START_TIME = Time.utc(2005, 1, 1, 0, 0, 0)
     MAX_START_TIME = Time.utc(2020, 12, 31, 23, 59, 59)
@@ -25,7 +31,7 @@ module WOW::Capture
       file_name = path.split('/').last
       file_extension = file_name.split('.').last.downcase.strip
 
-      if file_extension == 'bin'
+      if file_extension == BIN_FORMAT_EXT
         @type = :bin
       else
         @type = :pkt
@@ -52,6 +58,8 @@ module WOW::Capture
 
       @packet_index = 0
 
+      @packet_start = 0
+
       @subscriptions = {}
 
       read_pkt_header if @type == :pkt
@@ -61,7 +69,6 @@ module WOW::Capture
       validate_client_build
 
       select_definitions
-      select_packet_module
     end
 
     # Returns a stub to the module appropriate for the client build of this capture.
@@ -148,22 +155,9 @@ module WOW::Capture
       raise "Unable to identify appropriate definitions: #{@client_build}" if @definitions.nil?
     end
 
-    private def select_packet_module
-      case WOW::ClientBuilds.build_era(@client_build)
-      when '6.x'
-        require_relative 'packets/6.x'
-      when '5.x'
-        require_relative 'packets/5.x'
-      when '4.x'
-        require_relative 'packets/4.x'
-      when '3.x'
-        require_relative 'packets/3.x'
-      end
-    end
-
     # Read a .pkt file header.
     private def read_pkt_header
-      @magic = read_char(3)
+      @magic = read_string(3)
 
       # Headerless capture.
       if @magic != PKT_MAGIC_HEADER
@@ -179,21 +173,23 @@ module WOW::Capture
 
       @format_version = PKT_FORMAT_VERSIONS[read_uint16]
 
-      @sniffer_id = read_char(1)
+      @sniffer_id = read_string(1)
       @client_build = read_uint32
-      @client_locale = read_char(4)
-      @session_key = read_char(40)
+      @client_locale = read_string(4)
+      @session_key = read_string(40)
       @start_time = Time.at(read_uint32)
       @start_tick = read_uint32
 
       hello_length = read_uint32
-      @sniffer_hello = read_char(hello_length)
+      @sniffer_hello = read_string(hello_length)
 
       @packet_start = @file.pos
     end
 
     # Read a single packet.
     private def read_packet
+      raise EOFError.new if @file.eof?
+
       case @type
       when :pkt
         read_pkt_packet
@@ -218,23 +214,37 @@ module WOW::Capture
     end
 
     private def read_pkt_v3_1_packet
-      direction = read_char(4)
+      direction = DIRECTION_MAP[read_string(4)]
       connection_index = read_int32
       tick = read_uint32
-      elapsed_time = ((tick - @start_tick) / 1000.0)
+      elapsed_time = (tick - @start_tick) / 1000.0
       time = @start_time + elapsed_time
       extra_length = read_int32
       length = read_int32
-      read_char(extra_length)
+      extra_data = read_string(extra_length)
       opcode = read_int32
-      data = read_char(length - 4)
+
+      data = read_string(length - 4)
 
       packet_class, opcode_entry = lookup_opcode(direction, opcode)
-      packet = packet_class.new(self, opcode_entry, @packet_index, direction, connection_index, tick, time, elapsed_time, data)
+
+      header_attributes = {
+        index: @packet_index,
+        connection_index: connection_index,
+
+        tick: tick,
+        time: time,
+        elapsed_time: elapsed_time,
+
+        direction: direction,
+        opcode: opcode_entry
+      }
+
+      packet = packet_class.new(self, header_attributes, data)
 
       @packet_index += 1
 
-      publish(:packet, packet, direction: direction.to_sym, opcode: packet_class.to_s.split('::').last.to_sym)
+      publish(:packet, packet, direction: direction, opcode: opcode_entry)
 
       packet
     end
@@ -242,36 +252,81 @@ module WOW::Capture
     private def read_pkt_default_packet
       opcode = read_uint16
       length = read_int32
-      direction = ['CMSG', 'SMSG'][read_byte]
+      direction = DIRECTION_MAP[read_uint8]
       time = Time.at(read_int64)
-      data = read_char(length)
+      elapsed_time = @start_time.nil? ? 0 : time - @start_time
+      data = read_string(length)
 
       connection_index = nil
       tick = nil
-      elapsed_time = nil
 
       packet_class, opcode_entry = lookup_opcode(direction, opcode)
-      packet = packet_class.new(self, opcode_entry, @packet_index, direction, connection_index, tick, time, elapsed_time, data)
+
+      header_attributes = {
+        index: @packet_index,
+        connection_index: connection_index,
+
+        tick: tick,
+        time: time,
+        elapsed_time: elapsed_time,
+
+        direction: direction,
+        opcode: opcode_entry
+      }
+
+      packet = packet_class.new(self, header_attributes, data)
 
       @packet_index += 1
+
+      publish(:packet, packet, direction: direction, opcode: opcode_entry)
 
       packet
     end
 
-    private def read_char(length)
-      @file.read(length)
+    private def read_bin_packet
+      opcode = read_int32
+      length = read_int32
+      time = Time.at(read_int32)
+      direction = DIRECTION_MAP[read_uint8]
+      elapsed_time = @start_time.nil? ? 0 : time - @start_time
+      data = read_string(length)
+
+      connection_index = nil
+      tick = nil
+
+      packet_class, opcode_entry = lookup_opcode(direction, opcode)
+
+      header_attributes = {
+        index: @packet_index,
+        connection_index: connection_index,
+
+        tick: tick,
+        time: time,
+        elapsed_time: elapsed_time,
+
+        direction: direction,
+        opcode: opcode_entry
+      }
+
+      packet = packet_class.new(self, header_attributes, data)
+
+      @packet_index += 1
+
+      publish(:packet, packet, direction: direction, opcode: opcode_entry)
+
+      packet
     end
 
-    def read_byte
+    private def read_uint8
       @file.read(1).ord
     end
 
-    def read_int64
+    private def read_int64
       @file.read(8).unpack('q<').first
     end
 
     private def read_uint32
-      @file.read(4).unpack('V').first
+      @file.read(4).unpack('L<').first
     end
 
     private def read_int32
@@ -279,14 +334,18 @@ module WOW::Capture
     end
 
     private def read_uint16
-      @file.read(2).unpack('s<').first
+      @file.read(2).unpack('S<').first
     end
 
     private def read_float
       @file.read(4).unpack('e').first
     end
 
-    private def read_string
+    private def read_string(length)
+      @file.read(length)
+    end
+
+    private def read_cstring
       string = ''
 
       loop do
@@ -329,7 +388,7 @@ module WOW::Capture
     # Based on the timestamp of the first packet, guess which client build produced this capture.
     private def guess_build
       packet_specimen = read_packet
-      captured_at = packet_specimen.time
+      captured_at = packet_specimen.header.time
       @start_time = captured_at
 
       # Find the client build known to have been in use at the capture time.
@@ -343,15 +402,16 @@ module WOW::Capture
     # Ensure the capture start time appears within a valid range.
     private def validate_start_time
       if @start_time < MIN_START_TIME || @start_time > MAX_START_TIME
-        raise Errors::FormatError.new("Capture file has packet timestamp outside of expected" <<
-          " range: #{@start_time}")
+        raise WOW::Capture::Errors::FormatError.new("Capture file has packet timestamp outside" <<
+          " of expected range: #{@start_time}")
       end
     end
 
     # Checks if the capture's build is in the set of known client builds.
     private def validate_client_build
       if !WOW::ClientBuilds.known?(@client_build)
-        raise Errors::UnknownClientError.new("Unknown client build: #{@client_build}")
+        raise WOW::Capture::Errors::UnknownClientError.new("Unknown client build:" <<
+          " #{@client_build}")
       end
     end
   end

@@ -8,7 +8,7 @@ module WOW::Capture::WOWObject::Utility::LogItems
 
     def parse!
       @from = object.current_position
-      @to = packet.position
+      @to = packet.record.position
     end
 
     def pretty_print

@@ -164,29 +164,51 @@ module WOW
 
       def initialize(index, value, extras = {})
         @index = index
+
         @value = value
+        @value_s = value.to_s.freeze
+        @value_h = value.hash
+
         @extras = extras
       end
 
       def to_s
-        @value.to_s
+        @value_s
       end
 
       def ==(other)
-        other == @value || other.to_s == @value.to_s
+        other == @value || other.to_s == @value_s
       end
       alias_method :eql?, :==
 
       def ===(other)
-        other === @value || other.to_s === @value.to_s
+        other === @value || other.to_s === @value_s
       end
 
       def hash
-        @value.hash
+        @value_h
       end
 
       def has_extra?(extra)
         @extras.has_key?(extra)
+      end
+
+      def inspect
+        excluded_variables = [:@value_s, :@value_h]
+        all_variables = instance_variables
+        variables = all_variables - excluded_variables
+
+        prefix = "#<#{self.class}:0x#{self.__id__.to_s(16)}"
+
+        parts = []
+
+        variables.each do |var|
+          parts << "#{var}=#{instance_variable_get(var).inspect}"
+        end
+
+        str = parts.empty? ? "#{prefix}>" : "#{prefix} #{parts.join(' ')}>"
+
+        str
       end
 
       private def to_ary

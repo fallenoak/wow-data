@@ -7,12 +7,14 @@ module WOW::Capture::WOWObject::Utility::LogItems
     end
 
     def parse!
-      @spell_id = packet.spell_id
+      spell_cast = packet.record.spell_cast
 
-      if packet.spell_target[:unit].type != :null
-        @spell_target = packet.spell_target[:unit]
+      @spell_id = spell_cast.spell_id
+
+      if spell_cast.spell_target.unit_guid.type != :null
+        @spell_target = spell_cast.spell_target.unit_guid
       else
-        @spell_target = packet.spell_target[:item]
+        @spell_target = spell_cast.spell_target.item_guid
       end
     end
 

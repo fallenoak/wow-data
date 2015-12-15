@@ -163,7 +163,6 @@ module WOW::Definitions
       end
 
       table :player_fields do
-        i   :object_fields
         i   :unit_fields
 
         e   0x000,  :player_duel_arbiter,                     type: :uint32,    blocks: 1

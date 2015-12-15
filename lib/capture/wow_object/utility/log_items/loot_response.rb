@@ -7,9 +7,9 @@ module WOW::Capture::WOWObject::Utility::LogItems
     end
 
     def parse!
-      @coins = packet.coins
-      @items = packet.items
-      @currencies = packet.currencies
+      @coins = packet.record.coins
+      @items = packet.record.items
+      @currencies = packet.record.currencies
     end
 
     def pretty_print
@@ -24,7 +24,7 @@ module WOW::Capture::WOWObject::Utility::LogItems
       else
         @items.each do |item|
           output << pretty_line
-          output << " Item:       #{item}"
+          output << " Item:       #{item.quantity}x ##{item.item_instance.item_id}"
         end
       end
 
@@ -34,7 +34,7 @@ module WOW::Capture::WOWObject::Utility::LogItems
       else
         @currencies.each do |currency|
           output << pretty_line
-          output << " Currency:   #{currency}"
+          output << " Currency:   #{currency.inspect}"
         end
       end
 

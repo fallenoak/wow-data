@@ -49,47 +49,36 @@ module WOW::Capture::WOWObject::Utility
       end
     end
 
-    def initialize(object, attributes = {})
+    def initialize(object)
       @object = object
-      @attributes = attributes
+      @attributes = {}
+      @object_values = {}
+    end
+
+    def object_values
+      @object_values
     end
 
     def set!(given_attributes, mode = :normal)
-      given_attributes.each_pair do |attribute_name, attribute_data|
-        type = attribute_data[:type]
-        size = attribute_data[:size]
-
-        if mode == :zeroed
-          blocks = Array.new(size, 0)
-        else
-          blocks = attribute_data[:blocks].map { |block| block[:value] }
-        end
-
-        update_value = WOW::Capture::UpdateValue.new(@object.parser, type, size, blocks)
-
-        @attributes[attribute_name] = update_value
+      given_attributes.each_pair do |attribute_name, object_value|
+        @attributes[attribute_name] = object_value.value
+        @object_values[attribute_name] = object_value
       end
     end
 
     def update!(new_attributes)
       delta = Delta.new
 
-      new_attributes.each_pair do |attribute_name, attribute_data|
-        if !@attributes.has_key?(attribute_name)
-          set!({ attribute_name => attribute_data }, :zeroed)
-        end
+      new_attributes.each_pair do |attribute_name, object_value|
+        old_value = @attributes[attribute_name]
+        new_value = object_value.value
 
-        update_value = @attributes[attribute_name]
-
-        old_value = update_value.value
-
-        attribute_data[:blocks].each do |block|
-          update_value[block[:offset]] = block[:value]
-        end
-
-        new_value = update_value.value
+        next if new_value == old_value
 
         delta.add!(attribute_name, old_value, new_value)
+
+        @attributes[attribute_name] = new_value
+        @object_values[attribute_name] = object_value
       end
 
       delta
@@ -97,13 +86,13 @@ module WOW::Capture::WOWObject::Utility
 
     def each_pair(&block)
       @attributes.each_pair.each do |key, value|
-        block.call(key, value.value)
+        block.call(key, value)
       end
     end
 
     def method_missing(method_name)
       if @attributes.has_key?(method_name)
-        @attributes[method_name.to_sym].value
+        @attributes[method_name.to_sym]
       else
         nil
       end

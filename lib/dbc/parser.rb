@@ -1,7 +1,7 @@
 module WOW::DBC
   class Parser
     attr_reader :record_count, :field_count, :record_size, :string_table_size, :string_table,
-      :records
+      :records, :build, :locale
 
     def initialize(path, opts = {})
       @path = path
@@ -19,6 +19,7 @@ module WOW::DBC
       @string_table = nil
 
       @build = nil
+      @locale = nil
 
       @structure = nil
 
@@ -26,7 +27,7 @@ module WOW::DBC
 
       read_header
       read_string_table
-      load_build_number
+      identify_build_and_locale
       load_structure
 
       # Default to non-lazy w/ caching.
@@ -138,7 +139,7 @@ module WOW::DBC
         downcase
     end
 
-    private def load_build_number
+    private def identify_build_and_locale
       digest = Digest::SHA256.file(@path).hexdigest
       filename = @path.split('/').last.downcase.to_sym
 
@@ -146,10 +147,11 @@ module WOW::DBC
       raise 'Unknown DBC file!' if matched_file.nil?
 
       versions = VERSIONS[matched_file]
-      build_number = versions[digest.to_sym]
-      raise 'Unknown build!' if build_number.nil?
+      matched_entry = versions[digest.to_sym]
+      raise 'Unknown build!' if matched_entry.nil?
 
-      @build = build_number
+      @locale = matched_entry[1].to_s
+      @build = matched_entry[0]
     end
 
     private def load_structure

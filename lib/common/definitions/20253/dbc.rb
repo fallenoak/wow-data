@@ -61,6 +61,33 @@ module WOW::Definitions
         e   21,   :time_offset,                 type: :uint32,  tc_value: ''
       end
 
+      table :spell do
+        e   0,    :id,                          type: :uint32,  tc_value: 'ID'
+        e   1,    :name,                        type: :string,  tc_value: 'Name_lang'
+        e   2,    :name_subtext,                type: :string,  tc_value: 'NameSubtext_lang'
+        e   3,    :description,                 type: :string,  tc_value: 'Description'
+        e   4,    :aura_description,            type: :string,  tc_value: 'AuraDescription_lang'
+        e   5,    :rune_cost_id,                type: :uint32,  tc_value: 'RuneCostID'
+        e   6,    :spell_missile_id,            type: :uint32,  tc_value: 'SpellMissileID'
+        e   7,    :description_variables_id,    type: :uint32,  tc_value: 'DescriptionVariablesID'
+        e   8,    :scaling_id,                  type: :uint32,  tc_value: 'ScalingID'
+        e   9,    :aura_options_id,             type: :uint32,  tc_value: 'AuraOptionsID'
+        e   10,   :aura_restrictions_id,        type: :uint32,  tc_value: 'AuraRestrictionsID'
+        e   11,   :casting_requirements_id,     type: :uint32,  tc_value: 'CastingRequirementsID'
+        e   12,   :categories_id,               type: :uint32,  tc_value: 'CategoriesID'
+        e   13,   :class_options_id,            type: :uint32,  tc_value: 'ClassOptionsID'
+        e   14,   :cooldowns_id,                type: :uint32,  tc_value: 'CooldownsID'
+        e   15,   :equipped_items_id,           type: :uint32,  tc_value: 'EquippedItemsID'
+        e   16,   :interrupts_id,               type: :uint32,  tc_value: 'InterruptsID'
+        e   17,   :levels_id,                   type: :uint32,  tc_value: 'LevelsID'
+        e   18,   :reagents_id,                 type: :uint32,  tc_value: 'ReagentsID'
+        e   19,   :shapeshift_id,               type: :uint32,  tc_value: 'ShapeshiftID'
+        e   20,   :target_restrictions_id,      type: :uint32,  tc_value: 'TargetRestrictionsID'
+        e   21,   :totems_id,                   type: :uint32,  tc_value: 'TotemsID'
+        e   22,   :required_project_id,         type: :uint32,  tc_value: 'RequiredProjectID'
+        e   23,   :misc_id,                     type: :uint32,  tc_value: 'MiscID'
+      end
+
       table :spell_icon do
         e   0,    :id,                          type: :uint32,  tc_value: ''
         e   1,    :icon_path,                   type: :string,  tc_value: ''

@@ -3,11 +3,13 @@ module WOW::Definitions
     namespace :opcodes do
       table :smsg do
         # Implemented
+        e   0x0C28,   :OnMonsterMove,                           tc_value: 'SMSG_ON_MONSTER_MOVE'
+        e   0x0DB1,   :LootResponse,                            tc_value: 'SMSG_LOOT_RESPONSE'
+
+        if false
         e   0x1102,   :AuthChallenge,                           tc_value: 'SMSG_AUTH_CHALLENGE'
         e   0x144A,   :Chat,                                    tc_value: 'SMSG_CHAT'
         e   0x0531,   :Emote,                                   tc_value: 'SMSG_EMOTE'
-        e   0x0C28,   :OnMonsterMove,                           tc_value: 'SMSG_ON_MONSTER_MOVE'
-        e   0x0DB1,   :LootResponse,                            tc_value: 'SMSG_LOOT_RESPONSE'
         e   0x0EDB,   :QueryCreatureResponse,                   tc_value: 'SMSG_QUERY_CREATURE_RESPONSE'
         e   0x0331,   :QueryPlayerNameResponse,                 tc_value: 'SMSG_QUERY_PLAYER_NAME_RESPONSE'
         e   0x0C54,   :TextEmote,                               tc_value: 'SMSG_TEXT_EMOTE'
@@ -21,6 +23,7 @@ module WOW::Definitions
         e   0x0026,   :NewWorld,                                tc_value: 'SMSG_NEW_WORLD'
         e   0x08DF,   :EncounterEnd,                            tc_value: 'SMSG_ENCOUNTER_END'
         e   0x08D7,   :EncounterStart,                          tc_value: 'SMSG_ENCOUNTER_START'
+        end
 
         # Not Implemented
         e   0x0895,   :Unhandled,                               tc_value: 'SMSG_ABORT_NEW_WORLD'

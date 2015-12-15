@@ -1,17 +1,17 @@
 module WOW::Capture::WOWObject::Utility::LogItems
   class TextEmote < Base
-    attr_reader :source, :target, :emote_id, :sound_index
+    attr_reader :sender, :target, :emote_id, :sound_index
 
     def type
       :text_emote
     end
 
     def parse!
-      @source = packet.parser.objects.find(packet.source_guid)
-      @target = packet.parser.objects.find(packet.target_guid)
-      @emote_id = packet.emote_id
-      @emote_type = packet.emote_type
-      @sound_index = packet.sound_index
+      @sender = packet.parser.objects.find(packet.record.sender_guid)
+      @target = packet.parser.objects.find(packet.record.target_guid)
+      @emote_id = packet.record.emote_id
+      @emote_type = nil
+      @sound_index = packet.record.sound_index
     end
 
     def pretty_print

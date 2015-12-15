@@ -11,7 +11,7 @@ module WOW::Capture::WOWObject
       @map_id = @guid.map_id
       @session_map_id = @map_id
 
-      @current_position = WOW::Capture::Coordinate.new(nil, nil, nil, nil)
+      @current_position = WOW::Capture::Types::Coordinate.new(nil, nil, nil, nil)
       @positions = []
 
       @log = Utility::Log.new
@@ -44,11 +44,11 @@ module WOW::Capture::WOWObject
       @in_combat == true
     end
 
-    def create_object!(packet, raw_movement_state, raw_values_state)
+    def create_object!(packet, raw_movement_state, values)
       to_log!(:CreateObject, packet, contextual: false)
 
       @movement = raw_movement_state
-      @attributes.set!(raw_values_state)
+      @attributes.set!(values)
 
       if !@movement.nil? && !@movement.update.nil? && !@movement.update.status.nil?
         status_position = @movement.update.status.position
@@ -91,8 +91,8 @@ module WOW::Capture::WOWObject
     def move!(packet)
       to_log!(:Move, packet)
 
-      @current_position = packet.position
-      @positions << packet.position
+      @current_position = packet.record.position
+      @positions << packet.record.position
 
       @storage.trigger(:moved, self)
     end
@@ -110,8 +110,8 @@ module WOW::Capture::WOWObject
     end
 
     def attack_start!(packet)
-      attacker = parser.objects.find_or_create(packet.attacker_guid)
-      victim = parser.objects.find_or_create(packet.victim_guid)
+      attacker = parser.objects.find_or_create(packet.record.attacker_guid)
+      victim = parser.objects.find_or_create(packet.record.victim_guid)
 
       relevant_session = parser.combat_sessions.find_by_active_participants(attacker, victim).first
       relevant_session = parser.combat_sessions.create if relevant_session.nil?
@@ -123,8 +123,8 @@ module WOW::Capture::WOWObject
     end
 
     def attack_stop!(packet)
-      attacker = parser.objects.find_or_create(packet.attacker_guid)
-      victim = parser.objects.find_or_create(packet.victim_guid)
+      attacker = parser.objects.find_or_create(packet.record.attacker_guid)
+      victim = parser.objects.find_or_create(packet.record.victim_guid)
 
       to_log!(:AttackStop, packet)
 
