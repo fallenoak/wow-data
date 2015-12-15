@@ -380,7 +380,11 @@ module WOW::Capture
         packet_class_name = opcode_entry.value
       end
 
-      packet_class = packet_module.const_get(packet_class_name)
+      if packet_module.const_defined?(packet_class_name)
+        packet_class = packet_module.const_get(packet_class_name)
+      else
+        packet_class = Packets::Unhandled
+      end
 
       [packet_class, opcode_entry]
     end
