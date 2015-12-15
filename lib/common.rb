@@ -4,7 +4,6 @@ require 'date'
 require 'digest/sha1'
 require 'stringio'
 require 'json'
-require 'neatjson'
 
 require_relative 'common/bit_array'
 require_relative 'common/client_builds'
