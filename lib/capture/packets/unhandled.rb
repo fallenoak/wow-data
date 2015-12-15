@@ -7,5 +7,9 @@ module WOW::Capture::Packets
     def valid?
       true
     end
+
+    private def parse!
+      nil
+    end
   end
 end
