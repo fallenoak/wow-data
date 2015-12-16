@@ -217,12 +217,16 @@ module WOW::Capture
       direction = DIRECTION_MAP[read_string(4)]
       connection_index = read_int32
       tick = read_uint32
-      elapsed_time = (tick - @start_tick) / 1000.0
-      time = @start_time + elapsed_time
       extra_length = read_int32
       length = read_int32
       extra_data = read_string(extra_length)
       opcode = read_int32
+
+      validate_packet_length(length)
+      validate_packet_direction(direction)
+
+      elapsed_time = (tick - @start_tick) / 1000.0
+      time = @start_time + elapsed_time
 
       data = read_string(length - 4)
 
@@ -254,6 +258,10 @@ module WOW::Capture
       length = read_int32
       direction = DIRECTION_MAP[read_uint8]
       time = Time.at(read_int64)
+
+      validate_packet_length(length)
+      validate_packet_direction(direction)
+
       elapsed_time = @start_time.nil? ? 0 : time - @start_time
       data = read_string(length)
 
@@ -288,6 +296,10 @@ module WOW::Capture
       length = read_int32
       time = Time.at(read_int32)
       direction = DIRECTION_MAP[read_uint8]
+
+      validate_packet_length(length)
+      validate_packet_direction(direction)
+
       elapsed_time = @start_time.nil? ? 0 : time - @start_time
       data = read_string(length)
 
@@ -357,15 +369,7 @@ module WOW::Capture
       string
     end
 
-    private def valid_direction?(direction)
-      DIRECTIONS.include?(direction)
-    end
-
     private def lookup_opcode(direction, opcode)
-      if !valid_direction?(direction)
-        return [Packets::Invalid, nil]
-      end
-
       if defs.nil? || !defs.respond_to?(:opcodes) || defs.opcodes[direction.downcase].nil?
         return [Packets::Unhandled, nil]
       end
@@ -373,18 +377,17 @@ module WOW::Capture
       opcode_entry = defs.opcodes[direction.downcase][opcode]
 
       if opcode_entry.nil? || opcode_entry.value == :Unhandled
-        packet_module = Packets
-        packet_class_name = Packets::UNHANDLED_PACKET_CLASS_NAME
-      else
-        packet_module = Packets.const_get(direction)
-        packet_class_name = opcode_entry.value
+        return [Packets::Unhandled, opcode_entry]
       end
 
-      if packet_module.const_defined?(packet_class_name)
-        packet_class = packet_module.const_get(packet_class_name)
-      else
-        packet_class = Packets::Unhandled
+      packet_module = Packets.const_get(direction)
+      packet_class_name = opcode_entry.value
+
+      if !packet_module.const_defined?(packet_class_name)
+        return [Packets::Unhandled, opcode_entry]
       end
+
+      packet_class = packet_module.const_get(packet_class_name)
 
       [packet_class, opcode_entry]
     end
@@ -401,6 +404,20 @@ module WOW::Capture
 
       # Reset the file position to 0.
       rewind!
+    end
+
+    private def validate_packet_direction(direction)
+      if direction.nil? || !DIRECTIONS.include?(direction)
+        raise WOW::Capture::Errors::FormatError.new("Capture file has packet with invalid" <<
+          " direction: #{direction}")
+      end
+    end
+
+    private def validate_packet_length(length)
+      if length < 0
+        raise WOW::Capture::Errors::FormatError.new("Capture file has packet with negative" <<
+          " length: #{length}")
+      end
     end
 
     # Ensure the capture start time appears within a valid range.
