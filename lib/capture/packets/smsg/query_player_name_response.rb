@@ -2,11 +2,11 @@ module WOW::Capture::Packets::SMSG
   class QueryPlayerNameResponse < WOW::Capture::Packets::Base
     structure do
       build 19033 do
-        uint8     :has_data
+        invbool   :has_data
 
         guid128   :player_guid,             packed: true
 
-        halt      if: proc { has_data != 0 }
+        halt      if: proc { !has_data }
 
         bit       :is_deleted
 
@@ -37,9 +37,9 @@ module WOW::Capture::Packets::SMSG
       build 0...16981 do
         build 9767 do
           guid64  :player_guid,             packed: true
-          uint8   :has_data
+          invbool :has_data
 
-          halt    if: proc { has_data != 0 }
+          halt    if: proc { !has_data }
         end
 
         build 0...9767 do
@@ -61,11 +61,19 @@ module WOW::Capture::Packets::SMSG
           int32   :gender
           int32   :character_class,         remap: :classes
         end
+
+        bool      :name_declined
+
+        halt      if: proc { !name_declined }
+
+        array     :name_declined,           length: 5 do
+                    string
+                  end
       end
     end
 
     def has_data?
-      record.has_data == 0
+      record.has_data == true || record.has_data.nil?
     end
 
     def update_state!
