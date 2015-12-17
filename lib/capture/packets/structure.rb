@@ -48,9 +48,11 @@ module WOW::Capture::Packets
       @client_build = client_build
       @definitions = definitions
 
-      instance_eval(&@structure)
+      output = instance_eval(&@structure)
 
       reset
+
+      output
     end
 
     private def halted?
