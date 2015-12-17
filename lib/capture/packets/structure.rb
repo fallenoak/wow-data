@@ -223,6 +223,68 @@ module WOW::Capture::Packets
       end
     end
 
+    # Byte Array Element
+    private def byteae(name, opts = {})
+      return if halted?
+
+      record[name] = [] if !record.has_key?(name)
+
+      index = evaluate_option(opts[:index]) || record[name].length
+
+      xor = evaluate_option(opts[:xor])
+      xor = record[xor] if xor.is_a?(Symbol)
+
+      if xor.nil?
+        value = stream.read_uint8
+      else
+        xor_value = xor[index]
+        xor_value = 0 if xor_value == false
+        xor_value = 1 if xor_value == true
+
+        if xor_value != 0
+          value = stream.read_uint8
+          value = xor_value ^ value
+        else
+          value = 0
+        end
+      end
+
+      record[name][index] = value
+    end
+
+    # Bit Array Element
+    private def bitae(name, opts = {})
+      return if halted?
+
+      record[name] = [] if !record.has_key?(name)
+
+      index = evaluate_option(opts[:index]) || record[name].length
+
+      xor = evaluate_option(opts[:xor])
+      xor = record[xor] if xor.is_a?(Symbol)
+
+      binary = evaluate_option(opts[:binary]) || false
+
+      if xor.nil?
+        value = stream.read_bit
+        value = value ? 1 : 0 if binary == true
+      else
+        xor_value = xor[index]
+        xor_value = 0 if xor_value == false
+        xor_value = 1 if xor_value == true
+
+        if xor_value != 0
+          value = stream.read_bit
+          value = value ? 1 : 0 if binary == true
+          value = xor_value ^ value
+        else
+          value = 0
+        end
+      end
+
+      record[name][index] = value
+    end
+
     private reader def struct(name, opts = {}, &local_definition)
       if !opts[:source].nil?
         sourced_record_class = WOW::Capture::Packets::Records.named(opts[:source])
