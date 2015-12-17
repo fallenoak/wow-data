@@ -17,9 +17,10 @@ module WOW::Capture::Packets::Records
       WOW::Capture::Packets::Records.add(record_name, subclass)
     end
 
-    def initialize
+    def initialize(root = nil)
       @attributes = {}
       @structure = self.class.instance_variable_get(:@structure)
+      @root = root || self
     end
 
     def structure
@@ -51,8 +52,12 @@ module WOW::Capture::Packets::Records
       @attributes[key]
     end
 
+    def root
+      @root || self
+    end
+
     def inspect
-      excluded_variables = [:@structure]
+      excluded_variables = [:@structure, :@root]
       all_variables = instance_variables
       variables = all_variables - excluded_variables
 

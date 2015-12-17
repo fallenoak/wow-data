@@ -226,13 +226,13 @@ module WOW::Capture::Packets
         sourced_record_class = WOW::Capture::Packets::Records.named(opts[:source])
         raise StandardError.new("Unknown record: #{opts[:source]}") if sourced_record_class.nil?
 
-        sourced_record = sourced_record_class.new
+        sourced_record = sourced_record_class.new(record.root)
         sourced_record.parse!(stream, client_build, definitions)
 
         value = sourced_record
       else
         inlined_structure = Structure.new(&local_definition)
-        inlined_record = Records::Inline.new(inlined_structure)
+        inlined_record = Records::Inline.new(inlined_structure, record.root)
         inlined_record.parse!(stream, client_build, definitions)
 
         value = inlined_record
