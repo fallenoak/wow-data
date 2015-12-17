@@ -8,6 +8,8 @@ module WOW::Capture
     FORMAT_INT64    = 'q<'.freeze
     FORMAT_FLOAT    = 'e'.freeze
 
+    attr_reader :parser
+
     def initialize(parser, data)
       @parser = parser
       @client_build = parser.client_build
