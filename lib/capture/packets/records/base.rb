@@ -44,6 +44,10 @@ module WOW::Capture::Packets::Records
       @attributes[key]
     end
 
+    def has_key?(key)
+      @attributes.has_key?(key)
+    end
+
     def empty?
       @attributes.empty?
     end
