@@ -153,6 +153,22 @@ module WOW::Capture::Packets
       record[name] = value
     end
 
+    # Write out the given source byte array using the provided content proc.
+    private def write(name, opts = {}, &content)
+      return if halted?
+
+      source = evaluate_option(opts[:source])
+
+      source_data = source.map { |v| v.chr }.join
+      source_stream = WOW::Capture::Stream.new(stream.parser, source_data)
+
+      inlined_structure = Structure.new(&content)
+      inlined_record = Records::Inline.new(inlined_structure, record.root)
+      value = inlined_record.parse!(source_stream, client_build, definitions)
+
+      record[name] = value
+    end
+
     private def reset_bit_reader
       return if halted?
 
