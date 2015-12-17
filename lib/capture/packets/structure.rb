@@ -321,6 +321,14 @@ module WOW::Capture::Packets
       length.nil? ? stream.read_cstring : stream.read_string(length)
     end
 
+    private reader def bool(name, opts = {})
+      stream.read_bool
+    end
+
+    private reader def invbool(name, opts = {})
+      !stream.read_bool
+    end
+
     private reader def bitarray(name, opts = {})
       length = evaluate_option(opts[:length])
 
