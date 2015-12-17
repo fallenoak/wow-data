@@ -157,6 +157,24 @@ module WOW::Capture::WOWObject
       to_log!(:SpellGo, packet)
     end
 
+    def inspect
+      excluded_variables = [:@storage]
+      all_variables = instance_variables
+      variables = all_variables - excluded_variables
+
+      prefix = "#<#{self.class}:0x#{self.__id__.to_s(16)}"
+
+      parts = []
+
+      variables.each do |var|
+        parts << "#{var}=#{instance_variable_get(var).inspect}"
+      end
+
+      str = parts.empty? ? "#{prefix}>" : "#{prefix} #{parts.join(' ')}>"
+
+      str
+    end
+
     private def related_combat_sessions(mode = :any)
       case mode
       when :attacker
