@@ -144,6 +144,15 @@ module WOW::Capture::Packets
       @halted = true
     end
 
+    # Copy an attribute from another path to the given name at the current path.
+    private def copy(name, opts = {})
+      return if halted?
+
+      value = record.instance_eval(&opts[:source])
+
+      record[name] = value
+    end
+
     private def reset_bit_reader
       return if halted?
 
