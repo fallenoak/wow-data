@@ -17,7 +17,7 @@ module WOW::Capture::Types
       output << " @x= #{@x ? '%10.3f' % @x : '%10s' % '---'}"
       output << " @y= #{@y ? '%10.3f' % @y : '%10s' % '---' }"
       output << " @z= #{@z ? '%8.3f' % @z : '%8s' % '---' }"
-      output << " @o= #{@o ? '$8.3f' % @o : '%8s' % '---' }" if !@o.nil?
+      output << " @o= #{@o ? '%8.3f' % @o : '%8s' % '---' }" if !@o.nil?
       output << ">"
 
       output
