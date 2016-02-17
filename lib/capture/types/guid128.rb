@@ -62,7 +62,8 @@ module WOW::Capture::Types
       if high_type == :null || high_type.nil?
         output << "<guid128:null>"
       else
-        output << "<guid128:0x#{short_id}"
+        output << "<guid128:"
+        output << (opts[:full_id] ? "0x#{hex}" : "0x#{short_id}")
         output << " object_type:#{object_type || 'null'};"
         output << " high_type:#{high_type || 'null'};"
         output << " realm_id:#{@realm_id};"
