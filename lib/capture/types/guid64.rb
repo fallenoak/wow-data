@@ -29,6 +29,10 @@ module WOW::Capture::Types
       @object_type ||= get_object_type
     end
 
+    def player?
+      high_type == :player
+    end
+
     def creature?
       high_type == :creature
     end
@@ -106,7 +110,7 @@ module WOW::Capture::Types
         if @defs.legacy_guid_types.high[@high_type_id]
           return @defs.legacy_guid_types.high[@high_type_id]
         else
-          raise StandardError.new("Unexpected high value: #{high_value}")
+          raise StandardError.new("Unexpected high_type_id: #{@high_type_id}")
         end
       end
     end
