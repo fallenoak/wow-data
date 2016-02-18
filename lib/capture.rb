@@ -48,6 +48,7 @@ require_relative 'capture/storage/combat_session_storage'
 require_relative 'capture/utility/reference'
 require_relative 'capture/utility/object_field_manager'
 require_relative 'capture/utility/guid_manager'
+require_relative 'capture/utility/zmanager'
 
 require_relative 'capture/packets'
 require_relative 'capture/packets/structure'

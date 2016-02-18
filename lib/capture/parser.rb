@@ -60,6 +60,8 @@ module WOW::Capture
 
       @packet_start = 0
 
+      @zmanager = WOW::Capture::Utility::Zmanager.new
+
       @subscriptions = {}
 
       read_pkt_header if @type == :pkt
@@ -80,6 +82,10 @@ module WOW::Capture
     # Returns the instance of ObjectStorage used by this parser instance.
     def objects
       @objects
+    end
+
+    def zmanager
+      @zmanager
     end
 
     def session
