@@ -173,10 +173,47 @@ module WOW::Capture
 
       @format_version = PKT_FORMAT_VERSIONS[read_uint16]
 
-      @sniffer_id = read_string(1)
+      case @format_version
+      when :v3_0
+        read_pkt_v3_0_header
+      when :v3_1
+        read_pkt_v3_1_header
+      end
+    end
+
+    private def read_pkt_v3_0_header
+      @sniffer_id = read_string(1).ord
+
       @client_build = read_uint32
       @client_locale = read_string(4)
       @session_key = read_string(40)
+
+      additional_length = read_int32
+
+      pre_pos = @file.pos
+
+      read_string(additional_length)
+
+      post_pos = @file.pos
+
+      # Xyla
+      if @sniffer_id == 10
+        @file.pos = pre_pos
+
+        @start_time = Time.at(read_uint32)
+        @start_tick = read_uint32
+
+        @file.pos = post_pos
+      end
+    end
+
+    private def read_pkt_v3_1_header
+      @sniffer_id = read_string(1).ord
+
+      @client_build = read_uint32
+      @client_locale = read_string(4)
+      @session_key = read_string(40)
+
       @start_time = Time.at(read_uint32)
       @start_tick = read_uint32
 
@@ -211,6 +248,51 @@ module WOW::Capture
       else
         read_pkt_default_packet
       end
+    end
+
+    private def read_pkt_v3_0_packet
+      direction = DIRECTION_MAP[read_string(4)]
+
+      time = Time.at(read_int32)
+      tick = read_uint32
+
+      extra_length = read_int32
+      length = read_int32
+
+      extra_data = read_string(extra_length)
+
+      opcode = read_int32
+
+      validate_packet_length(length)
+      validate_packet_direction(direction)
+
+      elapsed_time = @start_time - time
+
+      connection_index = nil
+
+      data = read_string(length - 4)
+
+      packet_class, opcode_entry = lookup_opcode(direction, opcode)
+
+      header_attributes = {
+        index: @packet_index,
+        connection_index: connection_index,
+
+        tick: tick,
+        time: time,
+        elapsed_time: elapsed_time,
+
+        direction: direction,
+        opcode: opcode_entry
+      }
+
+      packet = packet_class.new(self, header_attributes, data)
+
+      @packet_index += 1
+
+      publish(:packet, packet, direction: direction, opcode: opcode_entry)
+
+      packet
     end
 
     private def read_pkt_v3_1_packet
@@ -323,6 +405,35 @@ module WOW::Capture
       packet = packet_class.new(self, header_attributes, data)
 
       @packet_index += 1
+
+      publish(:packet, packet, direction: direction, opcode: opcode_entry)
+
+      packet
+    end
+
+    def create_inline_packet(parent, opcode, data_or_stream)
+      direction = parent.header.direction
+      connection_index = parent.header.connection_index
+      tick = parent.header.tick
+
+      elapsed_time = parent.header.elapsed_time
+      time = parent.header.time
+
+      packet_class, opcode_entry = lookup_opcode(direction, opcode)
+
+      header_attributes = {
+        index: parent.header.index,
+        connection_index: connection_index,
+
+        tick: tick,
+        time: time,
+        elapsed_time: elapsed_time,
+
+        direction: direction,
+        opcode: opcode_entry
+      }
+
+      packet = packet_class.new(self, header_attributes, data_or_stream)
 
       publish(:packet, packet, direction: direction, opcode: opcode_entry)
 
