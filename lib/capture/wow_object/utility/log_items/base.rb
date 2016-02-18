@@ -1,6 +1,6 @@
 module WOW::Capture::WOWObject::Utility::LogItems
   class Base
-    attr_reader :packet_index, :tick, :time, :context, :embed, :extras
+    attr_reader :packet_index, :tick, :time, :elapsed_time, :context, :embed, :extras
 
     def initialize(object, packet, opts = {})
       @object = object
