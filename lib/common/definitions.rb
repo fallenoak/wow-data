@@ -176,6 +176,16 @@ module WOW
         @value_s
       end
 
+      def to_h
+        h = {}
+
+        h[:index] = @index
+        h[:value] = @value_s
+        h[:tc_value] = @extras[:tc_value] if !@extras[:tc_value].to_s.empty?
+
+        h
+      end
+
       def ==(other)
         other == @value || other.to_s == @value_s
       end
