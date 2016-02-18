@@ -6,22 +6,27 @@ module WOW::Capture::Packets
       @structure = Structure.new(&definition)
     end
 
-    def initialize(parser, header_attributes, data)
+    def initialize(parser, header_attributes, data_or_stream)
       @parser = parser
 
       @header = Header.new(header_attributes)
-      @stream = WOW::Capture::Stream.new(@parser, data)
+
+      if data_or_stream.is_a?(WOW::Capture::Stream)
+        @stream = data_or_stream
+      else
+        @stream = WOW::Capture::Stream.new(@parser, data_or_stream)
+      end
 
       structure = self.class.instance_variable_get(:@structure)
-      @record = Records::Root.new(structure)
+      @record = Records::Root.new(self, structure)
 
       @references = []
 
       parse!
 
       if !@record.empty?
-        track_references!
-        update_state!
+        track_references! rescue nil
+        update_state! rescue nil
       end
     end
 
@@ -75,6 +80,24 @@ module WOW::Capture::Packets
     end
 
     private def update_state!
+    end
+
+    def to_h
+      h = {}
+
+      h[:handled] = handled?
+      h[:header] = @header.to_h
+      h[:record] = handled? ? @record.to_h : nil
+
+      h
+    end
+
+    def to_json(opts = {})
+      if opts[:pretty]
+        JSON.pretty_generate(to_h, indent: (' ' * 4))
+      else
+        to_h.to_json
+      end
     end
   end
 end
