@@ -19,6 +19,7 @@ module WOW::Capture::Packets::Records
 
     def initialize(root = nil)
       @attributes = {}
+      @private = []
       @structure = self.class.instance_variable_get(:@structure)
       @root = root || self
     end
@@ -38,6 +39,14 @@ module WOW::Capture::Packets::Records
 
     def []=(key, value)
       @attributes[key] = value
+    end
+
+    def set_attribute(key, value, make_private = false)
+      @attributes[key] = value
+
+      @private << key if !@private.include?(key) && make_private
+
+      value
     end
 
     def [](key)
@@ -61,7 +70,7 @@ module WOW::Capture::Packets::Records
     end
 
     def inspect
-      excluded_variables = [:@structure, :@root]
+      excluded_variables = [:@structure, :@root, :@packet]
       all_variables = instance_variables
       variables = all_variables - excluded_variables
 
@@ -82,10 +91,14 @@ module WOW::Capture::Packets::Records
       h = {}
 
       @attributes.each_pair do |key, value|
+        next if @private.include?(key)
+
         case value
         when Integer, Float, TrueClass, FalseClass, NilClass
           h[key] = value
-        when Hash, String
+        when String
+          h[key] = value.dup.force_encoding('ISO-8859-1').encode('UTF-8')
+        when Hash
           h[key] = value.dup
         when Array
           values = []
@@ -94,7 +107,9 @@ module WOW::Capture::Packets::Records
             case array_value
             when Integer, Float, TrueClass, FalseClass, NilClass
               values << array_value
-            when Hash, String
+            when String
+              values << array_value.dup.force_encoding('ISO-8859-1').encode('UTF-8')
+            when Hash
               values << array_value.dup
             when Array
               values << array_value.dup
