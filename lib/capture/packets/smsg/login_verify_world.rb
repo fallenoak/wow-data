@@ -6,6 +6,11 @@ module WOW::Capture::Packets::SMSG
         coord     :position,        format: :xyzo
         uint32    :reason
       end
+
+      build 0..15005 do
+        int32     :map_id
+        coord     :position,        format: :xyzo
+      end
     end
 
     def update_state!
