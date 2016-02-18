@@ -172,5 +172,20 @@ module WOW::Capture::Types
         @defs.object_types.find_by_value(:creature)
       end
     end
+
+    def to_h
+      h = {}
+
+      h[:high_type] = high_type
+
+      if high_type != :null
+        h[:object_type] = object_type
+        h[:entry_id] = entry_id
+        h[:full_hex] = hex
+        h[:full_int] = to_i
+      end
+
+      h
+    end
   end
 end
