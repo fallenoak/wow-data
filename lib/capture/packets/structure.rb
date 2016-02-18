@@ -27,7 +27,11 @@ module WOW::Capture::Packets
 
           accumulated_values << value if accumulate?
 
-          name.nil? ? value : record[name] = value
+          return value if name.nil?
+
+          record.set_attribute(name, value, opts[:private])
+
+          value
         end
       EORUBY
 
@@ -158,8 +162,17 @@ module WOW::Capture::Packets
       return if halted?
 
       source = evaluate_option(opts[:source])
+      length = evaluate_option(opts[:length])
+      reverse = evaluate_option(opts[:reverse]) || false
 
-      source_data = source.map { |v| v.chr }.join
+      source_data = source.map { |v| v.nil? ? "\x00" : v.chr }.join
+
+      if !length.nil? && source_data.bytesize != length
+        (length - source_data.bytesize).times { source_data << "\x00" }
+      end
+
+      source_data.reverse! if reverse
+
       source_stream = WOW::Capture::Stream.new(stream.parser, source_data)
 
       inlined_structure = Structure.new(&content)
@@ -173,6 +186,47 @@ module WOW::Capture::Packets
       return if halted?
 
       stream.reset_bit_reader
+    end
+
+    private reader def packet(name, opts = {})
+      opcode = evaluate_option(opts[:opcode])
+      data = evaluate_option(opts[:data])
+
+      if data == :immediate
+        data = stream
+      end
+
+      stream.parser.create_inline_packet(record.root.packet, opcode, data)
+    end
+
+    private reader def inflate(name, opts = {})
+      inflated_length = evaluate_option(opts[:inflated_length])
+      preserve_context = evaluate_option(opts[:preserve_context])
+
+      inflate_opts = {
+        inflated_length: inflated_length,
+        preserve_context: preserve_context
+      }
+
+      inflated_value = stream.read_inflate(inflate_opts)
+
+      if !opts[:as].nil?
+        sourced_record_class = WOW::Capture::Packets::Records.named(opts[:as])
+        raise StandardError.new("Unknown record: #{opts[:as]}") if sourced_record_class.nil?
+
+        sourced_stream = WOW::Capture::Stream.new(stream.parser, inflated_value)
+
+        sourced_record = sourced_record_class.new(record.root)
+        sourced_record.parse!(sourced_stream, client_build, definitions)
+
+        value = sourced_record
+
+        record.merge!(value) if opts[:merge]
+      else
+        value = inflated_value
+      end
+
+      value
     end
 
     private reader def guid128(name, opts = {})
@@ -198,15 +252,27 @@ module WOW::Capture::Packets
     end
 
     private reader def array(name, opts = {}, &content_type)
-      length = evaluate_option(opts[:length]).to_i
+      length = evaluate_option(opts[:length])
 
       value = []
 
-      length.times do |index|
-        if content_type.arity == 1
-          value << instance_exec(index, &content_type)
-        else
-          value << instance_eval(&content_type)
+      if length == :all
+        while !stream.eof?
+          if content_type.arity == 1
+            value << instance_exec(index, &content_type)
+          else
+            value << instance_eval(&content_type)
+          end
+        end
+      else
+        length = length.to_i
+
+        length.times do |index|
+          if content_type.arity == 1
+            value << instance_exec(index, &content_type)
+          else
+            value << instance_eval(&content_type)
+          end
         end
       end
 
@@ -259,8 +325,15 @@ module WOW::Capture::Packets
       xor = evaluate_option(opts[:xor])
       xor = record[xor] if xor.is_a?(Symbol)
 
+      mask = evaluate_option(opts[:mask])
+      mask = record[mask] if mask.is_a?(Symbol)
+
       if xor.nil?
-        value = stream.read_uint8
+        if mask.nil? || mask[index] == 1
+          value = stream.read_uint8
+        else
+          value = 0
+        end
       else
         xor_value = xor[index]
         xor_value = 0 if xor_value == false
