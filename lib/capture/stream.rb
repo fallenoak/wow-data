@@ -20,6 +20,10 @@ module WOW::Capture
       @current_bit_value = nil
     end
 
+    def length
+      @data.length
+    end
+
     def pos
       @data.pos
     end
@@ -138,6 +142,48 @@ module WOW::Capture
       WOW::Capture::Utility::GuidManager.fetch_guid128(@parser, guid_low, guid_high)
     end
 
+    def read_all
+      @data.read(@data.length - @data.pos)
+    end
+
+    def read_inflate(opts = {})
+      deflated_length = opts[:deflated_length]
+      inflated_length = opts[:inflated_length]
+      preserve_context = opts[:preserve_context].nil? ? true : opts[:preserve_context]
+
+      if deflated_length.nil?
+        buffer = read_all
+      else
+        buffer = read_string(deflated_length)
+      end
+
+      # Client builds after 15005 seem to NOT maintain Zlib state between compressed packets.
+      # Client builds including and before 15005 seem to maintain Zlib state between compressed
+      # packets.
+      #
+      # TODO: There's a lot more at play with compression state, including the distinct possibility
+      # older captures with packets with compressed data will simply never be fully decompressed.
+      if @client_build > 15005 || !preserve_context
+        inflater = Zlib::Inflate.new
+
+        if !inflated_length.nil?
+          inflater.avail_out = inflated_length
+        end
+
+        begin
+          value = inflater.inflate(buffer)
+        rescue => e
+          value = ''
+        end
+
+        inflater.close
+      else
+        value = @parser.zmanager.inflate(buffer, inflated_length)
+      end
+
+      value
+    end
+
     def read_string(length)
       @data.read(length)
     end
@@ -170,6 +216,12 @@ module WOW::Capture
       end
 
       res
+    end
+
+    def read_time
+      time = read_int32
+
+      Time.at(time)
     end
 
     def read_packed_time
@@ -236,6 +288,7 @@ module WOW::Capture
 
     def read_bitstream_uint64(start_values, parse_values)
       bitstream = read_bitstream_start(start_values)
+
       read_bitstream_parse(bitstream, parse_values)
 
       value = bitstream.reverse.map { |v| sprintf('%02X' % v) }.join.to_i(16)
