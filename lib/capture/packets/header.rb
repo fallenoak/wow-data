@@ -13,5 +13,17 @@ module WOW::Capture::Packets
       @direction = attributes[:direction]
       @opcode = attributes[:opcode]
     end
+
+    def to_h
+      {
+        index: @index,
+        connection_index: @connection_index,
+        tick: @tick,
+        time: @time,
+        elapsed_time: @elapsed_time,
+        direction: @direction,
+        opcode: @opcode ? @opcode.to_h : nil
+      }
+    end
   end
 end
