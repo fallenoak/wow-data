@@ -56,6 +56,7 @@ module WOW::Capture::Packets::SMSG
       payload.values.each_pair do |field_name, field_update|
         value = WOW::Capture::Types::ObjectValue.new(parser, field_update)
         parsed_values[field_name] = value
+        field_update.value = value.value
       end
 
       wow_object = parser.objects.find_or_create(payload.guid)
@@ -68,6 +69,7 @@ module WOW::Capture::Packets::SMSG
       payload.values.each_pair do |field_name, field_update|
         value = WOW::Capture::Types::ObjectValue.new(parser, field_update)
         parsed_values[field_name] = value
+        field_update.value = value.value
       end
 
       wow_object = parser.objects.find_or_create(payload.guid)
@@ -90,6 +92,7 @@ module WOW::Capture::Packets::SMSG
         end
 
         updated_values[field_name] = value
+        field_update.value = value.value
       end
 
       wow_object.update_attributes!(self, updated_values)
