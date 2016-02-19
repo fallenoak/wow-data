@@ -15,10 +15,10 @@ module WOW::Definitions
       table :item_fields do
         i   :object_fields
 
-        e   0x000,  :item_owner_guid,                         type: :uint32,    blocks: 1
-        e   0x004,  :item_contained,                          type: :uint32,    blocks: 1
-        e   0x008,  :item_creator,                            type: :uint32,    blocks: 1
-        e   0x00C,  :item_gift_creator,                       type: :uint32,    blocks: 1
+        e   0x000,  :item_owner_guid,                         type: :guid128,   blocks: 4
+        e   0x004,  :item_contained_guid,                     type: :guid128,   blocks: 4
+        e   0x008,  :item_creator_guid,                       type: :guid128,   blocks: 4
+        e   0x00C,  :item_gift_creator_guid,                  type: :guid128,   blocks: 4
         e   0x010,  :item_stack_count,                        type: :uint32,    blocks: 1
         e   0x011,  :item_duration,                           type: :uint32,    blocks: 1
         e   0x012,  :item_spell_charges,                      type: :uint32,    blocks: 1
@@ -47,14 +47,14 @@ module WOW::Definitions
       table :unit_fields do
         i   :object_fields
 
-        e   0x000,  :unit_charm,                              type: :guid128,   blocks: 4
-        e   0x004,  :unit_summon,                             type: :guid128,   blocks: 4
-        e   0x008,  :unit_critter,                            type: :guid128,   blocks: 4
-        e   0x00C,  :unit_charmed_by,                         type: :guid128,   blocks: 4
-        e   0x010,  :unit_summoned_by,                        type: :guid128,   blocks: 4
-        e   0x014,  :unit_created_by,                         type: :guid128,   blocks: 4
-        e   0x018,  :unit_demon_creator,                      type: :guid128,   blocks: 4
-        e   0x01C,  :unit_target,                             type: :guid128,   blocks: 4
+        e   0x000,  :unit_charm_guid,                         type: :guid128,   blocks: 4
+        e   0x004,  :unit_summon_guid,                        type: :guid128,   blocks: 4
+        e   0x008,  :unit_critter_guid,                       type: :guid128,   blocks: 4
+        e   0x00C,  :unit_charmed_by_guid,                    type: :guid128,   blocks: 4
+        e   0x010,  :unit_summoned_by_guid,                   type: :guid128,   blocks: 4
+        e   0x014,  :unit_created_by_guid,                    type: :guid128,   blocks: 4
+        e   0x018,  :unit_demon_creator_guid,                 type: :guid128,   blocks: 4
+        e   0x01C,  :unit_target_guid,                        type: :guid128,   blocks: 4
         e   0x020,  :unit_battle_pet_companion_guid,          type: :guid128,   blocks: 4
         e   0x024,  :unit_battle_pet_db_id,                   type: :uint32,    blocks: 1
         e   0x026,  :unit_channel_object,                     type: :uint32,    blocks: 1
