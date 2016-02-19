@@ -39,14 +39,12 @@ module WOW::Capture::Types
     def to_h
       if o.nil?
         {
-          _t: 'coord',
           x: x,
           y: y,
           z: z
         }
       else
         {
-          _t: 'coord',
           x: x,
           y: y,
           z: z,
