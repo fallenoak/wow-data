@@ -25,7 +25,8 @@ module WOW::Capture
     MIN_START_TIME = Time.utc(2005, 1, 1, 0, 0, 0)
     MAX_START_TIME = Time.utc(2020, 12, 31, 23, 59, 59)
 
-    attr_reader :type, :format_version, :client_build, :client_locale, :start_time, :packet_index
+    attr_reader :type, :format_version, :client_build, :client_locale, :start_time, :packet_index,
+      :file_size
 
     def initialize(path, opts = {})
       file_name = path.split('/').last
@@ -38,6 +39,7 @@ module WOW::Capture
       end
 
       @file = File.open(path, 'rb')
+      @file_size = File.size(path)
 
       setup_storage
 
@@ -134,6 +136,14 @@ module WOW::Capture
 
     def eof?
       @file.eof?
+    end
+
+    def pos
+      @file.pos
+    end
+
+    def progress
+      @file.pos / @file_size.to_f
     end
 
     # Drives the parser across all packets within the capture. Useful when relying on event
