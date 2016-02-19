@@ -108,10 +108,10 @@ class JSONExporter
 
       if !(include_opcodes.nil? || include_opcodes.empty?)
         next if packet.header.opcode.nil?
-        next if !include_opcodes.include?(packet.header.opcode.tc_value)
+        next if !include_opcodes.include?(packet.header.opcode.label)
       elsif !(exclude_opcodes.nil? || exclude_opcodes.empty?)
         next if packet.header.opcode.nil?
-        next if exclude_opcodes.include?(packet.header.opcode.tc_value)
+        next if exclude_opcodes.include?(packet.header.opcode.label)
       end
 
       next if skip_unhandled && !packet.handled?
