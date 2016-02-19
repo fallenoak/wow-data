@@ -93,13 +93,19 @@ class JSONExporter
 
     capture = WOW::Capture::Parser.new(input_path)
 
-    h = {
-      capture: {
-        packets: []
-      }
-    }
+    if options[:pretty]
+      opening = "{\n    \"packets\": ["
+    else
+      opening = "{\"packets\":["
+    end
+
+    output_file.write(opening)
+
+    first_packet = true
 
     capture.on(:packet) do |packet|
+      print "\r-> Progress: #{(capture.progress * 100).round}% ##{packet.header.index} (#{capture.pos} / #{capture.file_size})"
+
       if !(include_opcodes.nil? || include_opcodes.empty?)
         next if packet.header.opcode.nil?
         next if !include_opcodes.include?(packet.header.opcode.tc_value)
@@ -110,25 +116,40 @@ class JSONExporter
 
       next if skip_unhandled && !packet.handled?
 
-      h[:capture][:packets] << packet.to_h
+      output_file.write(',') if !first_packet
+
+      if options[:pretty]
+        raw_output = JSON.pretty_generate(packet.to_h, indent: (' ' * 4))
+        output = raw_output.split("\n").map { |line| "        #{line}" }.join("\n")
+        output_file.write("\n#{output}")
+      else
+        output_file.write(packet.to_json)
+      end
+
+      first_packet = false if first_packet
     end
 
     puts '-> Replaying capture'
 
+    if skip_unhandled
+      puts '-> Skipping unhandled packets'
+    end
+
     capture.replay!
 
-    puts '-> Writing JSON'
-
     if options[:pretty]
-      output_file.write(JSON.pretty_generate(h, indent: (' ' * 4)))
+      closing = "\n    ]\n}"
     else
-      output_file.write(h.to_json)
+      closing = "]}"
     end
+
+    output_file.write(closing)
 
     output_file.close
 
     capture.close
 
+    puts
     puts '-> Finished!'
   end
 end
