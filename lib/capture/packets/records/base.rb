@@ -87,19 +87,38 @@ module WOW::Capture::Packets::Records
       str
     end
 
-    def to_h
+    def to_h(local_attributes = nil)
       h = {}
 
-      @attributes.each_pair do |key, value|
+      local_attributes = @attributes if local_attributes.nil?
+
+      local_attributes.each_pair do |key, value|
         next if @private.include?(key)
 
         case value
+        when WOW::Capture::Types::ObjectUpdate
+          if value.value.nil?
+            h[key] = value.to_s
+          else
+            case value.value
+            when Integer, Float, TrueClass, FalseClass, NilClass
+              h[key] = value.value
+            when String
+              h[key] = value.value.dup.force_encoding('ISO-8859-1').encode('UTF-8')
+            else
+              if value.value.respond_to?(:to_h)
+                h[key] = value.value.to_h
+              else
+                h[key] = value.value.to_s
+              end
+            end
+          end
         when Integer, Float, TrueClass, FalseClass, NilClass
           h[key] = value
         when String
           h[key] = value.dup.force_encoding('ISO-8859-1').encode('UTF-8')
         when Hash
-          h[key] = value.dup
+          h[key] = to_h(value.dup)
         when Array
           values = []
 
@@ -110,7 +129,7 @@ module WOW::Capture::Packets::Records
             when String
               values << array_value.dup.force_encoding('ISO-8859-1').encode('UTF-8')
             when Hash
-              values << array_value.dup
+              values << to_h(array_value.dup)
             when Array
               values << array_value.dup
             else
