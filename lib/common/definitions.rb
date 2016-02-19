@@ -181,7 +181,10 @@ module WOW
 
         h[:index] = @index
         h[:value] = @value_s
-        h[:tc_value] = @extras[:tc_value] if !@extras[:tc_value].to_s.empty?
+
+        @extras.each_pair do |k, v|
+          h[k] = v if !h.has_key?(k) && !v.nil? && !v.empty?
+        end
 
         h
       end
