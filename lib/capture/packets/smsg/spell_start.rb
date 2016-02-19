@@ -1,6 +1,10 @@
 module WOW::Capture::Packets::SMSG
   class SpellStart < WOW::Capture::Packets::Base
     structure do
+      build 0...16981 do
+        struct  :spell_cast,   source: :spell_cast
+      end
+
       build 19033 do
         struct  :spell_cast,   source: :spell_cast
       end
