@@ -15,6 +15,13 @@ module WOW::Capture::Packets
             return nil if !evaluate_conditional(opts[:if])
           end
 
+          if !opts[:any_flags].nil?
+            source_path = opts[:any_flags][0]
+            flags = opts[:any_flags][1]
+            source = record[source_path]
+            return nil if !(source.any? { |s| flags.include?(s) })
+          end
+
           value = #{internal_method_name}(name, opts, &block)
 
           if !opts[:mask].nil?
@@ -23,6 +30,16 @@ module WOW::Capture::Packets
 
           if !opts[:remap].nil? && !definitions[opts[:remap]].nil?
             value = definitions[opts[:remap]].find(value) || value
+          end
+
+          if !opts[:flags].nil? && !definitions[opts[:flags]].nil?
+            flags = []
+
+            definitions[opts[:flags]].each do |flag|
+              flags << flag if (value & flag.index) > 0
+            end
+
+            value = flags
           end
 
           accumulated_values << value if accumulate?
