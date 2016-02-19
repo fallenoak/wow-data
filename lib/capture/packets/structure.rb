@@ -135,6 +135,14 @@ module WOW::Capture::Packets
       end
     end
 
+    private def opcode(opcode, &local_definition)
+      return if halted?
+
+      if record.root.packet.header.opcode == opcode
+        instance_eval(&local_definition)
+      end
+    end
+
     private def cond(opts = {}, &local_definition)
       return if halted?
       return if !evaluate_conditional(opts[:if])
