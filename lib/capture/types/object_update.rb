@@ -16,11 +16,11 @@ module WOW::Capture::Types
     def to_s
       output = []
 
-      @size.times do |block_index|
-        output << "#{block_index}:#{@blocks[block_index] || 0}"
+      @blocks.each_pair do |offset, value|
+        output << "#{offset}:#{value}"
       end
 
-      "[#{output.join('; ')}]"
+      "[#{output.join(' ')}]"
     end
   end
 end
