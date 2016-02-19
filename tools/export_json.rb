@@ -43,6 +43,10 @@ class JSONExporter
         options[:include_opcodes] = i
       end
 
+      opts.on('-s', '--skip-unhandled', 'Skip unhandled packets (may still include packets that are missing specific build support)') do |s|
+        options[:skip_unhandled] = true
+      end
+
       opts.on_tail('-h', '--help', 'Display argument information') do
         puts opts
         exit
@@ -83,6 +87,8 @@ class JSONExporter
     include_opcodes = options[:include_opcodes]
     exclude_opcodes = options[:exclude_opcodes]
 
+    skip_unhandled = options[:skip_unhandled] == true
+
     output_file = File.open(output_path, 'w')
 
     capture = WOW::Capture::Parser.new(input_path)
@@ -101,6 +107,8 @@ class JSONExporter
         next if packet.header.opcode.nil?
         next if exclude_opcodes.include?(packet.header.opcode.tc_value)
       end
+
+      next if skip_unhandled && !packet.handled?
 
       h[:capture][:packets] << packet.to_h
     end
