@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 15595 do
+  build 16309 do
     namespace :opcodes do
       table :cmsg do
         # Implemented
