@@ -176,13 +176,14 @@ module WOW::Capture::Types
     def to_h
       h = {}
 
+      h[:hex] = hex
+      h[:int] = to_i
+
       h[:high_type] = high_type
 
       if high_type != :null
         h[:object_type] = object_type
         h[:entry_id] = entry_id
-        h[:full_hex] = hex
-        h[:full_int] = to_i
       end
 
       h
