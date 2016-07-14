@@ -122,7 +122,7 @@ module WOW::DB2
 
     private def read_record
       record_data = read_char(@record_size)
-      record = Records.const_get(record_class_name).new(self, @structure, record_data)
+      record = WOW::DB::Records.const_get(record_class_name).new(self, @structure, record_data)
 
       # Cache record if requested.
       @records << record if cache?
@@ -174,7 +174,7 @@ module WOW::DB2
     end
 
     private def load_structure
-      @structure = WOW::Definitions.for_build(@build, merged: true).db2.send(record_table_name)
+      @structure = WOW::Definitions.for_build(@build, merged: true).db.send(record_table_name)
     end
   end
 end
