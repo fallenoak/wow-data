@@ -23,7 +23,7 @@ module WOW::DBC
 
       @structure = nil
 
-      @records = []
+      @records = {}
 
       read_header
       read_string_table
@@ -79,10 +79,10 @@ module WOW::DBC
 
     private def read_record
       record_data = read_char(@record_size)
-      record = Records.const_get(record_class_name).new(self, @structure, record_data)
+      record = Records.const_get(record_class_name, false).new(self, @structure, record_data)
 
       # Cache record if requested.
-      @records << record if cache?
+      @records[record.id] = record if cache?
 
       # Ensure we return the record.
       record
