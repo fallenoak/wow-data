@@ -140,18 +140,22 @@ module WOW::DBC
     end
 
     private def identify_build_and_locale
-      digest = Digest::SHA256.file(@path).hexdigest
-      filename = @path.split('/').last.downcase.to_sym
+      specimen_digest = Digest::SHA256.file(@path).hexdigest
+      specimen_filename = @path.split('/').last.downcase
 
-      matched_file = VERSIONS.keys.select { |v| v.to_s.downcase.to_sym == filename }.first
-      raise 'Unknown DBC file!' if matched_file.nil?
+      VERSIONS.each_pair do |build, locales|
+        locales.each_pair do |locale, filenames|
+          filenames.each_pair do |filename, digest|
+            if filename.to_s.downcase == specimen_filename && digest == specimen_digest
+              @locale = locale
+              @build = build
+              return
+            end
+          end
+        end
+      end
 
-      versions = VERSIONS[matched_file]
-      matched_entry = versions[digest.to_sym]
-      raise 'Unknown build!' if matched_entry.nil?
-
-      @locale = matched_entry[1].to_s
-      @build = matched_entry[0]
+      raise 'Unknown DBC file!'
     end
 
     private def load_structure
