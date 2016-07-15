@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 19033 do
     namespace :guid_types do
       table :high do
         e   0,    :null,                tc_value: 'Null'

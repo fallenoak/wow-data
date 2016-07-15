@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 19033 do
     table :power_types do
       e   -2, :health,          tc_value: 'Health',         label: 'Health'
       e   0,  :mana,            tc_value: 'Mana',           label: 'Mana'

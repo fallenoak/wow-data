@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 19033 do
     table :creature_ranks do
       e   0,  :normal,          tc_value: 'Normal',       label: 'Normal'
       e   1,  :elite,           tc_value: 'Elite',        label: 'Elite'

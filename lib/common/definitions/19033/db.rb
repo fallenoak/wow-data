@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 18179 do
+  build 19033 do
     namespace :db do
       table :achievement do
         e   0,    :id,                          type: :uint32,  tc_value: ''

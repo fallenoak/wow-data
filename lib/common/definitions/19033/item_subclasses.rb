@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 19033 do
     namespace :item_subclasses do
       table :consumable do
         e   0,  :consumable,          tc_value: nil,    label: 'Consumable'

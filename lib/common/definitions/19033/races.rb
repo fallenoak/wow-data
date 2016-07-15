@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 19033 do
     table :races do
       e   0,  :none,                tc_value: 'None',               label: 'None'
       e   1,  :human,               tc_value: 'Human',              label: 'Human'

@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 19033 do
     table :map_types do
       e   0,    :common,        tc_value: 'MAP_COMMON',         label: 'Common'
       e   1,    :instance,      tc_value: 'MAP_INSTANCE',       label: 'Instance'

@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 19033 do
     table :item_classes do
       e   0,  :consumable,    tc_value: 'Consumable',     label: 'Consumable'
       e   1,  :container,     tc_value: 'Container',      label: 'Container'

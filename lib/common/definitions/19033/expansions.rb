@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 19033 do
     table :expansions do
       e   0,  :world_of_warcraft,       tc_value: 'WorldOfWarcraft',    label: 'World of Warcraft'
       e   1,  :the_burning_crusade,     tc_value: 'TheBurningCrusade',  label: 'The Burning Crusade'

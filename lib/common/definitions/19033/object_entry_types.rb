@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 19027 do
+  build 19033 do
     table :object_entry_types do
       e   0,  :update
       e   1,  :create1

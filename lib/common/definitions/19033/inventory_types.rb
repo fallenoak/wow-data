@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 19033 do
     table :inventory_types do
       e   0,  :non_equip,           tc_value: 'NonEquip',         label: 'Non-Equippable'
       e   1,  :head,                tc_value: 'Head',             label: 'Head'

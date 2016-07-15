@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 19033 do
     table :text_emotes do
       e   1,    :agree
       e   2,    :amaze

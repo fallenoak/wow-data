@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 19033 do
     table :item_qualities do
       e   0,  :poor,          tc_value: 'Poor',       label: 'Poor'
       e   1,  :normal,        tc_value: 'Normal',     label: 'Normal'

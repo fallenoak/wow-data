@@ -1,5 +1,5 @@
 module WOW::Definitions
-  build 20253 do
+  build 19033 do
     table :emotes do
       e   0,    :one_shot_none
       e   1,    :one_shot_talk
