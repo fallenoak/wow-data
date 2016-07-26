@@ -44,6 +44,12 @@ module WOW
       @stream.write(data)
     end
 
+    def overwrite(data)
+      @stream.pos = 0
+      @stream.write(data)
+      @stream.pos = 0
+    end
+
     def read(length = nil)
       @stream.read(length)
     end
