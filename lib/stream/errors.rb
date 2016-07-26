@@ -3,7 +3,7 @@ module WOW
     class Error < StandardError; end
 
     module Errors
-      class UnknownFormat < Error; end
+      class UnsupportedFormat < Error; end
     end
   end
 end
